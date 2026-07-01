@@ -354,18 +354,34 @@
 .navbar__toggle {
   display: none;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 5px;
-  width: 32px;
-  height: 32px;
+  gap: 6px;
+  width: 44px;
+  height: 44px;
 }
 
 .navbar__toggle span {
   display: block;
+  width: 24px;
   height: 2px;
   background-color: var(--color-white);
   border-radius: var(--radius-full);
   transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+/* Hamburger → X, driven directly by the aria-expanded state that
+   navigation.js already sets — no extra JS class needed. */
+.navbar__toggle[aria-expanded='true'] span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.navbar__toggle[aria-expanded='true'] span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar__toggle[aria-expanded='true'] span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 /* ---------------------------------------------------------------------
@@ -409,8 +425,8 @@
 }
 
 .footer__social a {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -441,6 +457,9 @@
   display: flex;
   align-items: center;
   min-height: 100vh;
+  /* Mobile Safari's 100vh includes the address bar; dvh accounts for the
+     real visible viewport. Browsers without dvh support keep the line above. */
+  min-height: 100dvh;
   color: var(--color-white);
   background-color: var(--color-carbon);
   overflow: hidden;
@@ -453,6 +472,12 @@
   transform: scale(1);
   transition: transform 0.1s linear;
   will-change: transform;
+  /* Shows instantly, before the video has a frame to paint, and remains
+     as the fallback background if the video errors or is hidden for
+     prefers-reduced-motion — no dependency on a poster image file. */
+  background:
+    radial-gradient(120% 100% at 20% 20%, rgba(179, 18, 31, 0.35), transparent 60%),
+    linear-gradient(160deg, var(--color-graphite) 0%, var(--color-carbon) 65%);
 }
 
 .hero__media img,
@@ -462,16 +487,10 @@
   object-fit: cover;
 }
 
-/* Video failed to load, or the user prefers reduced motion — fall back
-   to the poster frame as a static background. */
+/* Video failed to load, or the user prefers reduced motion — hide the
+   video and let the .hero__media gradient background show through. */
 .hero--video-fallback .hero__media video {
   display: none;
-}
-
-.hero--video-fallback .hero__media {
-  background-image: url('../images/hero/hero-poster.jpg');
-  background-size: cover;
-  background-position: center;
 }
 
 .hero__overlay {
@@ -825,6 +844,7 @@
   gap: var(--space-lg);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: var(--space-md);
   scrollbar-width: none;
 }
@@ -866,8 +886,8 @@
 }
 
 .carousel-controls button {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-full);
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -958,6 +978,74 @@
 .accordion__panel-content {
   padding-bottom: var(--space-lg);
   color: var(--color-text-muted);
+}
+
+/* ---------------------------------------------------------------------
+   Photo placeholder
+   Branded stand-in for real photography that hasn't been supplied yet.
+   Drop-in replacement for an <img> — set the same aspect-ratio the real
+   photo will use so layout doesn't shift once it's swapped in.
+   --------------------------------------------------------------------- */
+.photo-placeholder {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-xl);
+  text-align: center;
+  border-radius: var(--radius-lg);
+  background-color: var(--glass-bg);
+  border: 2px dashed var(--color-red-dark);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+@media (hover: hover) {
+  .photo-placeholder:hover {
+    border-color: var(--color-red);
+    box-shadow: var(--shadow-glow-sm);
+  }
+}
+
+.photo-placeholder__icon {
+  width: 40px;
+  height: 40px;
+  color: var(--color-red-bright);
+  opacity: 0.85;
+}
+
+.photo-placeholder__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-gray-300);
+}
+
+.photo-placeholder__subtitle {
+  max-width: 280px;
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-gray-500);
+}
+
+/* Compact variant for smaller card slots (gallery grid, build cards). */
+.photo-placeholder--compact {
+  padding: var(--space-lg);
+}
+
+.photo-placeholder--compact .photo-placeholder__icon {
+  width: 28px;
+  height: 28px;
+}
+
+.photo-placeholder--compact .photo-placeholder__title {
+  font-size: var(--fs-sm);
 }
 
 /* ---------------------------------------------------------------------

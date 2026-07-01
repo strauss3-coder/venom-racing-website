@@ -80,7 +80,11 @@
 
         <!-- Highlighted case study -->
         <div class="grid" style="grid-template-columns: 1fr 1fr; align-items:center; margin-bottom: var(--space-3xl);">
-          <img src="assets/images/builds/hilux-gd6.jpg" alt="Toyota Hilux 2.8 GD-6 Unichip build" class="slide-in-left" style="border-radius: var(--radius-lg);">
+          <div class="photo-placeholder texture-carbon slide-in-left" style="aspect-ratio: 4/3;" role="img" aria-label="Toyota Hilux 2.8 GD-6 Unichip build — coming soon">
+              <svg class="photo-placeholder__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <strong class="photo-placeholder__title">Professional Workshop Photography</strong>
+              <p class="photo-placeholder__subtitle">This section will showcase our completed builds and workshop after the photo shoot.</p>
+            </div>
           <div class="slide-in-right">
             <span class="eyebrow">Case Study</span>
             <h2>Toyota Hilux 2.8 GD-6 — Dastek Unichip</h2>
@@ -97,7 +101,11 @@
         </div>
 
         <div class="grid grid--auto" data-builds-grid></div>
-        <p data-builds-empty hidden style="text-align:center; color: var(--color-text-muted);">More builds coming soon — check back shortly, or view our full gallery.</p>
+        <div data-builds-empty hidden class="photo-placeholder texture-carbon" style="max-width: 480px; margin-inline: auto;" role="img" aria-label="More builds coming soon">
+          <svg class="photo-placeholder__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <strong class="photo-placeholder__title">More Builds Coming Soon</strong>
+          <p class="photo-placeholder__subtitle">We're documenting our completed projects — check back shortly, or view our workshop gallery.</p>
+        </div>
 
         <div style="text-align:center; margin-top: var(--space-2xl);">
           <a class="btn btn-outline" href="gallery.html" data-ripple>View Full Gallery</a>

@@ -14,6 +14,50 @@
    --------------------------------------------------------------------- */
 .navbar__links {
   display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: var(--z-dropdown);
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  background-color: rgba(10, 10, 11, 0.98);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  max-height: calc(100dvh - var(--header-height));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: var(--shadow-lg);
+}
+
+.navbar__links.is-open {
+  display: flex;
+}
+
+.navbar__links li {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.navbar__links li:last-child {
+  border-bottom: none;
+  padding: var(--space-md) var(--container-padding);
+}
+
+.navbar__links .navbar__link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--space-md) var(--container-padding);
+}
+
+.navbar__links .navbar__link::after {
+  display: none;
+}
+
+.navbar__links .navbar__cta {
+  width: 100%;
+  justify-content: center;
 }
 
 .navbar__toggle {
@@ -63,11 +107,13 @@
 .hero__sound-toggle {
   bottom: var(--space-md);
   right: var(--space-md);
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
 }
 
-.grid--auto {
+.grid--auto,
+.grid--services,
+.grid--features {
   grid-template-columns: 1fr;
 }
 
@@ -100,6 +146,36 @@
 @media (min-width: 992px) {
   .navbar__links {
     display: flex;
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-xl);
+    background-color: transparent;
+    border: none;
+    max-height: none;
+    overflow: visible;
+    box-shadow: none;
+  }
+
+  .navbar__links li {
+    border-bottom: none;
+  }
+
+  .navbar__links li:last-child {
+    padding: 0;
+  }
+
+  .navbar__links .navbar__link {
+    min-height: auto;
+    padding: 0;
+  }
+
+  .navbar__links .navbar__link::after {
+    display: block;
+  }
+
+  .navbar__links .navbar__cta {
+    width: auto;
   }
 
   .navbar__toggle {
