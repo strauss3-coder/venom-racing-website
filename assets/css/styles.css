@@ -1,0 +1,201 @@
+/* ==========================================================================
+   Venom Racing — Global Styles
+   Base resets, typography, and site-wide layout rules for the dark
+   performance theme. Component-specific styles live in components.css.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------
+   Reset / Base
+   --------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* ---------------------------------------------------------------------
+   Typography
+   --------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--color-white);
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: var(--fs-5xl);
+}
+
+h2 {
+  font-size: var(--fs-3xl);
+}
+
+h3 {
+  font-size: var(--fs-2xl);
+}
+
+h4 {
+  font-size: var(--fs-xl);
+  text-transform: none;
+}
+
+p {
+  margin-bottom: var(--space-md);
+  color: var(--color-text-muted);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--color-red-bright);
+  margin-bottom: var(--space-sm);
+}
+
+.text-accent {
+  color: var(--color-red-bright);
+}
+
+/* ---------------------------------------------------------------------
+   Layout helpers
+   --------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
+
+.section {
+  padding-block: var(--space-3xl);
+}
+
+.section--alt {
+  background-color: var(--color-bg-alt);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------------------------------
+   Metallic / carbon-fibre texture utilities
+   Low-contrast background accents for premium sections — kept subtle
+   so they read as texture, not pattern.
+   --------------------------------------------------------------------- */
+.texture-carbon {
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 6px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 6px);
+}
+
+.texture-metallic {
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.03) 100%);
+}
+
+/* ---------------------------------------------------------------------
+   Focus states — accessibility
+   --------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--color-red-bright);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------
+   Selection
+   --------------------------------------------------------------------- */
+::selection {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+/* ---------------------------------------------------------------------
+   Scrollbar (webkit)
+   --------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-carbon);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-graphite-light);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-red-dark);
+}

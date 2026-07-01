@@ -1,0 +1,153 @@
+/* ==========================================================================
+   Venom Racing — Global Design Tokens
+   Premium dark performance theme: Carbon Black / Matte Graphite / Deep
+   Racing Red. Every other stylesheet should reference these variables
+   rather than hard-coding values, so the entire site's look can be
+   updated in one place.
+   ========================================================================== */
+
+:root {
+  /* ---------------------------------------------------------------------
+     Colours
+     --------------------------------------------------------------------- */
+  --color-carbon: #0a0a0b;
+  --color-carbon-alt: #101012;
+  --color-graphite: #1c1c1f;
+  --color-graphite-light: #2a2a2e;
+  --color-graphite-border: #313136;
+
+  --color-red: #b3121f;
+  --color-red-bright: #e01e2e;
+  --color-red-dark: #7a0c15;
+  --color-red-glow: rgba(224, 30, 46, 0.45);
+
+  --color-white: #ffffff;
+  --color-off-white: #f2f1f0;
+
+  --color-gray-300: #d4d4d8;
+  --color-gray-400: #a3a3aa;
+  --color-gray-500: #767680;
+  --color-gray-600: #55555c;
+
+  --color-success: #2a9d6f;
+  --color-warning: #f4a261;
+  --color-error: #e63946;
+  --color-info: #6ea8c9;
+
+  /* Semantic aliases */
+  --color-bg: var(--color-carbon);
+  --color-bg-alt: var(--color-carbon-alt);
+  --color-surface: var(--color-graphite);
+  --color-surface-light: var(--color-graphite-light);
+  --color-text: var(--color-off-white);
+  --color-text-muted: var(--color-gray-400);
+  --color-border: var(--color-graphite-border);
+  --color-accent: var(--color-red);
+
+  /* ---------------------------------------------------------------------
+     Typography
+     Headings use a condensed/geometric display face for a technical,
+     motorsport feel; body copy stays on a calm neutral sans.
+     --------------------------------------------------------------------- */
+  --font-primary: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-heading: 'Barlow Condensed', 'Oswald', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: 2rem;
+  --fs-3xl: 2.5rem;
+  --fs-4xl: 3.25rem;
+  --fs-5xl: 4.5rem;
+
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-black: 900;
+
+  --lh-tight: 1.15;
+  --lh-normal: 1.55;
+  --lh-loose: 1.85;
+
+  --ls-tight: -0.01em;
+  --ls-wide: 0.04em;
+  --ls-widest: 0.12em;
+
+  /* ---------------------------------------------------------------------
+     Spacing scale
+     --------------------------------------------------------------------- */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* ---------------------------------------------------------------------
+     Layout
+     --------------------------------------------------------------------- */
+  --container-max-width: 1280px;
+  --container-padding: var(--space-md);
+  --header-height: 84px;
+
+  /* ---------------------------------------------------------------------
+     Border radius
+     --------------------------------------------------------------------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* ---------------------------------------------------------------------
+     Shadows & glow
+     --------------------------------------------------------------------- */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.65);
+  --shadow-glow-sm: 0 0 16px var(--color-red-glow);
+  --shadow-glow-md: 0 0 32px var(--color-red-glow);
+  --shadow-glow-lg: 0 0 64px var(--color-red-glow);
+
+  /* Glassmorphism surface */
+  --glass-bg: rgba(255, 255, 255, 0.045);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-blur: 16px;
+
+  /* ---------------------------------------------------------------------
+     Transitions
+     --------------------------------------------------------------------- */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slower: 800ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------------------------------------------------------------------
+     Z-index scale
+     --------------------------------------------------------------------- */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-header: 300;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+
+  /* ---------------------------------------------------------------------
+     Breakpoints (reference only)
+     mobile:  0 - 599px
+     tablet:  600px - 991px
+     desktop: 992px - 1439px
+     large:   1440px+
+     --------------------------------------------------------------------- */
+}

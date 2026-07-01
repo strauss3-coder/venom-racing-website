@@ -1,0 +1,24 @@
+{
+  "name": "Venom Racing",
+  "short_name": "Venom Racing",
+  "description": "RMI 4-Star accredited performance tuning and fabrication workshop in eMalahleni, Mpumalanga — official MRC Tuning and Dastek Unichip dealer.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0b",
+  "theme_color": "#0a0a0b",
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

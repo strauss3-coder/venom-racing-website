@@ -1,0 +1,173 @@
+/* ==========================================================================
+   Venom Racing — Responsive Layout
+   Mobile-first breakpoints. Base styles (outside any media query) target
+   mobile; each breakpoint below progressively enhances the layout.
+
+   Breakpoints:
+     Tablet:        min-width 600px
+     Desktop:       min-width 992px
+     Large Desktop: min-width 1440px
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------
+   Mobile first base (0 - 599px)
+   --------------------------------------------------------------------- */
+.navbar__links {
+  display: none;
+}
+
+.navbar__toggle {
+  display: inline-flex;
+}
+
+.hero__title {
+  font-size: var(--fs-3xl);
+}
+
+.hero__grid {
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+  text-align: center;
+}
+
+.hero__content {
+  max-width: none;
+  margin-inline: auto;
+}
+
+.hero__subtitle {
+  margin-inline: auto;
+}
+
+.hero__actions {
+  justify-content: center;
+}
+
+.hero__cards {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero__float-card {
+  flex: 1 1 200px;
+  max-width: 240px;
+}
+
+.hero__float-card-inner {
+  flex-direction: column;
+  text-align: center;
+  gap: var(--space-sm);
+}
+
+.hero__sound-toggle {
+  bottom: var(--space-md);
+  right: var(--space-md);
+  width: 40px;
+  height: 40px;
+}
+
+.grid--auto {
+  grid-template-columns: 1fr;
+}
+
+.container {
+  padding-inline: var(--space-md);
+}
+
+/* ---------------------------------------------------------------------
+   Tablet — min-width: 600px
+   --------------------------------------------------------------------- */
+@media (min-width: 600px) {
+  .hero__title {
+    font-size: var(--fs-4xl);
+  }
+
+  .grid--auto,
+  .grid--services,
+  .grid--features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Desktop — min-width: 992px
+   --------------------------------------------------------------------- */
+@media (min-width: 992px) {
+  .navbar__links {
+    display: flex;
+  }
+
+  .navbar__toggle {
+    display: none;
+  }
+
+  .hero__title {
+    font-size: var(--fs-5xl);
+  }
+
+  .hero__grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    text-align: left;
+  }
+
+  .hero__content {
+    margin-inline: 0;
+  }
+
+  .hero__subtitle {
+    margin-inline: 0;
+  }
+
+  .hero__actions {
+    justify-content: flex-start;
+  }
+
+  .hero__cards {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .hero__float-card {
+    max-width: none;
+  }
+
+  .hero__float-card-inner {
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .grid--auto,
+  .grid--services {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid--features {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .footer__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .container {
+    padding-inline: var(--space-xl);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Large Desktop — min-width: 1440px
+   --------------------------------------------------------------------- */
+@media (min-width: 1440px) {
+  .grid--auto {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .container {
+    padding-inline: var(--space-2xl);
+  }
+}

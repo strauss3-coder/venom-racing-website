@@ -1,0 +1,271 @@
+/* ==========================================================================
+   Venom Racing — Animations
+   Keyframes and utility classes for fades, slides, glow, hover effects,
+   and loading states. Paired with IntersectionObserver logic in
+   assets/js/animations.js which toggles the `.is-visible` class.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------
+   Fade
+   --------------------------------------------------------------------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  transition: opacity var(--transition-slow) ease;
+}
+
+.fade-in.is-visible {
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------------
+   Slide
+   --------------------------------------------------------------------- */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity var(--transition-slow) ease, transform var(--transition-slow) ease;
+}
+
+.slide-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity var(--transition-slow) ease, transform var(--transition-slow) ease;
+}
+
+.slide-in-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity var(--transition-slow) ease, transform var(--transition-slow) ease;
+}
+
+.slide-in-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---------------------------------------------------------------------
+   Glow
+   --------------------------------------------------------------------- */
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: var(--shadow-glow-sm);
+  }
+  50% {
+    box-shadow: var(--shadow-glow-lg);
+  }
+}
+
+.glow-pulse {
+  animation: glowPulse 2.4s ease-in-out infinite;
+}
+
+.glow-on-hover {
+  transition: box-shadow var(--transition-base);
+}
+
+.glow-on-hover:hover {
+  box-shadow: var(--shadow-glow-md);
+}
+
+/* Animated gradient — subtle moving sheen for premium accents */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-animated {
+  background: linear-gradient(120deg, var(--color-red-dark), var(--color-red-bright), var(--color-red-dark));
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+}
+
+/* ---------------------------------------------------------------------
+   Parallax
+   Applied via JS (transform: translateY) driven by scroll position;
+   this class only opts an element into GPU-accelerated transforms.
+   --------------------------------------------------------------------- */
+.parallax {
+  will-change: transform;
+}
+
+/* ---------------------------------------------------------------------
+   Floating particles — very subtle ambient drift
+   --------------------------------------------------------------------- */
+@keyframes particleDrift {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(var(--drift-x, 20px), -120px);
+    opacity: 0;
+  }
+}
+
+.particle-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  bottom: 0;
+  width: 3px;
+  height: 3px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-red-bright);
+  animation: particleDrift 8s linear infinite;
+}
+
+/* ---------------------------------------------------------------------
+   Hover
+   --------------------------------------------------------------------- */
+.hover-lift {
+  transition: transform var(--transition-base);
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px);
+}
+
+.hover-scale {
+  transition: transform var(--transition-base);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* ---------------------------------------------------------------------
+   Loading
+   --------------------------------------------------------------------- */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--color-graphite-light);
+  border-top-color: var(--color-red-bright);
+  border-radius: var(--radius-full);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes skeletonPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.skeleton {
+  background-color: var(--color-graphite-light);
+  border-radius: var(--radius-md);
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------------------
+   Counter — pairs with assets/js/main.js number count-up
+   --------------------------------------------------------------------- */
+@keyframes counterPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.stat__number.is-visible {
+  animation: counterPopIn var(--transition-slow) ease-out;
+}
+
+/* ---------------------------------------------------------------------
+   Reduced motion — respect user preference
+   --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
