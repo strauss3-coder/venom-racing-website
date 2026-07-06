@@ -1,9 +1,9 @@
 # Venom Racing — Website
 
-Production website for Venom Racing, an RMI 4-Star accredited performance
-tuning and fabrication workshop in eMalahleni, Mpumalanga (official MRC
-Tuning and Dastek Unichip dealer). Static HTML/CSS/JavaScript, no build
-step required, deployed via GitHub Pages with a custom domain.
+Production website for Venom Racing, an RMI Accredited performance
+tuning and fabrication workshop in eMalahleni, Mpumalanga (official Dastek
+Unichip dealer). Static HTML/CSS/JavaScript, no build step required,
+deployed via GitHub Pages with a custom domain.
 
 > Venom Racing is a performance workshop, **not** a vehicle dealership —
 > the site has no inventory listings, financing, or vehicle-selling flows.

@@ -104,13 +104,6 @@
   gap: var(--space-sm);
 }
 
-.hero__sound-toggle {
-  bottom: var(--space-md);
-  right: var(--space-md);
-  width: 44px;
-  height: 44px;
-}
-
 .grid--auto,
 .grid--services,
 .grid--features {

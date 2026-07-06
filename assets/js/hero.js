@@ -1,9 +1,9 @@
 /**
  * hero.js
  * Behaviour for the homepage video hero: graceful fallback if the video
- * can't play, a mute/unmute toggle, and scroll-driven cinematic effects
- * (subtle video scale-down, content fade-up, staggered floating-card
- * parallax). Only runs when a `.hero[data-hero]` element is present.
+ * can't play, and scroll-driven cinematic effects (subtle video
+ * scale-down, content fade-up, staggered floating-card parallax).
+ * Only runs when a `.hero[data-hero]` element is present.
  */
 
 (function (window, document) {
@@ -29,30 +29,6 @@
       video.pause();
       hero.classList.add('hero--video-fallback');
     }
-  }
-
-  /**
-   * Muted-by-default sound toggle. Browsers require the video to already
-   * be playing (muted autoplay) before unmuting via a user gesture works
-   * reliably, which is exactly the state we start in.
-   */
-  function initSoundToggle(hero, video) {
-    const toggle = qs('[data-hero-sound]', hero);
-    if (!toggle || !video) return;
-
-    const mutedIcon = qs('[data-icon-muted]', toggle);
-    const unmutedIcon = qs('[data-icon-unmuted]', toggle);
-
-    toggle.addEventListener('click', () => {
-      video.muted = !video.muted;
-      const isMuted = video.muted;
-
-      toggle.setAttribute('aria-pressed', String(!isMuted));
-      toggle.setAttribute('aria-label', isMuted ? 'Unmute hero video' : 'Mute hero video');
-
-      if (mutedIcon) mutedIcon.hidden = !isMuted;
-      if (unmutedIcon) unmutedIcon.hidden = isMuted;
-    });
   }
 
   /**
@@ -113,7 +89,6 @@
 
     const video = qs('video', hero);
     initVideoFallback(hero, video);
-    initSoundToggle(hero, video);
     initScrollEffects(hero);
   }
 
