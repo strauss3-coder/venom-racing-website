@@ -270,3 +270,81 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------------------------------------------------------------------
+   Preloader + page transition
+   Reveals a branded loading screen on first paint, then fades away once
+   assets load (hidden by main.js, with a hard safety timeout). The
+   `.is-leaving` state fades the page out before internal navigation for
+   a continuous feel between pages.
+   --------------------------------------------------------------------- */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  background-color: var(--color-carbon);
+  background-image: var(--bg-atmosphere);
+  transition: opacity var(--transition-slow) ease, visibility var(--transition-slow) ease;
+}
+
+.preloader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader__word {
+  font-family: var(--font-heading);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--color-white);
+  opacity: 0;
+  animation: fadeIn var(--transition-slow) ease 120ms forwards;
+}
+
+.preloader__bar {
+  width: 120px;
+  height: 3px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-graphite-light);
+  overflow: hidden;
+}
+
+.preloader__bar::before {
+  content: '';
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background-color: var(--color-red-bright);
+  box-shadow: var(--shadow-glow-sm);
+  animation: preloaderSlide 1.1s ease-in-out infinite;
+}
+
+@keyframes preloaderSlide {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+/* Fade the page out before internal navigation */
+body.is-leaving {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader__bar::before {
+    animation: none;
+  }
+}

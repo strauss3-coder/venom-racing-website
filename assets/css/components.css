@@ -983,3 +983,32 @@
 .photo-placeholder--compact .photo-placeholder__title {
   font-size: var(--fs-sm);
 }
+
+/* ---------------------------------------------------------------------
+   Premium card glow (unified)
+   Standardises depth + hover across every non-hero card family so they
+   read as one cohesive, high-end component set — the composited
+   --glass-glow (1px red ring + deep shadow + soft glow) intensifies on
+   hover with a consistent lift. Applied after the individual card rules
+   so it governs the final shadow/hover for all of them. (.glass-card is
+   intentionally excluded: it's used inside the hero, left untouched.)
+   --------------------------------------------------------------------- */
+.card,
+.service-card,
+.feature-card,
+.review-card,
+.process__step {
+  box-shadow: var(--glass-glow);
+  transition: transform var(--transition-base), box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.card:hover,
+.service-card:hover,
+.feature-card:hover,
+.review-card:hover,
+.process__step:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--glass-glow-hover);
+  border-color: rgba(224, 30, 46, 0.40);
+}

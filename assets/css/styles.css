@@ -27,9 +27,18 @@ body {
   line-height: var(--lh-normal);
   color: var(--color-text);
   background-color: var(--color-bg);
+  /* Layered, fixed atmosphere so every page feels alive as you scroll —
+     pure CSS, no JS, negligible cost. */
+  background-image: var(--bg-atmosphere);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   min-height: 100vh;
   min-height: 100dvh;
   overflow-x: hidden;
+  /* Soft fade-in on first paint (reuses the fadeIn keyframe) */
+  animation: fadeIn var(--transition-base) ease both;
 }
 
 /* Locks background scroll while the mobile nav dropdown is open. */

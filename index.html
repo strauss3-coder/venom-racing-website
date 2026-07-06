@@ -34,6 +34,11 @@
 
   <link rel="manifest" href="manifest.json">
 
+  <!-- Fonts (preconnect for perf; heading = Barlow Condensed/Oswald, body = Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/styles.css">
@@ -68,6 +73,12 @@
   </script>
 </head>
 <body>
+
+  <!-- Page preloader (revealed on first paint, hidden by main.js once loaded) -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <span class="preloader__word">VENOM RACING</span>
+    <span class="preloader__bar"></span>
+  </div>
 
   <a class="visually-hidden" href="#main-content">Skip to main content</a>
 

@@ -19,6 +19,50 @@
   }
 
   /**
+   * Preloader — reveals the page once assets have loaded, with a hard
+   * safety timeout so a slow/failed asset can never trap the visitor
+   * behind the loading screen.
+   */
+  function initPreloader() {
+    // Uses native DOM (not the qs helper) so a failure to load utils.js
+    // can never leave the visitor trapped behind the loading screen.
+    const preloader = document.getElementById('preloader');
+    if (!preloader) return;
+    const hide = () => preloader.classList.add('is-hidden');
+    if (document.readyState === 'complete') {
+      setTimeout(hide, 300);
+    } else {
+      window.addEventListener('load', () => setTimeout(hide, 300));
+    }
+    setTimeout(hide, 2500);
+  }
+
+  /**
+   * Soft page transition — fades the body out before following an
+   * internal link, so navigation between pages feels continuous rather
+   * than a hard flash. Skipped for reduced-motion, new-tab clicks,
+   * external links, and in-page anchors.
+   */
+  function initPageTransition() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    qsa('a[href]').forEach((link) => {
+      const href = link.getAttribute('href');
+      const sameTab = !link.target || link.target === '_self';
+      const internal = href && /\.html($|#|\?)/.test(href) && !href.startsWith('http');
+      if (!internal || !sameTab || href.startsWith('#')) return;
+
+      link.addEventListener('click', (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+        event.preventDefault();
+        document.body.classList.add('is-leaving');
+        setTimeout(() => {
+          window.location.href = href;
+        }, 200);
+      });
+    });
+  }
+
+  /**
    * FAQ accordion — toggles `.is-open` on `.accordion__item`.
    * CSS handles the open/close transition via grid-template-rows.
    */
@@ -153,6 +197,8 @@
   }
 
   function initApp() {
+    initPreloader();
+    initPageTransition();
     setCurrentYear();
     initAccordions();
     initCounters();
