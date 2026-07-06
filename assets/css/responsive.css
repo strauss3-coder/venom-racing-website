@@ -65,25 +65,36 @@
 }
 
 .hero-cinematic-wrapper {
-  /* Shorter scroll distance on small screens — the same 5-beat sequence
+  /* Shorter scroll distance on small screens — the same video scrub
      over a smaller viewport otherwise feels twice as long to scroll through. */
-  --hero-scroll-length: 320vh;
+  --hero-scroll-length: 220vh;
 }
 
-.hero-cinematic__tagline {
-  font-size: var(--fs-2xl);
-}
-
-.hero-cinematic__final-heading {
+.hero-cinematic__headline {
   font-size: var(--fs-3xl);
 }
 
-.hero-cinematic__card-inner {
-  padding: var(--space-lg) var(--space-xl);
+.hero-cinematic__subtitle {
+  font-size: var(--fs-base);
 }
 
-.hero-cinematic__card-inner strong {
-  font-size: var(--fs-lg);
+.hero-cinematic__actions {
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.hero-cinematic__actions .btn {
+  width: 100%;
+}
+
+.hero-cinematic__cards {
+  grid-template-columns: 1fr;
+}
+
+.hero-cinematic__card-mini {
+  max-height: none;
+  justify-content: flex-start;
 }
 
 .grid--auto,
@@ -154,23 +165,11 @@
   }
 
   .hero-cinematic-wrapper {
-    --hero-scroll-length: 400vh;
+    --hero-scroll-length: 260vh;
   }
 
-  .hero-cinematic__tagline {
-    font-size: var(--fs-3xl);
-  }
-
-  .hero-cinematic__final-heading {
-    font-size: var(--fs-4xl);
-  }
-
-  .hero-cinematic__card-inner {
-    padding: var(--space-xl) var(--space-2xl);
-  }
-
-  .hero-cinematic__card-inner strong {
-    font-size: var(--fs-xl);
+  .hero-cinematic__headline {
+    font-size: var(--fs-5xl);
   }
 
   .grid--auto,

@@ -453,14 +453,14 @@
    Cinematic Hero (scroll-scrubbed video)
    A tall wrapper provides scroll distance; the inner stage is pinned via
    CSS position:sticky while assets/js/hero.js (GSAP ScrollTrigger) maps
-   scroll progress onto the video's currentTime and a sequence of
-   centred content "phases" (intro / three cards / final CTA), each
-   with its own fade in/out window along that progress. See
-   --hero-scroll-length below to retune how much scroll the whole
-   sequence consumes.
+   scroll progress onto the video's currentTime — the video is never
+   autoplayed, scrolling scrubs it frame by frame. The hero's text
+   content (badge/headline/subtitle/CTAs/mini cards) is always visible,
+   not scroll-sequenced. See --hero-scroll-length below to retune how
+   much scroll the video scrub consumes.
    --------------------------------------------------------------------- */
 .hero-cinematic-wrapper {
-  --hero-scroll-length: 400vh;
+  --hero-scroll-length: 260vh;
   position: relative;
   height: var(--hero-scroll-length);
 }
@@ -470,7 +470,6 @@
   top: 0;
   height: 100vh;
   height: 100dvh;
-  min-height: 110vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -494,30 +493,10 @@
   object-fit: cover;
 }
 
-/* GSAP failed to load, reduced motion is preferred, or the video
-   errored — collapse back to a normal single-screen static hero
-   showing frame 0 and the final headline/CTA only. */
-.hero-cinematic--static {
-  height: auto;
-}
-
-.hero-cinematic--static .hero-cinematic {
-  position: relative;
-  height: 100vh;
-  height: 100dvh;
-  min-height: 110vh;
-}
-
-.hero-cinematic--static [data-hero-phase] {
+/* Video failed to load — hide it and let the .hero-cinematic__media
+   gradient background show through instead of a broken/frozen frame. */
+.hero-cinematic--video-fallback .hero-cinematic__video {
   display: none;
-}
-
-.hero-cinematic--static [data-hero-phase='final'] {
-  display: flex;
-  opacity: 1;
-  filter: none;
-  transform: none;
-  pointer-events: auto;
 }
 
 .hero-cinematic__overlay {
@@ -527,76 +506,159 @@
   pointer-events: none;
   background:
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 6px),
-    radial-gradient(140% 100% at 50% 100%, rgba(10, 10, 11, 0.55) 0%, transparent 60%),
-    linear-gradient(180deg, rgba(10, 10, 11, 0.4) 0%, rgba(10, 10, 11, 0.15) 40%, rgba(10, 10, 11, 0.6) 100%);
+    radial-gradient(140% 100% at 50% 100%, rgba(10, 10, 11, 0.6) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(10, 10, 11, 0.55) 0%, rgba(10, 10, 11, 0.25) 45%, rgba(10, 10, 11, 0.65) 100%);
 }
 
-/* Shared positioning for every centred content phase — intro, cards,
-   and final reveal all occupy the same centred stage; only one is
-   ever meaningfully visible at a time (driven by JS opacity/blur). */
-.hero-cinematic__intro,
-.hero-cinematic__card,
-.hero-cinematic__final {
-  position: absolute;
-  inset: 0;
+/* ---------------------------------------------------------------------
+   Cinematic Hero — content (badge, headline, subtitle, CTAs, mini cards)
+   --------------------------------------------------------------------- */
+.hero-cinematic__content {
+  position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  padding-inline: var(--space-lg);
-  opacity: 0;
-  will-change: opacity, transform, filter;
+  width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
+  padding: var(--space-3xl) var(--space-lg);
 }
 
-.hero-cinematic__brand {
-  font-family: var(--font-heading);
-  font-size: 14px;
-  font-weight: var(--fw-semibold);
-  letter-spacing: var(--ls-widest);
-  text-transform: uppercase;
-  color: var(--color-gray-300);
-  margin-bottom: var(--space-md);
-}
-
-.hero-cinematic__tagline {
-  font-family: var(--font-heading);
-  font-size: var(--fs-3xl);
-  line-height: 1.25;
-  font-weight: var(--fw-medium);
-  color: var(--color-white);
-  text-transform: none;
-}
-
-.hero-cinematic__card-inner {
-  display: flex;
-  flex-direction: column;
+.hero-cinematic__badge {
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-2xs);
-  padding: var(--space-xl) var(--space-2xl);
-  border-radius: var(--radius-lg);
-}
-
-.hero-cinematic__card-inner strong {
+  padding: var(--space-2xs) var(--space-md);
+  margin-bottom: var(--space-xl);
+  border-radius: var(--radius-full);
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   font-family: var(--font-heading);
-  font-size: var(--fs-xl);
-  font-weight: var(--fw-semibold);
-  color: var(--color-white);
-  text-transform: uppercase;
-  letter-spacing: var(--ls-wide);
-}
-
-.hero-cinematic__card-inner span {
   font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
   color: var(--color-gray-300);
 }
 
-.hero-cinematic__final-heading {
-  font-size: var(--fs-4xl);
-  margin-bottom: var(--space-xl);
+.hero-cinematic__headline {
+  font-size: var(--fs-5xl);
+  line-height: 1.1;
   color: var(--color-white);
+  margin-bottom: var(--space-lg);
 }
+
+.hero-cinematic__subtitle {
+  font-size: var(--fs-lg);
+  color: var(--color-gray-300);
+  max-width: 540px;
+  margin-bottom: var(--space-xl);
+}
+
+.hero-cinematic__actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.hero-cinematic__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.hero-cinematic__card-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 70px;
+  max-height: 90px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+@media (hover: hover) {
+  .hero-cinematic__card-mini:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow-sm);
+    border-color: var(--color-red);
+  }
+}
+
+.hero-cinematic__card-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-red-bright);
+}
+
+.hero-cinematic__card-mini span {
+  font-family: var(--font-heading);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
+  line-height: 1.25;
+  color: var(--color-white);
+  text-align: left;
+}
+
+.hero-cinematic__scroll-indicator {
+  position: absolute;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  width: 26px;
+  height: 42px;
+  border: 2px solid var(--color-gray-300);
+  border-radius: var(--radius-full);
+  animation: scrollIndicatorPulse 2.4s ease-in-out infinite;
+}
+
+.hero-cinematic__scroll-indicator::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 4px;
+  height: 8px;
+  background-color: var(--color-red-bright);
+  border-radius: var(--radius-full);
+  transform: translateX(-50%);
+  animation: scrollIndicator 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollIndicator {
+  0% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 14px);
+    opacity: 0;
+  }
+}
+
+@keyframes scrollIndicatorPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* ---------------------------------------------------------------------
    Sections
    --------------------------------------------------------------------- */
 .section-heading {

@@ -1,16 +1,16 @@
 /**
  * hero.js
- * Cinematic scroll-scrubbed homepage hero. The 360° reception video is
- * never autoplayed — GSAP ScrollTrigger maps scroll progress across the
- * pinned hero directly onto the video's currentTime, and the same
- * progress value drives a sequence of centred content "phases" (an
- * intro, three feature cards, and a final headline + CTA), each fading
- * in/out within its own narrow window of the overall scroll range.
+ * Homepage hero behaviour:
+ *  - Scrubs the 360° reception video's playback to scroll position via
+ *    GSAP ScrollTrigger — the video is never autoplayed; as the visitor
+ *    scrolls down through the pinned hero it advances frame by frame
+ *    (as if walking into the workshop), and scrolling up reverses it.
+ *  - Populates the ambient `.particle-field` container(s).
  *
- * Falls back to a static, fully visible hero (frame 0 + final CTA, no
- * animation) if GSAP failed to load, the user prefers reduced motion,
- * or the video itself fails — so the rest of the site is never blocked
- * behind a broken or unscriptable hero.
+ * The hero's text content (badge, headline, subtitle, CTAs, mini cards)
+ * is a normal always-visible layout — only the video is scroll-driven.
+ * Falls back to a frozen first frame if GSAP failed to load, the user
+ * prefers reduced motion, or the video itself errors.
  */
 
 (function (window, document) {
@@ -48,81 +48,34 @@
   }
 
   /**
-   * Reveals the static fallback state: video frozen on its first frame,
-   * every phase hidden except the final headline/CTA, and the wrapper's
-   * scroll-jacking height collapsed back to a normal single-screen hero.
+   * Scrubs the hero video's currentTime to match scroll progress across
+   * the pinned wrapper (0 = first frame, 1 = last frame). Uses a short
+   * GSAP tween per update rather than a hard seek, so rapid scroll deltas
+   * settle smoothly instead of jumping between frames.
    */
-  function useStaticFallback(wrapper, video) {
-    wrapper.classList.add('hero-cinematic--static');
-    if (video) {
-      video.pause();
-      video.currentTime = 0;
-    }
-  }
-
-  /**
-   * Returns an opacity 0-1 for a given scroll `progress`, ramping up
-   * across [a, b], holding across [b, c], and ramping down across [c, d].
-   */
-  function windowOpacity(progress, [a, b, c, d]) {
-    if (progress <= a || progress >= d) return 0;
-    if (progress < b) return (progress - a) / (b - a);
-    if (progress <= c) return 1;
-    return 1 - (progress - c) / (d - c);
-  }
-
-  function applyPhase(el, progress, win, options) {
-    if (!el) return;
-    const opacity = windowOpacity(progress, win);
-    const scaleIn = options && options.scaleIn;
-
-    el.style.opacity = String(opacity);
-    el.style.filter = `blur(${(1 - opacity) * 6}px)`;
-    el.style.transform = scaleIn
-      ? `scale(${0.94 + opacity * 0.06})`
-      : `translateY(${(1 - opacity) * 18}px)`;
-    el.style.pointerEvents = opacity > 0.5 ? 'auto' : 'none';
-  }
-
-  function initHeroCinematic() {
+  function initHeroVideoScrub() {
     const wrapper = qs('[data-hero-wrapper]');
     if (!wrapper) return;
 
     const video = qs('[data-scrub-video]', wrapper);
+    if (!video) return;
+
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const gsapReady = window.gsap && window.ScrollTrigger;
 
     if (!gsapReady || reduceMotion) {
-      useStaticFallback(wrapper, video);
+      video.pause();
+      video.currentTime = 0;
       return;
     }
 
-    if (video) {
-      video.addEventListener('error', () => useStaticFallback(wrapper, video));
-    }
+    video.addEventListener('error', () => {
+      wrapper.classList.add('hero-cinematic--video-fallback');
+    });
 
     gsap.registerPlugin(ScrollTrigger);
 
-    const phases = {
-      intro: qs('[data-hero-phase="intro"]', wrapper),
-      card1: qs('[data-hero-phase="card-1"]', wrapper),
-      card2: qs('[data-hero-phase="card-2"]', wrapper),
-      card3: qs('[data-hero-phase="card-3"]', wrapper),
-      final: qs('[data-hero-phase="final"]', wrapper),
-    };
-
-    // [fadeInStart, fullyVisibleFrom, fullyVisibleUntil, fadeOutEnd] as
-    // fractions of the hero's total scroll progress (0 - 1).
-    const windows = {
-      intro: [0, 0, 0.05, 0.09],
-      card1: [0.08, 0.12, 0.16, 0.19],
-      card2: [0.32, 0.36, 0.4, 0.43],
-      card3: [0.57, 0.61, 0.65, 0.68],
-      final: [0.85, 0.93, 1, 1],
-    };
-
     let videoTween = null;
-
     const scrubVideoTo = (time) => {
       if (videoTween) videoTween.kill();
       videoTween = gsap.to(video, {
@@ -139,23 +92,15 @@
       end: 'bottom bottom',
       scrub: 0.4,
       onUpdate(self) {
-        const progress = self.progress;
-
-        if (video && Number.isFinite(video.duration) && video.duration > 0) {
-          scrubVideoTo(progress * video.duration);
+        if (Number.isFinite(video.duration) && video.duration > 0) {
+          scrubVideoTo(self.progress * video.duration);
         }
-
-        applyPhase(phases.intro, progress, windows.intro);
-        applyPhase(phases.card1, progress, windows.card1);
-        applyPhase(phases.card2, progress, windows.card2);
-        applyPhase(phases.card3, progress, windows.card3);
-        applyPhase(phases.final, progress, windows.final, { scaleIn: true });
       },
     });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     initParticleFields();
-    initHeroCinematic();
+    initHeroVideoScrub();
   });
 })(window, document);
