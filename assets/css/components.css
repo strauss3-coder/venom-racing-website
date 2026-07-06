@@ -1124,3 +1124,271 @@
   box-shadow: var(--glass-glow-hover);
   border-color: rgba(224, 30, 46, 0.40);
 }
+
+/* ---------------------------------------------------------------------
+   About — image showcase carousel
+   One slide at a time (sliding track); premium glass frame + red glow.
+   Behaviour in assets/js/showcase.js. Each slide falls back to a
+   carbon-textured label (data-label) if its image is missing.
+   --------------------------------------------------------------------- */
+.about-media {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.showcase {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-glow);
+  background-color: var(--color-graphite);
+}
+
+.showcase__track {
+  display: flex;
+  height: 100%;
+  transition: transform var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  touch-action: pan-y;
+}
+
+.showcase__slide {
+  position: relative;
+  flex: 0 0 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.showcase__slide::before {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: var(--fs-md);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+}
+
+.showcase__slide img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.showcase__caption {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--space-2xl) var(--space-md) var(--space-md);
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-white);
+  background: linear-gradient(0deg, rgba(10, 10, 11, 0.85), transparent);
+}
+
+.showcase__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: rgba(10, 10, 11, 0.5);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--color-white);
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.showcase__arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+.showcase__arrow:hover {
+  background-color: var(--color-red);
+  border-color: var(--color-red);
+  box-shadow: var(--shadow-glow-sm);
+}
+
+.showcase__arrow--prev {
+  left: var(--space-sm);
+}
+
+.showcase__arrow--next {
+  right: var(--space-sm);
+}
+
+.showcase__dots {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: var(--space-sm);
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.showcase__dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.45);
+  transition: width var(--transition-base), background-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.showcase__dots button.is-active {
+  width: 22px;
+  background-color: var(--color-red-bright);
+  box-shadow: var(--shadow-glow-sm);
+}
+
+/* ---------------------------------------------------------------------
+   About — premium RMI accreditation badge
+   The RMI logo sits on an intentional white "plaque" inside a glass +
+   carbon-textured card with a red accent edge, so it reads as a
+   certification seal rather than a pasted-on image.
+   --------------------------------------------------------------------- */
+.rmi-badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--glass-glow);
+}
+
+.rmi-badge::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--color-red-bright), var(--color-red-dark));
+  box-shadow: var(--shadow-glow-sm);
+}
+
+.rmi-badge__plate {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  min-height: 40px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.rmi-badge__plate img {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+
+.rmi-badge__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rmi-badge__text strong {
+  font-family: var(--font-heading);
+  font-size: var(--fs-lg);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-white);
+}
+
+.rmi-badge__text span {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+/* ---------------------------------------------------------------------
+   About — "Technology We Use" chip strip
+   --------------------------------------------------------------------- */
+.tech-strip {
+  margin-bottom: var(--space-3xl);
+  padding: var(--space-lg) var(--space-xl);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md) var(--space-lg);
+}
+
+.tech-strip__label {
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--color-red-bright);
+}
+
+.tech-strip__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tech-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-white);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.tech-chip:hover {
+  border-color: var(--color-red);
+  box-shadow: var(--shadow-glow-sm);
+}
+
+.tech-chip svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-red-bright);
+}

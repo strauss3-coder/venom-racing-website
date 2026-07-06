@@ -83,23 +83,62 @@
 
     <section class="section" style="padding-top: var(--space-2xl);">
       <div class="container">
-        <div class="grid split-grid split-grid--wide-left" style="align-items:center; margin-bottom: var(--space-3xl);">
+        <div class="grid split-grid split-grid--wide-left" style="align-items:center; margin-bottom: var(--space-2xl);">
           <div class="slide-in-left">
             <span class="eyebrow">About Venom Racing</span>
-            <h1>Precision Engineering, Proven On The Dyno</h1>
-            <p>Venom Racing is a performance workshop based in eMalahleni, Mpumalanga, built around official brand partnerships and in-house fabrication rather than backyard guesswork.</p>
-            <p>As an official Dastek Unichip dealer, we install and calibrate brand-authorised ECU tuning hardware, backed by our own dyno facility to validate every result before a vehicle leaves the workshop.</p>
+            <h1>Precision Tuning<br>Proven On The Dyno</h1>
+            <p>Venom Racing is a performance workshop based in eMalahleni, Mpumalanga, built around official dealer accreditation, in-house fabrication and tune validation with data logging.</p>
+            <p>Venom Racing is equipped with the latest state-of-the-art diagnostic, data logging and ECU tuning equipment, allowing every vehicle to be tuned safely, accurately and reliably. Our investment in modern technology ensures every calibration is validated for maximum performance, drivability and long-term reliability.</p>
           </div>
-          <div style="position: relative;">
-            <div class="photo-placeholder texture-carbon slide-in-right" style="aspect-ratio: 4/3;" role="img" aria-label="Venom Racing workshop — coming soon">
-              <svg class="photo-placeholder__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-              <strong class="photo-placeholder__title">Professional Workshop Photography</strong>
-              <p class="photo-placeholder__subtitle">This section will showcase our completed builds and workshop after the photo shoot.</p>
+
+          <div class="about-media slide-in-right">
+            <!-- Premium image showcase (autoplaying, looping; arrows + swipe + dots) -->
+            <div class="showcase" data-showcase aria-roledescription="carousel" aria-label="Venom Racing workshop showcase">
+              <div class="showcase__track" data-showcase-track>
+                <figure class="showcase__slide texture-carbon" data-label="Custom Intercooler">
+                  <img src="assets/images/about/intercooler.jpg" alt="Custom intercooler manufactured by Venom Racing" loading="lazy" onerror="this.style.display='none'">
+                  <figcaption class="showcase__caption">Custom Intercooler</figcaption>
+                </figure>
+                <figure class="showcase__slide texture-carbon" data-label="Performance Exhaust">
+                  <img src="assets/images/about/exhaust.jpg" alt="Custom-manufactured performance exhaust by Venom Racing" loading="lazy" onerror="this.style.display='none'">
+                  <figcaption class="showcase__caption">Manufactured Performance Exhaust</figcaption>
+                </figure>
+                <figure class="showcase__slide texture-carbon" data-label="On The Dyno">
+                  <img src="assets/images/about/dyno.jpg" alt="Customer vehicle on the Venom Racing dyno" loading="lazy" onerror="this.style.display='none'">
+                  <figcaption class="showcase__caption">Vehicle On The Dyno</figcaption>
+                </figure>
+              </div>
+              <button class="showcase__arrow showcase__arrow--prev" type="button" data-showcase-prev aria-label="Previous image">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <button class="showcase__arrow showcase__arrow--next" type="button" data-showcase-next aria-label="Next image">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+              <div class="showcase__dots" data-showcase-dots></div>
             </div>
-            <div class="glass-card floating-badge fade-in">
-              <strong style="font-family: var(--font-heading); font-size: var(--fs-lg); color: var(--color-white);">RMI Accredited</strong>
-              <p style="margin:0; font-size: var(--fs-sm);">Accredited performance &amp; repair facility</p>
+
+            <!-- Premium RMI accreditation badge -->
+            <div class="rmi-badge glass-card texture-carbon fade-in">
+              <span class="rmi-badge__plate">
+                <img src="assets/images/logo/rmi-logo.png" alt="Retail Motor Industry Organisation (RMI)" onerror="this.style.display='none'">
+              </span>
+              <span class="rmi-badge__text">
+                <strong>RMI Accredited</strong>
+                <span>Approved performance &amp; repair facility</span>
+              </span>
             </div>
+          </div>
+        </div>
+
+        <!-- Technology We Use -->
+        <div class="tech-strip fade-in">
+          <span class="tech-strip__label">Technology We Use</span>
+          <div class="tech-strip__items">
+            <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>Dastek Unichip</span>
+            <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 12l4.5-3"/></svg>Dyno Tuning</span>
+            <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Advanced Diagnostics</span>
+            <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 4-5"/></svg>Data Logging</span>
+            <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5l8-3z"/><path d="M9 12l2 2 4-4"/></svg>RMI Accredited</span>
           </div>
         </div>
 
@@ -113,7 +152,7 @@
             <p>RMI Accredited, meeting manufacturer-level standards on tooling, safety and technician qualification.</p>
           </div>
           <div class="feature-card slide-up">
-            <h4>Official Partnerships</h4>
+            <h4>Official Dealer</h4>
             <p>Authorised Dastek Unichip dealer for brand-backed hardware calibration.</p>
           </div>
           <div class="feature-card slide-up">
@@ -182,6 +221,7 @@
   <script src="assets/js/animations.js" defer></script>
   <script src="assets/js/builds.js" defer></script>
   <script src="assets/js/forms.js" defer></script>
+  <script src="assets/js/showcase.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
