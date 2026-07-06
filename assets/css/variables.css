@@ -51,6 +51,10 @@
      --------------------------------------------------------------------- */
   --font-primary: 'Inter', 'Helvetica Neue', Arial, sans-serif;
   --font-heading: 'Barlow Condensed', 'Oswald', 'Inter', sans-serif;
+  /* Big motorsport display face — used for hero + page H1 only, where its
+     tall all-caps forms read as premium. Section headings stay on the more
+     readable condensed --font-heading. */
+  --font-display: 'Bebas Neue', 'Oswald', 'Barlow Condensed', sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 
   --fs-xs: 0.75rem;

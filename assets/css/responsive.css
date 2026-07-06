@@ -12,6 +12,14 @@
 /* ---------------------------------------------------------------------
    Mobile first base (0 - 599px)
    --------------------------------------------------------------------- */
+/* Below the desktop split, the hero is a single column laid over the
+   video — use a more uniform, stronger scrim to guarantee text contrast. */
+@media (max-width: 991px) {
+  .hero__scrim {
+    background: linear-gradient(180deg, rgba(10, 10, 11, 0.72) 0%, rgba(10, 10, 11, 0.82) 100%);
+  }
+}
+
 .navbar__links {
   display: none;
   position: absolute;
@@ -64,37 +72,16 @@
   display: inline-flex;
 }
 
-.hero-cinematic-wrapper {
-  /* Shorter scroll distance on small screens — the same video scrub
-     over a smaller viewport otherwise feels twice as long to scroll through. */
-  --hero-scroll-length: 220vh;
-}
-
-.hero-cinematic__headline {
-  font-size: var(--fs-3xl);
-}
-
-.hero-cinematic__subtitle {
-  font-size: var(--fs-base);
-}
-
-.hero-cinematic__actions {
+/* Hero (mobile base): full-width stacked CTAs; cards stack via the
+   base .hero__cards flex column. Heading size is handled by clamp(). */
+.hero__actions {
   flex-direction: column;
   align-items: stretch;
   width: 100%;
 }
 
-.hero-cinematic__actions .btn {
+.hero__actions .btn {
   width: 100%;
-}
-
-.hero-cinematic__cards {
-  grid-template-columns: 1fr;
-}
-
-.hero-cinematic__card-mini {
-  max-height: none;
-  justify-content: flex-start;
 }
 
 .grid--auto,
@@ -183,14 +170,6 @@
 
   .navbar__toggle {
     display: none;
-  }
-
-  .hero-cinematic-wrapper {
-    --hero-scroll-length: 260vh;
-  }
-
-  .hero-cinematic__headline {
-    font-size: var(--fs-5xl);
   }
 
   .grid--auto,

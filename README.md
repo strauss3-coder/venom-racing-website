@@ -64,40 +64,35 @@ venom-racing-website/
 │   │   ├── backgrounds/    Section background imagery
 │   │   └── social/         Open Graph / Twitter Card share images
 │   │
-│   ├── videos/            reception-360.mp4 — the homepage hero's scroll-scrubbed video
+│   ├── videos/            venom-hero.mp4 — the homepage hero's ambient background video
 │   └── fonts/              Self-hosted webfonts (if not using a CDN)
 │
 └── favicon/                Favicon & PWA icon set (see favicon/README.md)
 ```
 
-## Homepage hero (cinematic scroll-scrub)
+## Homepage hero (left/right cinematic composition)
 
-`index.html`'s hero doesn't autoplay video — scrolling drives it. A tall
-`.hero-cinematic-wrapper` provides scroll distance; the visible
-`.hero-cinematic` stage stays pinned via CSS `position: sticky` while
-`assets/js/hero.js` (GSAP + ScrollTrigger) maps scroll progress (0–1)
-onto the video's `currentTime` and reveals five content "phases" in
-sequence — intro, three feature cards, and a final headline + CTA —
-each fading in/out within its own narrow window of that same progress
-value. See the `windows` object in `hero.js` to retime any phase, and
-`--hero-scroll-length` (set in `components.css`, overridden per
-breakpoint in `responsive.css`) to change how much scrolling the whole
-sequence takes.
+`index.html`'s hero (`.hero`, styled in `components.css`, behaviour in
+`assets/js/hero.js`) is a split composition over an ambient looping
+video (`assets/videos/venom-hero.mp4`, autoplay + muted + loop) under a
+left-weighted scrim:
 
-**External dependency:** GSAP + ScrollTrigger are loaded from the
-jsDelivr CDN in `index.html` (this is a no-build static site, so there's
-no npm install step) — the site needs internet access to load them.
-If they fail to load, or the visitor has `prefers-reduced-motion`
-enabled, or the video itself errors, `hero.js` falls back to a normal
-static hero (frame 0 + the final headline/CTA shown immediately) so the
-homepage is never blocked behind a broken scroll effect.
+- **Left** — big Bebas Neue display heading (`--font-display`),
+  supporting paragraph, two premium glass "badge" pills, and the CTAs.
+- **Right** — three premium glass cards. On capable desktops the stage
+  pins (CSS `position: sticky`) and the cards cross-fade one at a time
+  as you scroll through the hero (`hero.js` adds `.is-sequenced`, then a
+  lightweight rAF scroll handler drives opacity/blur via the `windows`
+  array). On mobile / reduced-motion / no-JS the cards simply stack and
+  stay visible — no pin, no scroll-jacking.
 
-**Video encoding:** `reception-360.mp4` is used as-is; no video
-processing tools were available in this environment to inspect or
-re-encode it. For the smoothest scrubbing and fastest load, encode it
-as H.264 MP4, 1080p, ~24fps, and compressed (a high-fps/high-bitrate
-source will make `currentTime` seeks feel less responsive while
-scrolling, especially on mobile).
+No external JS dependencies (GSAP was removed). If the video errors or
+reduced-motion is set, the video hides and the `.hero__media` gradient
+shows through; the hero content is always readable regardless.
+
+**Video encoding:** `venom-hero.mp4` is used as-is; no video tools were
+available in this environment to re-encode it. For fastest load, keep it
+H.264 MP4, 1080p, compressed.
 
 ## Local development
 

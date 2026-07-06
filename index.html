@@ -37,7 +37,7 @@
   <!-- Fonts (preconnect for perf; heading = Barlow Condensed/Oswald, body = Inter) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="assets/css/variables.css">
@@ -110,45 +110,64 @@
     <!-- ============================================================
          1. Hero
          ============================================================ -->
-    <section class="hero-cinematic-wrapper" data-hero-wrapper>
-      <div class="hero-cinematic" data-hero-cinematic>
-        <div class="hero-cinematic__media" data-hero-media>
-          <video class="hero-cinematic__video" data-scrub-video muted playsinline preload="auto" aria-hidden="true">
-            <source src="assets/videos/reception-360.mp4" type="video/mp4">
+    <section class="hero" data-hero>
+      <div class="hero__stage" data-hero-stage>
+        <div class="hero__media" data-hero-media>
+          <video class="hero__video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+            <source src="assets/videos/venom-hero.mp4" type="video/mp4">
           </video>
         </div>
-        <div class="hero-cinematic__overlay"></div>
-        <div class="particle-field" data-particles data-particle-count="20" aria-hidden="true"></div>
+        <div class="hero__scrim"></div>
+        <div class="particle-field" data-particles data-particle-count="16" aria-hidden="true"></div>
 
-        <div class="hero-cinematic__content">
-          <span class="hero-cinematic__badge">RMI Accredited &bull; Dastek Unichip Dealer</span>
+        <div class="container hero__grid">
+          <!-- LEFT — primary lede -->
+          <div class="hero__lede">
+            <span class="hero__eyebrow">eMalahleni &bull; Performance Workshop</span>
+            <h1 class="hero__title">Engineered<br>To <span class="hero__title-accent">Outperform.</span></h1>
+            <p class="hero__text">Venom Racing is an RMI Accredited performance workshop and official Dastek Unichip dealer — dyno-validated ECU tuning, custom exhaust fabrication and precision automotive repairs.</p>
 
-          <h1 class="hero-cinematic__headline">Built For Drivers<br>Who Expect More.</h1>
+            <div class="hero__badges">
+              <span class="hero__badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+                RMI Accredited
+              </span>
+              <span class="hero__badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>
+                Dastek Unichip Dealer
+              </span>
+            </div>
 
-          <p class="hero-cinematic__subtitle">Venom Racing is an RMI Accredited performance workshop in eMalahleni — official Dastek Unichip dealer specialising in dyno-validated ECU tuning, custom exhaust fabrication, and precision automotive repairs.</p>
-
-          <div class="hero-cinematic__actions">
-            <a class="btn btn-primary" href="services.html" data-ripple>Explore Services</a>
-            <a class="btn btn-outline" href="contact.html" data-ripple>Request Quote</a>
+            <div class="hero__actions">
+              <a class="btn btn-primary" href="services.html" data-ripple>Explore Services</a>
+              <a class="btn btn-outline" href="contact.html" data-ripple>Request Quote</a>
+            </div>
           </div>
 
-          <div class="hero-cinematic__cards">
-            <div class="hero-cinematic__card-mini glass-card">
-              <svg class="hero-cinematic__card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>
-              <span>Performance Upgrades</span>
-            </div>
-            <div class="hero-cinematic__card-mini glass-card">
-              <svg class="hero-cinematic__card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-              <span>Minor &amp; Major Services &amp; Repairs</span>
-            </div>
-            <div class="hero-cinematic__card-mini glass-card">
-              <svg class="hero-cinematic__card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
-              <span>RMI Accredited &bull; Dastek Unichip Dealer</span>
+          <!-- RIGHT — premium cards (cross-fade sequence on desktop) -->
+          <div class="hero__cards" data-hero-cards>
+            <article class="hero__card" data-card="0">
+              <div class="hero__card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></div>
+              <h3 class="hero__card-title">Performance Upgrades</h3>
+              <p class="hero__card-text">Dyno-validated ECU tuning, turbo &amp; engine conversions and custom exhaust fabrication for real, measured gains.</p>
+            </article>
+            <article class="hero__card" data-card="1">
+              <div class="hero__card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+              <h3 class="hero__card-title">Minor &amp; Major Services &amp; Repairs</h3>
+              <p class="hero__card-text">Full mechanical servicing and precision repairs, carried out to manufacturer-level standards.</p>
+            </article>
+            <article class="hero__card" data-card="2">
+              <div class="hero__card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5l8-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+              <h3 class="hero__card-title">RMI Accredited &bull; Dastek Dealer</h3>
+              <p class="hero__card-text">Official Dastek Unichip dealer, backed by RMI-accredited workshop standards you can trust.</p>
+            </article>
+            <div class="hero__card-dots" data-hero-dots aria-hidden="true">
+              <span class="is-active"></span><span></span><span></span>
             </div>
           </div>
         </div>
 
-        <div class="hero-cinematic__scroll-indicator" aria-hidden="true"></div>
+        <div class="hero__scroll" aria-hidden="true"></div>
       </div>
     </section>
 
@@ -549,10 +568,6 @@
   </footer>
 
   <!-- Scripts -->
-  <!-- GSAP + ScrollTrigger (CDN — this is a no-build static site, so GSAP is
-       loaded as a plain script rather than an npm dependency) -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
   <script src="assets/js/utils.js" defer></script>
   <script src="assets/js/navigation.js" defer></script>
   <script src="assets/js/animations.js" defer></script>

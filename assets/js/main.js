@@ -19,6 +19,23 @@
   }
 
   /**
+   * Injects the sitewide ambient background layer (soft drifting red
+   * orbs) once per page, behind all content. Motion is handled/frozen in
+   * CSS per prefers-reduced-motion, so this just builds the markup.
+   */
+  function initAmbient() {
+    if (document.querySelector('.ambient')) return;
+    const layer = document.createElement('div');
+    layer.className = 'ambient';
+    layer.setAttribute('aria-hidden', 'true');
+    layer.innerHTML =
+      '<span class="ambient__orb ambient__orb--1"></span>' +
+      '<span class="ambient__orb ambient__orb--2"></span>' +
+      '<span class="ambient__orb ambient__orb--3"></span>';
+    document.body.appendChild(layer);
+  }
+
+  /**
    * Preloader — reveals the page once assets have loaded, with a hard
    * safety timeout so a slow/failed asset can never trap the visitor
    * behind the loading screen.
@@ -198,6 +215,7 @@
 
   function initApp() {
     initPreloader();
+    initAmbient();
     initPageTransition();
     setCurrentYear();
     initAccordions();

@@ -460,168 +460,227 @@
 }
 
 /* ---------------------------------------------------------------------
-   Cinematic Hero (scroll-scrubbed video)
-   A tall wrapper provides scroll distance; the inner stage is pinned via
-   CSS position:sticky while assets/js/hero.js (GSAP ScrollTrigger) maps
-   scroll progress onto the video's currentTime — the video is never
-   autoplayed, scrolling scrubs it frame by frame. The hero's text
-   content (badge/headline/subtitle/CTAs/mini cards) is always visible,
-   not scroll-sequenced. See --hero-scroll-length below to retune how
-   much scroll the video scrub consumes.
+   Hero — cinematic left/right composition
+   Left = primary lede (display heading, paragraph, premium badges, CTAs).
+   Right = three premium glass cards that cross-fade one at a time while
+   the stage pins briefly (desktop only, via .is-sequenced added by
+   hero.js). The ambient video stays visible under a left-weighted scrim.
+   Default (mobile, reduced-motion, no-JS) = readable static stacked
+   cards, no pin. No external JS deps.
    --------------------------------------------------------------------- */
-.hero-cinematic-wrapper {
-  --hero-scroll-length: 260vh;
+.hero {
   position: relative;
-  height: var(--hero-scroll-length);
+  background-color: var(--color-carbon);
 }
 
-.hero-cinematic {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  height: 100dvh;
+.hero__stage {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
-  justify-content: center;
   overflow: hidden;
-  background-color: var(--color-carbon);
-  color: var(--color-white);
 }
 
-.hero-cinematic__media {
+.hero__media {
   position: absolute;
   inset: 0;
   z-index: 0;
+  /* Instant gradient base; also the fallback if the video errors. */
   background:
-    radial-gradient(120% 100% at 50% 20%, rgba(179, 18, 31, 0.12), transparent 60%),
-    linear-gradient(160deg, var(--color-graphite) 0%, var(--color-carbon) 65%);
+    radial-gradient(120% 90% at 30% 20%, rgba(179, 18, 31, 0.14), transparent 60%),
+    linear-gradient(160deg, var(--color-graphite) 0%, var(--color-carbon) 70%);
 }
 
-.hero-cinematic__video {
+.hero__video {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Video failed to load — hide it and let the .hero-cinematic__media
-   gradient background show through instead of a broken/frozen frame. */
-.hero-cinematic--video-fallback .hero-cinematic__video {
+.hero--video-fallback .hero__video {
   display: none;
 }
 
-.hero-cinematic__overlay {
+/* Left-weighted scrim — guarantees text contrast on the left while
+   keeping the video clearly visible toward the right. */
+.hero__scrim {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 6px),
-    radial-gradient(140% 100% at 50% 100%, rgba(10, 10, 11, 0.6) 0%, transparent 60%),
-    linear-gradient(180deg, rgba(10, 10, 11, 0.55) 0%, rgba(10, 10, 11, 0.25) 45%, rgba(10, 10, 11, 0.65) 100%);
+    linear-gradient(90deg, rgba(10, 10, 11, 0.92) 0%, rgba(10, 10, 11, 0.72) 38%, rgba(10, 10, 11, 0.34) 70%, rgba(10, 10, 11, 0.55) 100%),
+    linear-gradient(0deg, rgba(10, 10, 11, 0.85) 0%, transparent 32%, transparent 68%, rgba(10, 10, 11, 0.6) 100%);
 }
 
-/* ---------------------------------------------------------------------
-   Cinematic Hero — content (badge, headline, subtitle, CTAs, mini cards)
-   --------------------------------------------------------------------- */
-.hero-cinematic__content {
+.hero__grid {
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
   width: 100%;
-  max-width: 720px;
-  margin-inline: auto;
-  padding: var(--space-3xl) var(--space-lg);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+  align-items: center;
+  padding-block: calc(var(--header-height) + var(--space-xl)) var(--space-3xl);
 }
 
-.hero-cinematic__badge {
+/* --- Left lede --- */
+.hero__eyebrow {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--color-red-bright);
+  margin-bottom: var(--space-md);
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: var(--fw-regular);
+  font-size: clamp(3.25rem, 12vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  margin-bottom: var(--space-lg);
+}
+
+.hero__title-accent {
+  color: var(--color-red-bright);
+  text-shadow: 0 0 34px var(--color-red-glow);
+}
+
+.hero__text {
+  font-size: var(--fs-md);
+  color: var(--color-gray-300);
+  max-width: 46ch;
+  margin-bottom: var(--space-xl);
+}
+
+/* Premium badges — glass pill + red accent bar + icon + soft glow */
+.hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.hero__badge {
   display: inline-flex;
   align-items: center;
-  padding: var(--space-2xs) var(--space-md);
-  margin-bottom: var(--space-xl);
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md) var(--space-xs) var(--space-sm);
   border-radius: var(--radius-full);
   background-color: var(--glass-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-glow);
   font-family: var(--font-heading);
   font-size: var(--fs-sm);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
-  color: var(--color-gray-300);
-}
-
-.hero-cinematic__headline {
-  font-size: var(--fs-5xl);
-  line-height: 1.1;
   color: var(--color-white);
-  margin-bottom: var(--space-lg);
 }
 
-.hero-cinematic__subtitle {
-  font-size: var(--fs-lg);
-  color: var(--color-gray-300);
-  max-width: 540px;
-  margin-bottom: var(--space-xl);
+.hero__badge::before {
+  content: '';
+  width: 3px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-red-bright);
+  box-shadow: var(--shadow-glow-sm);
 }
 
-.hero-cinematic__actions {
-  display: flex;
-  gap: var(--space-md);
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: var(--space-2xl);
-}
-
-.hero-cinematic__cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-md);
-  width: 100%;
-}
-
-.hero-cinematic__card-mini {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-xs);
-  min-height: 70px;
-  max-height: 90px;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-lg);
-  text-align: center;
-  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
-}
-
-@media (hover: hover) {
-  .hero-cinematic__card-mini:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-glow-sm);
-    border-color: var(--color-red);
-  }
-}
-
-.hero-cinematic__card-icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
+.hero__badge svg {
+  width: 18px;
+  height: 18px;
   color: var(--color-red-bright);
 }
 
-.hero-cinematic__card-mini span {
-  font-family: var(--font-heading);
-  font-size: var(--fs-xs);
-  font-weight: var(--fw-semibold);
-  letter-spacing: var(--ls-tight);
-  line-height: 1.25;
-  color: var(--color-white);
-  text-align: left;
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
 }
 
-.hero-cinematic__scroll-indicator {
+/* --- Right cards --- */
+.hero__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.hero__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-xl);
+  border-radius: var(--radius-lg);
+  background-color: var(--glass-bg);
+  background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 7px);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-glow);
+}
+
+.hero__card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);
+  background-color: rgba(224, 30, 46, 0.12);
+  color: var(--color-red-bright);
+  box-shadow: inset 0 0 12px rgba(224, 30, 46, 0.15);
+}
+
+.hero__card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.hero__card-title {
+  font-size: var(--fs-lg);
+  color: var(--color-white);
+}
+
+.hero__card-text {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-gray-300);
+}
+
+/* Progress dots (shown only while the desktop sequence is active) */
+.hero__card-dots {
+  display: none;
+  gap: var(--space-xs);
+  justify-content: center;
+  margin-top: var(--space-lg);
+}
+
+.hero__card-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-graphite-light);
+  transition: background-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.hero__card-dots span.is-active {
+  background-color: var(--color-red-bright);
+  box-shadow: var(--shadow-glow-sm);
+}
+
+/* --- Scroll indicator (desktop only) --- */
+.hero__scroll {
+  display: none;
   position: absolute;
   bottom: var(--space-xl);
   left: 50%;
@@ -629,12 +688,12 @@
   z-index: 2;
   width: 26px;
   height: 42px;
-  border: 2px solid var(--color-gray-300);
+  border: 2px solid var(--color-gray-400);
   border-radius: var(--radius-full);
   animation: scrollIndicatorPulse 2.4s ease-in-out infinite;
 }
 
-.hero-cinematic__scroll-indicator::before {
+.hero__scroll::before {
   content: '';
   position: absolute;
   top: 8px;
@@ -667,6 +726,59 @@
     opacity: 0.6;
   }
 }
+
+/* --- Desktop: split layout + pinned card sequence --- */
+@media (min-width: 992px) {
+  .hero__grid {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: var(--space-3xl);
+    padding-block: 0;
+  }
+
+  .hero__scroll {
+    display: block;
+  }
+
+  /* Enhancement layer (hero.js adds .is-sequenced on capable desktops) */
+  .hero.is-sequenced {
+    height: 240vh;
+  }
+
+  .hero.is-sequenced .hero__stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .hero.is-sequenced .hero__cards {
+    position: relative;
+    display: block;
+    min-height: 300px;
+  }
+
+  .hero.is-sequenced .hero__card {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--transition-slow) ease, transform var(--transition-slow) ease,
+      filter var(--transition-slow) ease;
+    will-change: opacity, transform;
+  }
+
+  .hero.is-sequenced .hero__card:first-child {
+    opacity: 1;
+  }
+
+  .hero.is-sequenced .hero__card-dots {
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(-1 * var(--space-xl));
+  }
+}
+
 
 /* ---------------------------------------------------------------------
    Sections
