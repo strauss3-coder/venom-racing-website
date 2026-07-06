@@ -136,7 +136,9 @@ p {
 }
 
 .section {
-  padding-block: var(--space-3xl);
+  /* Scales up at larger breakpoints — see responsive.css. Kept smaller on
+     mobile so heading + content + cards can comfortably fit in view. */
+  padding-block: var(--space-2xl);
 }
 
 .section--alt {

@@ -111,10 +111,22 @@
    Tablet — min-width: 600px
    --------------------------------------------------------------------- */
 @media (min-width: 600px) {
+  .section {
+    padding-block: var(--space-3xl);
+  }
+
   .grid--auto,
   .grid--services,
   .grid--features {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .split-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .split-grid--wide-left {
+    grid-template-columns: 1.1fr 0.9fr;
   }
 
   .footer__grid {
@@ -126,6 +138,15 @@
    Desktop — min-width: 992px
    --------------------------------------------------------------------- */
 @media (min-width: 992px) {
+  .section {
+    padding-block: var(--space-4xl);
+  }
+
+  .floating-badge {
+    bottom: -24px;
+    left: -24px;
+  }
+
   .navbar__links {
     display: flex;
     position: static;
