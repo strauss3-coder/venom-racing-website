@@ -11,11 +11,18 @@
 
   const { qs, qsa } = window.VenomUtils || {};
 
-  /** @type {Array<Object>} Placeholder build/project data. */
+  /** @type {Array<Object>} Completed project data — add more as photography comes in. */
   const BUILDS = [
-    // Example shape — populate with real completed projects:
+    {
+      id: 'build-exhaust-001',
+      title: 'Custom Dual-Quad Exhaust System',
+      category: 'exhaust',
+      summary: 'TIG-welded stainless dual-quad cat-back system, custom-built and fitted in-house.',
+      image: 'assets/images/exhaust/exhaust-dual-quad-system.jpg',
+    },
+    // Example shape — populate with further completed projects:
     // {
-    //   id: 'build-001',
+    //   id: 'build-002',
     //   title: 'Toyota Hilux 2.8 GD-6',
     //   category: 'ecu-tuning',
     //   summary: 'Dastek Unichip 5-map install with custom towing and economy profiles.',

@@ -450,272 +450,153 @@
 }
 
 /* ---------------------------------------------------------------------
-   Hero
+   Cinematic Hero (scroll-scrubbed video)
+   A tall wrapper provides scroll distance; the inner stage is pinned via
+   CSS position:sticky while assets/js/hero.js (GSAP ScrollTrigger) maps
+   scroll progress onto the video's currentTime and a sequence of
+   centred content "phases" (intro / three cards / final CTA), each
+   with its own fade in/out window along that progress. See
+   --hero-scroll-length below to retune how much scroll the whole
+   sequence consumes.
    --------------------------------------------------------------------- */
-.hero {
+.hero-cinematic-wrapper {
+  --hero-scroll-length: 400vh;
   position: relative;
-  display: flex;
-  align-items: center;
-  min-height: 100vh;
-  /* Mobile Safari's 100vh includes the address bar; dvh accounts for the
-     real visible viewport. Browsers without dvh support keep the line above. */
-  min-height: 100dvh;
-  color: var(--color-white);
-  background-color: var(--color-carbon);
-  overflow: hidden;
+  height: var(--hero-scroll-length);
 }
 
-.hero__media {
+.hero-cinematic {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 110vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--color-carbon);
+  color: var(--color-white);
+}
+
+.hero-cinematic__media {
   position: absolute;
   inset: 0;
   z-index: 0;
-  transform: scale(1);
-  transition: transform 0.1s linear;
-  will-change: transform;
-  /* Shows instantly, before the video has a frame to paint, and remains
-     as the fallback background if the video errors or is hidden for
-     prefers-reduced-motion — no dependency on a poster image file. */
   background:
-    radial-gradient(120% 100% at 20% 20%, rgba(179, 18, 31, 0.35), transparent 60%),
+    radial-gradient(120% 100% at 50% 20%, rgba(179, 18, 31, 0.12), transparent 60%),
     linear-gradient(160deg, var(--color-graphite) 0%, var(--color-carbon) 65%);
 }
 
-.hero__media img,
-.hero__media video {
+.hero-cinematic__video {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Video failed to load, or the user prefers reduced motion — hide the
-   video and let the .hero__media gradient background show through. */
-.hero--video-fallback .hero__media video {
+/* GSAP failed to load, reduced motion is preferred, or the video
+   errored — collapse back to a normal single-screen static hero
+   showing frame 0 and the final headline/CTA only. */
+.hero-cinematic--static {
+  height: auto;
+}
+
+.hero-cinematic--static .hero-cinematic {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 110vh;
+}
+
+.hero-cinematic--static [data-hero-phase] {
   display: none;
 }
 
-.hero__overlay {
+.hero-cinematic--static [data-hero-phase='final'] {
+  display: flex;
+  opacity: 1;
+  filter: none;
+  transform: none;
+  pointer-events: auto;
+}
+
+.hero-cinematic__overlay {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(120% 100% at 12% 15%, var(--color-red-glow) 0%, transparent 55%),
-    linear-gradient(180deg, rgba(10, 10, 11, 0.6) 0%, rgba(10, 10, 11, 0.88) 70%, var(--color-carbon) 100%);
   z-index: 1;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px, transparent 1px, transparent 6px),
+    radial-gradient(140% 100% at 50% 100%, rgba(10, 10, 11, 0.55) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(10, 10, 11, 0.4) 0%, rgba(10, 10, 11, 0.15) 40%, rgba(10, 10, 11, 0.6) 100%);
 }
 
-.hero__grid {
-  position: relative;
+/* Shared positioning for every centred content phase — intro, cards,
+   and final reveal all occupy the same centred stage; only one is
+   ever meaningfully visible at a time (driven by JS opacity/blur). */
+.hero-cinematic__intro,
+.hero-cinematic__card,
+.hero-cinematic__final {
+  position: absolute;
+  inset: 0;
   z-index: 2;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: var(--space-3xl);
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-inline: var(--space-lg);
+  opacity: 0;
+  will-change: opacity, transform, filter;
 }
 
-.hero__content {
-  max-width: 620px;
-  transition: opacity 0.1s linear, transform 0.1s linear;
-  will-change: opacity, transform;
-}
-
-.hero__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-2xs) var(--space-md);
-  margin-bottom: var(--space-lg);
-  border-radius: var(--radius-full);
-  background-color: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
+.hero-cinematic__brand {
   font-family: var(--font-heading);
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-medium);
-  letter-spacing: var(--ls-wide);
+  font-size: 14px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-widest);
   text-transform: uppercase;
   color: var(--color-gray-300);
-}
-
-.hero__badge-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-red-bright);
-  box-shadow: var(--shadow-glow-sm);
-  animation: badgePulse 1.8s ease-in-out infinite;
-}
-
-@keyframes badgePulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.8);
-  }
-}
-
-.hero__title {
-  font-size: var(--fs-5xl);
-  color: var(--color-white);
   margin-bottom: var(--space-md);
 }
 
-.hero__title-word {
-  display: inline-block;
-  opacity: 0;
-  animation: heroWordIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.hero-cinematic__tagline {
+  font-family: var(--font-heading);
+  font-size: var(--fs-3xl);
+  line-height: 1.25;
+  font-weight: var(--fw-medium);
+  color: var(--color-white);
+  text-transform: none;
 }
 
-.hero__title-word:nth-child(1) {
-  animation-delay: 0.2s;
-}
-
-.hero__title-word:nth-child(2) {
-  animation-delay: 0.45s;
-}
-
-.hero__title-word:nth-child(3) {
-  animation-delay: 0.7s;
-}
-
-.hero__title-word--accent {
-  color: var(--color-red-bright);
-  text-shadow: 0 0 32px var(--color-red-glow);
-}
-
-@keyframes heroWordIn {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hero__subtitle {
-  font-size: var(--fs-lg);
-  color: var(--color-gray-300);
-  margin-bottom: var(--space-xl);
-  max-width: 560px;
-}
-
-.hero__actions {
-  display: flex;
-  gap: var(--space-md);
-  flex-wrap: wrap;
-}
-
-.hero__cards {
+.hero-cinematic__card-inner {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
-}
-
-/* Outer element receives the JS scroll-parallax transform; the bounce
-   animation and hover glow live on the inner element so the two
-   transforms don't fight over the same property. */
-.hero__float-card {
-  transition: transform 0.1s linear;
-  will-change: transform;
-}
-
-.hero__float-card-inner {
-  display: flex;
   align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-lg);
-  animation: floatCard 4.5s ease-in-out infinite;
-  animation-delay: var(--float-delay, 0s);
-  transition: box-shadow var(--transition-base), border-color var(--transition-base);
+  gap: var(--space-2xs);
+  padding: var(--space-xl) var(--space-2xl);
+  border-radius: var(--radius-lg);
 }
 
-.hero__float-card-inner:hover {
-  box-shadow: var(--shadow-glow-md);
-  border-color: var(--color-red);
+.hero-cinematic__card-inner strong {
+  font-family: var(--font-heading);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  color: var(--color-white);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wide);
 }
 
-.hero__float-icon {
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-md);
-  background-color: var(--color-graphite-light);
-  color: var(--color-red-bright);
+.hero-cinematic__card-inner span {
+  font-size: var(--fs-sm);
+  color: var(--color-gray-300);
 }
 
-.hero__float-icon svg {
-  width: 22px;
-  height: 22px;
+.hero-cinematic__final-heading {
+  font-size: var(--fs-4xl);
+  margin-bottom: var(--space-xl);
+  color: var(--color-white);
 }
-
-@keyframes floatCard {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.hero__scroll-indicator {
-  position: absolute;
-  bottom: var(--space-xl);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  width: 26px;
-  height: 42px;
-  border: 2px solid var(--color-gray-300);
-  border-radius: var(--radius-full);
-  transition: opacity 0.1s linear;
-  animation: scrollIndicatorPulse 2.4s ease-in-out infinite;
-}
-
-.hero__scroll-indicator::before {
-  content: '';
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  width: 4px;
-  height: 8px;
-  background-color: var(--color-red-bright);
-  border-radius: var(--radius-full);
-  transform: translateX(-50%);
-  animation: scrollIndicator 1.8s ease-in-out infinite;
-}
-
-@keyframes scrollIndicator {
-  0% {
-    transform: translate(-50%, 0);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, 14px);
-    opacity: 0;
-  }
-}
-
-@keyframes scrollIndicatorPulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-/* ---------------------------------------------------------------------
    Sections
    --------------------------------------------------------------------- */
 .section-heading {

@@ -157,10 +157,10 @@
     opacity: 0;
   }
   10% {
-    opacity: 0.5;
+    opacity: var(--particle-opacity, 0.5);
   }
   90% {
-    opacity: 0.5;
+    opacity: var(--particle-opacity, 0.5);
   }
   100% {
     transform: translate(var(--drift-x, 20px), -120px);
@@ -171,6 +171,7 @@
 .particle-field {
   position: absolute;
   inset: 0;
+  z-index: 1;
   overflow: hidden;
   pointer-events: none;
 }

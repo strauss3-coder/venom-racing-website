@@ -99,80 +99,53 @@
     <!-- ============================================================
          1. Hero
          ============================================================ -->
-    <section class="hero" data-hero>
-      <div class="hero__media" data-hero-media>
-        <video
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="metadata"
-          aria-hidden="true">
-          <source src="assets/videos/venom-racing-hero.mp4" type="video/mp4">
-          Your browser does not support embedded video.
-        </video>
-      </div>
-      <div class="hero__overlay"></div>
+    <section class="hero-cinematic-wrapper" data-hero-wrapper>
+      <div class="hero-cinematic" data-hero-cinematic>
+        <div class="hero-cinematic__media" data-hero-media>
+          <video class="hero-cinematic__video" data-scrub-video muted playsinline preload="auto" aria-hidden="true">
+            <source src="assets/videos/reception-360.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="hero-cinematic__overlay"></div>
+        <div class="particle-field" data-particles data-particle-count="26" aria-hidden="true"></div>
 
-      <div class="container hero__grid">
-        <div class="hero__content" data-hero-content>
-          <span class="hero__badge fade-in">
-            <span class="hero__badge-dot" aria-hidden="true"></span>
-            Performance Specialists
-          </span>
+        <div class="hero-cinematic__intro" data-hero-phase="intro">
+          <span class="hero-cinematic__brand">VENOM RACING</span>
+          <p class="hero-cinematic__tagline">Performance.<br>Precision.<br>Passion.</p>
+        </div>
 
-          <h1 class="hero__title" aria-label="Engineered For Performance.">
-            <span class="hero__title-word">ENGINEERED</span>
-            <span class="hero__title-word">FOR</span>
-            <span class="hero__title-word hero__title-word--accent">PERFORMANCE.</span>
-          </h1>
-
-          <p class="hero__subtitle fade-in">Where passion meets precision — RMI Accredited &bull; Official Dastek Unichip Dealer, specialising in dyno-validated ECU tuning and custom exhaust fabrication.</p>
-
-          <div class="hero__actions fade-in">
-            <a class="btn btn-primary" href="contact.html" data-ripple>Book Your Vehicle</a>
-            <a class="btn btn-outline" href="services.html" data-ripple>Explore Our Services</a>
+        <div class="hero-cinematic__card" data-hero-phase="card-1">
+          <div class="glass-card hero-cinematic__card-inner">
+            <strong>Performance Upgrades</strong>
           </div>
         </div>
 
-        <div class="hero__cards" data-hero-cards>
-          <div class="hero__float-card" data-parallax-card="0.6">
-            <div class="glass-card hero__float-card-inner" style="--float-delay: 0s;">
-              <div class="hero__float-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>
-              </div>
-              <strong>Performance Upgrades</strong>
-            </div>
-          </div>
-
-          <div class="hero__float-card" data-parallax-card="1">
-            <div class="glass-card hero__float-card-inner" style="--float-delay: 0.4s;">
-              <div class="hero__float-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>
-              </div>
-              <strong>Custom Tuning</strong>
-            </div>
-          </div>
-
-          <div class="hero__float-card" data-parallax-card="1.4">
-            <div class="glass-card hero__float-card-inner" style="--float-delay: 0.8s;">
-              <div class="hero__float-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-              </div>
-              <strong>Minor &amp; Major Services &amp; Repairs</strong>
-            </div>
+        <div class="hero-cinematic__card" data-hero-phase="card-2">
+          <div class="glass-card hero-cinematic__card-inner">
+            <strong>Minor &amp; Major Services &amp; Repairs</strong>
           </div>
         </div>
-      </div>
 
-      <div class="hero__scroll-indicator" aria-hidden="true"></div>
+        <div class="hero-cinematic__card" data-hero-phase="card-3">
+          <div class="glass-card hero-cinematic__card-inner">
+            <strong>RMI Accredited</strong>
+            <span>Official Dastek Unichip Dealer</span>
+          </div>
+        </div>
+
+        <div class="hero-cinematic__final" data-hero-phase="final">
+          <h2 class="hero-cinematic__final-heading">Built For Drivers<br>Who Expect More.</h2>
+          <a class="btn btn-primary" href="#about-heading" data-hero-cta data-ripple>Explore Services <span aria-hidden="true">&darr;</span></a>
+        </div>
+      </div>
     </section>
 
     <!-- ============================================================
          2. About
          ============================================================ -->
-    <section class="section" aria-labelledby="about-heading">
-      <div class="container">
+    <section class="section" aria-labelledby="about-heading" style="position: relative; overflow: hidden;">
+      <div class="particle-field" data-particles data-particle-count="10" aria-hidden="true"></div>
+      <div class="container" style="position: relative; z-index: 1;">
         <div class="grid" style="grid-template-columns: 1.1fr 0.9fr; align-items: center;">
           <div class="slide-in-left">
             <span class="eyebrow">About Venom Racing</span>
@@ -564,6 +537,10 @@
   </footer>
 
   <!-- Scripts -->
+  <!-- GSAP + ScrollTrigger (CDN — this is a no-build static site, so GSAP is
+       loaded as a plain script rather than an npm dependency) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
   <script src="assets/js/utils.js" defer></script>
   <script src="assets/js/navigation.js" defer></script>
   <script src="assets/js/animations.js" defer></script>

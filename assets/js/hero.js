@@ -1,9 +1,16 @@
 /**
  * hero.js
- * Behaviour for the homepage video hero: graceful fallback if the video
- * can't play, and scroll-driven cinematic effects (subtle video
- * scale-down, content fade-up, staggered floating-card parallax).
- * Only runs when a `.hero[data-hero]` element is present.
+ * Cinematic scroll-scrubbed homepage hero. The 360° reception video is
+ * never autoplayed — GSAP ScrollTrigger maps scroll progress across the
+ * pinned hero directly onto the video's currentTime, and the same
+ * progress value drives a sequence of centred content "phases" (an
+ * intro, three feature cards, and a final headline + CTA), each fading
+ * in/out within its own narrow window of the overall scroll range.
+ *
+ * Falls back to a static, fully visible hero (frame 0 + final CTA, no
+ * animation) if GSAP failed to load, the user prefers reduced motion,
+ * or the video itself fails — so the rest of the site is never blocked
+ * behind a broken or unscriptable hero.
  */
 
 (function (window, document) {
@@ -12,85 +19,143 @@
   const { qs, qsa } = window.VenomUtils || {};
 
   /**
-   * If the video errors, or the user prefers reduced motion, fall back
-   * to the poster frame via a CSS hook rather than a broken/frozen video.
+   * Populates a `.particle-field` container with ambient floating
+   * particles. Purely decorative and CSS-animated (see animations.css'
+   * `.particle` / `particleDrift` keyframe) — this just randomises
+   * position/timing per instance so the field reads as one continuous
+   * motif whether it's the dense hero instance or a lighter one further
+   * down the page.
    */
-  function initVideoFallback(hero, video) {
-    if (!video) {
-      hero.classList.add('hero--video-fallback');
-      return;
-    }
+  function initParticleFields() {
+    qsa('[data-particles]').forEach((field) => {
+      const count = Number(field.dataset.particleCount) || 16;
+      const fragment = document.createDocumentFragment();
 
-    video.addEventListener('error', () => {
-      hero.classList.add('hero--video-fallback');
+      for (let i = 0; i < count; i += 1) {
+        const particle = document.createElement('span');
+        particle.className = 'particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.bottom = `${Math.random() * 40 - 10}%`;
+        particle.style.setProperty('--drift-x', `${(Math.random() - 0.5) * 60}px`);
+        particle.style.setProperty('--particle-opacity', String(0.3 + Math.random() * 0.4));
+        particle.style.animationDuration = `${6 + Math.random() * 6}s`;
+        particle.style.animationDelay = `${Math.random() * 8}s`;
+        fragment.appendChild(particle);
+      }
+
+      field.appendChild(fragment);
     });
+  }
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  /**
+   * Reveals the static fallback state: video frozen on its first frame,
+   * every phase hidden except the final headline/CTA, and the wrapper's
+   * scroll-jacking height collapsed back to a normal single-screen hero.
+   */
+  function useStaticFallback(wrapper, video) {
+    wrapper.classList.add('hero-cinematic--static');
+    if (video) {
       video.pause();
-      hero.classList.add('hero--video-fallback');
+      video.currentTime = 0;
     }
   }
 
   /**
-   * Cinematic scroll effects, scoped to the hero's own height so nothing
-   * looks broken once the user has scrolled past it:
-   *  - video scales down slightly (zoom-out)
-   *  - hero content fades and drifts upward
-   *  - floating cards parallax at different speeds via `data-parallax-card`
-   *  - the scroll indicator fades out early
+   * Returns an opacity 0-1 for a given scroll `progress`, ramping up
+   * across [a, b], holding across [b, c], and ramping down across [c, d].
    */
-  function initScrollEffects(hero) {
-    const media = qs('[data-hero-media]', hero);
-    const content = qs('[data-hero-content]', hero);
-    const cards = qsa('[data-parallax-card]', hero);
-    const indicator = qs('.hero__scroll-indicator', hero);
+  function windowOpacity(progress, [a, b, c, d]) {
+    if (progress <= a || progress >= d) return 0;
+    if (progress < b) return (progress - a) / (b - a);
+    if (progress <= c) return 1;
+    return 1 - (progress - c) / (d - c);
+  }
 
-    let ticking = false;
+  function applyPhase(el, progress, win, options) {
+    if (!el) return;
+    const opacity = windowOpacity(progress, win);
+    const scaleIn = options && options.scaleIn;
 
-    const update = () => {
-      const heroHeight = hero.offsetHeight || 1;
-      const progress = Math.min(Math.max(window.scrollY / heroHeight, 0), 1);
+    el.style.opacity = String(opacity);
+    el.style.filter = `blur(${(1 - opacity) * 6}px)`;
+    el.style.transform = scaleIn
+      ? `scale(${0.94 + opacity * 0.06})`
+      : `translateY(${(1 - opacity) * 18}px)`;
+    el.style.pointerEvents = opacity > 0.5 ? 'auto' : 'none';
+  }
 
-      if (media) {
-        media.style.transform = `scale(${1 - progress * 0.08})`;
-      }
+  function initHeroCinematic() {
+    const wrapper = qs('[data-hero-wrapper]');
+    if (!wrapper) return;
 
-      if (content) {
-        content.style.opacity = String(Math.max(1 - progress * 1.6, 0));
-        content.style.transform = `translateY(${-progress * 50}px)`;
-      }
+    const video = qs('[data-scrub-video]', wrapper);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const gsapReady = window.gsap && window.ScrollTrigger;
 
-      cards.forEach((card) => {
-        const speed = Number(card.dataset.parallaxCard) || 1;
-        card.style.transform = `translateY(${-progress * 140 * speed}px)`;
+    if (!gsapReady || reduceMotion) {
+      useStaticFallback(wrapper, video);
+      return;
+    }
+
+    if (video) {
+      video.addEventListener('error', () => useStaticFallback(wrapper, video));
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const phases = {
+      intro: qs('[data-hero-phase="intro"]', wrapper),
+      card1: qs('[data-hero-phase="card-1"]', wrapper),
+      card2: qs('[data-hero-phase="card-2"]', wrapper),
+      card3: qs('[data-hero-phase="card-3"]', wrapper),
+      final: qs('[data-hero-phase="final"]', wrapper),
+    };
+
+    // [fadeInStart, fullyVisibleFrom, fullyVisibleUntil, fadeOutEnd] as
+    // fractions of the hero's total scroll progress (0 - 1).
+    const windows = {
+      intro: [0, 0, 0.05, 0.09],
+      card1: [0.08, 0.12, 0.16, 0.19],
+      card2: [0.32, 0.36, 0.4, 0.43],
+      card3: [0.57, 0.61, 0.65, 0.68],
+      final: [0.85, 0.93, 1, 1],
+    };
+
+    let videoTween = null;
+
+    const scrubVideoTo = (time) => {
+      if (videoTween) videoTween.kill();
+      videoTween = gsap.to(video, {
+        currentTime: time,
+        duration: 0.3,
+        ease: 'power1.out',
+        overwrite: true,
       });
-
-      if (indicator) {
-        indicator.style.opacity = String(Math.max(1 - progress * 3, 0));
-      }
-
-      ticking = false;
     };
 
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(update);
-        ticking = true;
-      }
-    };
+    ScrollTrigger.create({
+      trigger: wrapper,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.4,
+      onUpdate(self) {
+        const progress = self.progress;
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    update();
+        if (video && Number.isFinite(video.duration) && video.duration > 0) {
+          scrubVideoTo(progress * video.duration);
+        }
+
+        applyPhase(phases.intro, progress, windows.intro);
+        applyPhase(phases.card1, progress, windows.card1);
+        applyPhase(phases.card2, progress, windows.card2);
+        applyPhase(phases.card3, progress, windows.card3);
+        applyPhase(phases.final, progress, windows.final, { scaleIn: true });
+      },
+    });
   }
 
-  function initHero() {
-    const hero = qs('.hero[data-hero]');
-    if (!hero) return;
-
-    const video = qs('video', hero);
-    initVideoFallback(hero, video);
-    initScrollEffects(hero);
-  }
-
-  document.addEventListener('DOMContentLoaded', initHero);
+  document.addEventListener('DOMContentLoaded', () => {
+    initParticleFields();
+    initHeroCinematic();
+  });
 })(window, document);
