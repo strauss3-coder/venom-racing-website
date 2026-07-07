@@ -2227,3 +2227,177 @@
   background: linear-gradient(150deg, var(--color-red), var(--color-red-dark));
   box-shadow: var(--shadow-glow-sm);
 }
+
+/* =====================================================================
+   Media frame — premium wrapper for images, video and carousels
+   Rounded corners · carbon-textured gutter · thin red accent border ·
+   soft shadow + red ring glow · glassmorphism overlay · hover glow.
+   Shared by single images, autoplay video and the reusable carousel.
+   ===================================================================== */
+.media-frame {
+  position: relative;
+  padding: 6px;                       /* carbon-textured gutter around media */
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(224, 30, 46, 0.35);
+  background-color: var(--color-carbon-alt);
+  box-shadow: var(--shadow-lg), var(--glass-glow);
+  overflow: hidden;
+  transition: box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+/* Red glow lift on hover — desktop / fine pointers only. Transform is
+   intentionally avoided here so it never fights the .slide-up reveal. */
+@media (hover: hover) and (pointer: fine) {
+  .media-frame:hover {
+    border-color: var(--color-red-bright);
+    box-shadow: var(--shadow-lg), var(--glass-glow-hover);
+  }
+}
+
+/* Media element (img or video) filling the frame */
+.media-frame__media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: calc(var(--radius-lg) - 6px);
+}
+
+/* Single-media frames carry their own aspect ratio to avoid layout shift */
+.media-frame--landscape { aspect-ratio: 16 / 9; }
+.media-frame--photo     { aspect-ratio: 4 / 3; }
+.media-frame--portrait {
+  aspect-ratio: 9 / 16;
+  max-width: 340px;
+  margin-inline: auto;
+}
+
+/* Glassmorphism / dark theme overlay — subtle, never hides the media */
+.media-frame__overlay {
+  position: absolute;
+  inset: 6px;
+  border-radius: calc(var(--radius-lg) - 6px);
+  pointer-events: none;
+  z-index: 2;
+  background:
+    linear-gradient(180deg, rgba(10, 10, 11, 0.28) 0%, transparent 22%, transparent 72%, rgba(10, 10, 11, 0.42) 100%),
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 55%);
+}
+
+/* =====================================================================
+   Carousel — reusable gallery component (site-wide)
+   Prev/next arrows · dots + "n / total" counter · swipe · mouse drag ·
+   keyboard · infinite loop · smooth transitions. Wrapped in .media-frame.
+   ===================================================================== */
+.carousel { position: relative; }
+
+.carousel__viewport {
+  overflow: hidden;
+  border-radius: calc(var(--radius-lg) - 6px);
+  touch-action: pan-y;                /* allow vertical page scroll, capture horizontal swipe */
+  cursor: grab;
+}
+.carousel__viewport:focus-visible { outline: 2px solid var(--color-red-bright); outline-offset: 2px; }
+.carousel__viewport.is-dragging { cursor: grabbing; }
+
+.carousel__track {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.carousel__track.is-no-transition { transition: none; }
+
+.carousel__slide {
+  position: relative;
+  flex: 0 0 100%;
+  aspect-ratio: 4 / 3;
+}
+.carousel__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.carousel__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--color-white);
+  cursor: pointer;
+  transition: background var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+.carousel__arrow:hover {
+  background: rgba(224, 30, 46, 0.85);
+  border-color: var(--color-red-bright);
+  box-shadow: var(--shadow-glow-sm);
+}
+.carousel__arrow svg { width: 22px; height: 22px; }
+.carousel__arrow--prev { left: 14px; }
+.carousel__arrow--next { right: 14px; }
+
+.carousel__ui {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 0 0 calc(var(--radius-lg) - 6px) calc(var(--radius-lg) - 6px);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.62), transparent);
+}
+
+.carousel__dots { display: flex; gap: 8px; }
+.carousel__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: background var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+}
+.carousel__dot.is-active {
+  background: var(--color-red-bright);
+  transform: scale(1.35);
+  box-shadow: 0 0 10px var(--color-red-glow);
+}
+
+.carousel__counter {
+  font-family: var(--font-heading);
+  letter-spacing: 0.08em;
+  font-size: var(--fs-sm);
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+/* Tighter controls on small screens — keep arrows reachable, no overflow */
+@media (max-width: 560px) {
+  .carousel__arrow { width: 38px; height: 38px; }
+  .carousel__arrow svg { width: 18px; height: 18px; }
+  .carousel__arrow--prev { left: 8px; }
+  .carousel__arrow--next { right: 8px; }
+  .carousel__ui { padding: var(--space-sm); }
+}
