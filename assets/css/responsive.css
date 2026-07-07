@@ -15,8 +15,10 @@
 /* Below the desktop split, the hero is a single column laid over the
    video — use a more uniform, stronger scrim to guarantee text contrast. */
 @media (max-width: 991px) {
-  .hero__scrim {
-    background: linear-gradient(180deg, rgba(10, 10, 11, 0.72) 0%, rgba(10, 10, 11, 0.82) 100%);
+  .hero__overlay {
+    background:
+      radial-gradient(90% 50% at 80% 12%, rgba(224, 30, 46, 0.14), transparent 60%),
+      linear-gradient(180deg, rgba(10, 10, 11, 0.80) 0%, rgba(10, 10, 11, 0.72) 45%, rgba(10, 10, 11, 0.88) 100%);
   }
 }
 
@@ -72,8 +74,8 @@
   display: inline-flex;
 }
 
-/* Hero (mobile base): full-width stacked CTAs; cards stack via the
-   base .hero__cards flex column. Heading size is handled by clamp(). */
+/* Hero (mobile base): full-width stacked CTAs; the split grid, showcase
+   and feature cards stack via their single-column base. Heading via clamp(). */
 .hero__actions {
   flex-direction: column;
   align-items: stretch;

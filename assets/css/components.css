@@ -459,120 +459,119 @@
   color: var(--color-gray-500);
 }
 
-/* ---------------------------------------------------------------------
-   Hero — cinematic left/right composition
-   Left = primary lede (display heading, paragraph, premium badges, CTAs).
-   Right = three premium glass cards that cross-fade one at a time while
-   the stage pins briefly (desktop only, via .is-sequenced added by
-   hero.js). The ambient video stays visible under a left-weighted scrim.
-   Default (mobile, reduced-motion, no-JS) = readable static stacked
-   cards, no pin. No external JS deps.
-   --------------------------------------------------------------------- */
+/* =====================================================================
+   HERO (v2) — one cinematic split. Left lede + right showcase carousel,
+   feature cards along the bottom. Restrained motion, refined surfaces.
+   ===================================================================== */
 .hero {
   position: relative;
   background-color: var(--color-carbon);
-}
-
-.hero__stage {
-  position: relative;
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  align-items: center;
   overflow: hidden;
 }
 
+/* --- Background: video + cinematic overlay + particles --- */
+.hero__bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+
 .hero__media {
   position: absolute;
-  inset: 0;
+  inset: -4%;                       /* bleed so parallax never shows edges */
   z-index: 0;
-  /* Instant gradient base; also the fallback if the video errors. */
+  will-change: transform;
   background:
     radial-gradient(120% 90% at 30% 20%, rgba(179, 18, 31, 0.14), transparent 60%),
     linear-gradient(160deg, var(--color-graphite) 0%, var(--color-carbon) 70%);
 }
+.hero__video { width: 100%; height: 100%; object-fit: cover; }
+.hero--video-fallback .hero__video { display: none; }
 
-.hero__video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hero--video-fallback .hero__video {
-  display: none;
-}
-
-/* Left-weighted scrim — guarantees text contrast on the left while
-   keeping the video clearly visible toward the right. */
-.hero__scrim {
+/* Cinematic layer: red ambient + left scrim + top/bottom + vignette */
+.hero__overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(10, 10, 11, 0.92) 0%, rgba(10, 10, 11, 0.72) 38%, rgba(10, 10, 11, 0.34) 70%, rgba(10, 10, 11, 0.55) 100%),
-    linear-gradient(0deg, rgba(10, 10, 11, 0.85) 0%, transparent 32%, transparent 68%, rgba(10, 10, 11, 0.6) 100%);
+    radial-gradient(80% 55% at 80% 16%, rgba(224, 30, 46, 0.16), transparent 60%),
+    linear-gradient(90deg, rgba(10, 10, 11, 0.94) 0%, rgba(10, 10, 11, 0.70) 42%, rgba(10, 10, 11, 0.32) 72%, rgba(10, 10, 11, 0.52) 100%),
+    linear-gradient(0deg, rgba(10, 10, 11, 0.90) 0%, transparent 34%, transparent 66%, rgba(10, 10, 11, 0.55) 100%),
+    radial-gradient(120% 120% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+.hero__overlay::before {                 /* subtle carbon weave */
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.014) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.014) 0 1px, transparent 1px 6px);
+}
+.hero__particles { z-index: 1; }
+
+/* --- Inner layout --- */
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-block: calc(var(--header-height) + var(--space-2xl)) var(--space-2xl);
 }
 
 .hero__grid {
-  position: relative;
-  z-index: 2;
-  width: 100%;
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-2xl);
   align-items: center;
-  padding-block: calc(var(--header-height) + var(--space-xl)) var(--space-3xl);
+  flex: 1;
 }
 
-/* --- Left lede --- */
-.hero__eyebrow {
-  display: inline-block;
-  font-family: var(--font-heading);
-  font-size: var(--fs-sm);
-  font-weight: var(--fw-semibold);
-  letter-spacing: var(--ls-widest);
-  text-transform: uppercase;
-  color: var(--color-red-bright);
-  margin-bottom: var(--space-md);
-}
-
+/* --- Headline --- */
 .hero__title {
   font-family: var(--font-display);
   font-weight: var(--fw-regular);
-  font-size: clamp(3.25rem, 12vw, 7rem);
-  line-height: 0.92;
+  font-size: clamp(3.5rem, 11vw, 8rem);
+  line-height: 0.9;
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: var(--color-white);
-  margin-bottom: var(--space-lg);
+  margin: 0 0 var(--space-lg);
 }
-
-.hero__title-accent {
+.hero__line {
+  display: block;
+  animation: heroLineIn 820ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i) * 130ms + 120ms);
+}
+.hero__line--accent {
   color: var(--color-red-bright);
-  text-shadow: 0 0 34px var(--color-red-glow);
+  text-shadow: 0 0 40px var(--color-red-glow);
 }
 
 .hero__text {
-  font-size: var(--fs-md);
+  font-size: clamp(1.05rem, 1.3vw, 1.25rem);
+  line-height: 1.6;
   color: var(--color-gray-300);
-  max-width: 46ch;
-  margin-bottom: var(--space-xl);
+  max-width: 520px;
+  margin: 0 0 var(--space-xl);
+  animation: heroFadeUp 820ms ease both;
+  animation-delay: 560ms;
 }
 
-/* Premium badges — glass pill + red accent bar + icon + soft glow */
+/* --- Badges --- */
 .hero__badges {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
   margin-bottom: var(--space-xl);
+  animation: heroFadeUp 820ms ease both;
+  animation-delay: 680ms;
 }
-
 .hero__badge {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-md) var(--space-xs) var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
   border-radius: var(--radius-full);
   background-color: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -585,200 +584,201 @@
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--color-white);
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+.hero__badge svg { width: 18px; height: 18px; color: var(--color-red-bright); }
+@media (hover: hover) and (pointer: fine) {
+  .hero__badge:hover {
+    transform: translateY(-2px);
+    border-color: rgba(224, 30, 46, 0.5);
+    box-shadow: var(--glass-glow-hover);
+  }
 }
 
-.hero__badge::before {
-  content: '';
-  width: 3px;
-  height: 16px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-red-bright);
-  box-shadow: var(--shadow-glow-sm);
-}
-
-.hero__badge svg {
-  width: 18px;
-  height: 18px;
-  color: var(--color-red-bright);
-}
-
+/* --- Actions --- */
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-md);
+  animation: heroFadeUp 820ms ease both;
+  animation-delay: 800ms;
+}
+.hero__actions .btn {
+  min-height: 56px;
+  padding-inline: var(--space-xl);
+  border-radius: var(--radius-md);
+}
+.hero__cta {
+  background-color: var(--color-red);
+  background-image: linear-gradient(135deg, var(--color-red-bright) 0%, var(--color-red-dark) 100%);
+  box-shadow: 0 10px 30px rgba(179, 18, 31, 0.35);
+}
+.hero__cta svg { width: 18px; height: 18px; transition: transform var(--transition-base); }
+@media (hover: hover) and (pointer: fine) {
+  .hero__actions .btn:hover { transform: translateY(-2px); }
+  .hero__cta:hover svg { transform: translateX(4px); }
 }
 
-/* --- Right cards --- */
-.hero__cards {
+/* --- Right showcase carousel --- */
+.hero__showcase {
+  position: relative;
+  animation: heroFadeUp 820ms ease both;
+  animation-delay: 440ms;
+}
+.hero-showcase__viewport {
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  touch-action: pan-y;
+  cursor: grab;
+}
+.hero-showcase__viewport:focus-visible { outline: 2px solid var(--color-red-bright); outline-offset: 3px; }
+.hero-showcase__viewport.is-dragging { cursor: grabbing; }
+.hero-showcase__track {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.hero-showcase__track.is-no-transition { transition: none; }
+.hero-showcase__slide { flex: 0 0 100%; }
+
+.hs-card {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-}
-
-.hero__card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-  padding: var(--space-xl);
-  border-radius: var(--radius-lg);
-  background-color: var(--glass-bg);
-  background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 7px);
+  min-height: 300px;
+  padding: var(--space-2xl);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(120% 80% at 80% 0%, rgba(224, 30, 46, 0.12), transparent 55%),
+    var(--glass-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   box-shadow: var(--glass-glow);
 }
-
-.hero__card-icon {
+.hs-card__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 46px;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-md);
+  background-color: rgba(224, 30, 46, 0.12);
+  color: var(--color-red-bright);
+  box-shadow: inset 0 0 14px rgba(224, 30, 46, 0.16);
+}
+.hs-card__icon svg { width: 28px; height: 28px; }
+.hs-card__title { font-size: var(--fs-xl); color: var(--color-white); margin: 0; }
+.hs-card__text { margin: 0; font-size: var(--fs-md); color: var(--color-gray-300); }
+
+.hero-showcase__ui {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+.hero-showcase__arrow {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--color-white);
+  cursor: pointer;
+  transition: background var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+.hero-showcase__arrow:hover {
+  background: rgba(224, 30, 46, 0.85);
+  border-color: var(--color-red-bright);
+  box-shadow: var(--shadow-glow-sm);
+}
+.hero-showcase__arrow svg { width: 20px; height: 20px; }
+.hero-showcase__dots { display: flex; gap: 8px; margin-inline: auto; }
+.hero-showcase__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: background var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+}
+.hero-showcase__dot.is-active {
+  background: var(--color-red-bright);
+  transform: scale(1.35);
+  box-shadow: 0 0 10px var(--color-red-glow);
+}
+
+/* --- Bottom feature cards --- */
+.hero__features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+.hero-feature {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-glow);
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+.hero-feature__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-md);
   background-color: rgba(224, 30, 46, 0.12);
   color: var(--color-red-bright);
   box-shadow: inset 0 0 12px rgba(224, 30, 46, 0.15);
 }
-
-.hero__card-icon svg {
-  width: 24px;
-  height: 24px;
-}
-
-.hero__card-title {
-  font-size: var(--fs-lg);
-  color: var(--color-white);
-}
-
-.hero__card-text {
-  margin: 0;
-  font-size: var(--fs-sm);
-  color: var(--color-gray-300);
-}
-
-/* Progress dots (shown only while the desktop sequence is active) */
-.hero__card-dots {
-  display: none;
-  gap: var(--space-xs);
-  justify-content: center;
-  margin-top: var(--space-lg);
-}
-
-.hero__card-dots span {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-graphite-light);
-  transition: background-color var(--transition-base), box-shadow var(--transition-base);
-}
-
-.hero__card-dots span.is-active {
-  background-color: var(--color-red-bright);
-  box-shadow: var(--shadow-glow-sm);
-}
-
-/* --- Scroll indicator (desktop only) --- */
-.hero__scroll {
-  display: none;
-  position: absolute;
-  bottom: var(--space-xl);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  width: 26px;
-  height: 42px;
-  border: 2px solid var(--color-gray-400);
-  border-radius: var(--radius-full);
-  animation: scrollIndicatorPulse 2.4s ease-in-out infinite;
-}
-
-.hero__scroll::before {
-  content: '';
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  width: 4px;
-  height: 8px;
-  background-color: var(--color-red-bright);
-  border-radius: var(--radius-full);
-  transform: translateX(-50%);
-  animation: scrollIndicator 1.8s ease-in-out infinite;
-}
-
-@keyframes scrollIndicator {
-  0% {
-    transform: translate(-50%, 0);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, 14px);
-    opacity: 0;
+.hero-feature__icon svg { width: 24px; height: 24px; }
+.hero-feature__title { font-size: var(--fs-lg); color: var(--color-white); margin: 0 0 2px; }
+.hero-feature__text { margin: 0; font-size: var(--fs-sm); color: var(--color-gray-300); }
+@media (hover: hover) and (pointer: fine) {
+  .hero-feature:hover {
+    transform: translateY(-4px) scale(1.03);
+    border-color: rgba(224, 30, 46, 0.5);
+    box-shadow: var(--shadow-lg), var(--glass-glow-hover);
   }
 }
 
-@keyframes scrollIndicatorPulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
+@keyframes heroLineIn {
+  from { opacity: 0; transform: translateY(15px); filter: blur(8px); }
+  to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Desktop: split layout + pinned card sequence --- */
+/* --- Desktop: 60 / 40 split; features in a row --- */
+@media (min-width: 600px) {
+  .hero__features { grid-template-columns: repeat(3, 1fr); }
+}
 @media (min-width: 992px) {
   .hero__grid {
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: 1.5fr 1fr;
     gap: var(--space-3xl);
-    padding-block: 0;
-  }
-
-  .hero__scroll {
-    display: block;
-  }
-
-  /* Enhancement layer (hero.js adds .is-sequenced on capable desktops) */
-  .hero.is-sequenced {
-    height: 240vh;
-  }
-
-  .hero.is-sequenced .hero__stage {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    height: 100dvh;
-  }
-
-  .hero.is-sequenced .hero__cards {
-    position: relative;
-    display: block;
-    min-height: 300px;
-  }
-
-  .hero.is-sequenced .hero__card {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity var(--transition-slow) ease, transform var(--transition-slow) ease,
-      filter var(--transition-slow) ease;
-    will-change: opacity, transform;
-  }
-
-  .hero.is-sequenced .hero__card:first-child {
-    opacity: 1;
-  }
-
-  .hero.is-sequenced .hero__card-dots {
-    display: flex;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: calc(-1 * var(--space-xl));
   }
 }
-
 
 /* ---------------------------------------------------------------------
    Sections
