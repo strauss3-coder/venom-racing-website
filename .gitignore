@@ -3,6 +3,8 @@ Thumbs.db
 .vscode/
 
 # Raw, un-optimised source media (kept locally only). The web-ready,
-# URL-safe copies live in assets/images/performance and assets/videos/performance.
+# URL-safe copies live in assets/images/performance, assets/videos/performance,
+# assets/images/gallery and assets/videos/gallery.
 assets/images/preformance-page-images /
 assets/images/services-page-images /
+assets/images/gallery-page/
