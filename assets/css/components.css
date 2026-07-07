@@ -1210,8 +1210,8 @@
 .rc-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
-  padding: var(--space-xl);
+  gap: var(--space-sm);
+  padding: 28px 28px 24px;
   border-radius: var(--radius-lg);
   background-color: var(--glass-bg);
   background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 7px);
@@ -1244,14 +1244,28 @@
   margin: 0;
   color: var(--color-off-white);
   font-size: var(--fs-md);
-  line-height: var(--lh-normal);
+  line-height: 1.6;
 }
+
+/* "Read Full Review" link — revealed only on clamped homepage cards */
+.rc-card__more {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-red-bright);
+  transition: gap var(--transition-base);
+}
+.rc-card__more:hover { gap: 8px; }
 
 .rc-card__foot {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  margin-top: auto;
 }
 
 .rc-card__avatar {
@@ -1310,16 +1324,33 @@
 }
 
 .rc__viewport {
-  --rc-card-w: min(560px, 86vw);
+  --rc-card-w: min(560px, 88vw);
   display: flex;
-  gap: var(--space-lg);
+  align-items: start;               /* cards size to their own content, not the tallest */
+  gap: var(--space-sm);             /* tighter spacing → next card previews on mobile */
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding-block: var(--space-lg);
-  padding-inline: max(var(--space-md), calc((100% - var(--rc-card-w)) / 2));
+  padding-inline: max(var(--space-sm), calc((100% - var(--rc-card-w)) / 2));
   cursor: grab;
+}
+
+/* Consistent minimum height + cap long reviews at ~7 lines on the homepage */
+.rc__viewport > .rc-card {
+  min-height: 180px;
+}
+.rc__viewport .rc-card__text {
+  max-height: calc(1.6em * 7);
+  overflow: hidden;
+}
+.rc__viewport .rc-card--clamped .rc-card__text {
+  -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 78%, transparent 100%);
+}
+.rc__viewport .rc-card--clamped .rc-card__more {
+  display: inline-flex;
 }
 
 .rc__viewport::-webkit-scrollbar {

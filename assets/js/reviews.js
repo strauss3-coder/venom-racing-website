@@ -67,6 +67,7 @@
       GOOGLE_G +
       '</div>' +
       '<p class="rc-card__text">' + esc(r.text) + '</p>' +
+      '<a class="rc-card__more" href="reviews.html">Read Full Review <span aria-hidden="true">&rarr;</span></a>' +
       '<div class="rc-card__foot">' +
       '<span class="rc-card__avatar" aria-hidden="true">' + esc(initial) + '</span>' +
       '<span class="rc-card__meta">' +
@@ -89,6 +90,22 @@
     viewport.innerHTML = REVIEWS.map(cardHTML).join('');
     const cards = qsa('.rc-card', viewport);
     if (!cards.length) return;
+
+    // Flag cards whose review text overflows the 7-line cap so the fade +
+    // "Read Full Review" link only shows where it's actually needed.
+    function markClamped() {
+      cards.forEach((card) => {
+        const t = qs('.rc-card__text', card);
+        if (t) card.classList.toggle('rc-card--clamped', t.scrollHeight - t.clientHeight > 4);
+      });
+    }
+    markClamped();
+    window.addEventListener('load', markClamped);
+    let clampTimer = null;
+    window.addEventListener('resize', () => {
+      window.clearTimeout(clampTimer);
+      clampTimer = window.setTimeout(markClamped, 150);
+    }, { passive: true });
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
