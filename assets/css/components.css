@@ -818,6 +818,16 @@
   grid-template-columns: 1fr;
 }
 
+/* Sections whose media precedes the text in the DOM (so the media sits on
+   the LEFT on desktop). When the grid stacks to one column on mobile, push
+   the media below the text so every section reads label → heading → text →
+   media. Desktop/tablet (>= 600px) two-column layout is untouched. */
+@media (max-width: 599.98px) {
+  .split-grid > .media-order-last {
+    order: 2;
+  }
+}
+
 .split-grid--stats {
   grid-template-columns: repeat(2, 1fr);
 }
