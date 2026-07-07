@@ -885,73 +885,6 @@
 }
 
 /* ---------------------------------------------------------------------
-   Reviews carousel
-   --------------------------------------------------------------------- */
-.reviews-carousel {
-  display: flex;
-  gap: var(--space-lg);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: var(--space-md);
-  scrollbar-width: none;
-}
-
-.reviews-carousel::-webkit-scrollbar {
-  display: none;
-}
-
-.review-card {
-  flex: 0 0 min(360px, 85vw);
-  scroll-snap-align: start;
-  padding: var(--space-xl);
-  border-radius: var(--radius-lg);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-}
-
-.review-card__rating {
-  color: var(--color-red-bright);
-  margin-bottom: var(--space-sm);
-}
-
-.review-card__verified {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  font-size: var(--fs-xs);
-  letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
-  color: var(--color-success);
-  margin-top: var(--space-md);
-}
-
-.carousel-controls {
-  display: flex;
-  gap: var(--space-sm);
-  margin-top: var(--space-lg);
-  justify-content: center;
-}
-
-.carousel-controls button {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  color: var(--color-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast);
-}
-
-.carousel-controls button:hover {
-  background-color: var(--color-red);
-  border-color: var(--color-red);
-}
-
-/* ---------------------------------------------------------------------
    FAQ accordion
    --------------------------------------------------------------------- */
 .accordion {
@@ -1108,7 +1041,6 @@
 .card,
 .service-card,
 .feature-card,
-.review-card,
 .process__step {
   box-shadow: var(--glass-glow);
   transition: transform var(--transition-base), box-shadow var(--transition-base),
@@ -1118,7 +1050,6 @@
 .card:hover,
 .service-card:hover,
 .feature-card:hover,
-.review-card:hover,
 .process__step:hover {
   transform: translateY(-6px);
   box-shadow: var(--glass-glow-hover);
@@ -1391,4 +1322,273 @@
   width: 18px;
   height: 18px;
   color: var(--color-red-bright);
+}
+
+/* ---------------------------------------------------------------------
+   Reviews — trust bar, review cards, centre-peek carousel, grid
+   Rendered from assets/js/reviews.js (single source of truth).
+   --------------------------------------------------------------------- */
+.trust-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm) var(--space-xl);
+  margin-bottom: var(--space-2xl);
+}
+
+.trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-gray-300);
+}
+
+.trust-item svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-red-bright);
+}
+
+/* Review card (shared by carousel + grid) */
+.rc-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  border-radius: var(--radius-lg);
+  background-color: var(--glass-bg);
+  background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 7px);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-glow);
+  transition: transform var(--transition-base), box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.rc-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.rc-card__stars {
+  color: var(--color-red-bright);
+  letter-spacing: 2px;
+  font-size: var(--fs-md);
+}
+
+.rc-card__google {
+  flex-shrink: 0;
+}
+
+.rc-card__text {
+  margin: 0;
+  color: var(--color-off-white);
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+}
+
+.rc-card__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: auto;
+}
+
+.rc-card__avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  color: var(--color-white);
+  background: linear-gradient(150deg, var(--color-red), var(--color-red-dark));
+  box-shadow: var(--shadow-glow-sm);
+}
+
+.rc-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rc-card__name {
+  color: var(--color-white);
+  font-size: var(--fs-base);
+}
+
+.rc-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-success);
+}
+
+.rc-card__badge svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+@media (hover: hover) {
+  .rc-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glass-glow-hover);
+    border-color: rgba(224, 30, 46, 0.4);
+  }
+}
+
+/* --- Carousel (homepage) --- */
+.rc {
+  position: relative;
+}
+
+.rc__viewport {
+  --rc-card-w: min(560px, 86vw);
+  display: flex;
+  gap: var(--space-lg);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-block: var(--space-lg);
+  padding-inline: max(var(--space-md), calc((100% - var(--rc-card-w)) / 2));
+  cursor: grab;
+}
+
+.rc__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.rc__viewport.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.rc__viewport > .rc-card {
+  flex: 0 0 var(--rc-card-w);
+  scroll-snap-align: center;
+  opacity: 0.5;
+  transform: scale(0.92);
+  transition: opacity var(--transition-slow) ease, transform var(--transition-slow) ease,
+    box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.rc__viewport > .rc-card.is-active {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: var(--glass-glow-hover);
+  border-color: rgba(224, 30, 46, 0.5);
+}
+
+.rc__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: rgba(10, 10, 11, 0.6);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--color-white);
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.rc__arrow:hover {
+  background-color: var(--color-red);
+  border-color: var(--color-red);
+  box-shadow: var(--shadow-glow-sm);
+}
+
+.rc__arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+.rc__arrow--prev {
+  left: var(--space-xs);
+}
+
+.rc__arrow--next {
+  right: var(--space-xs);
+}
+
+.rc__dots {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-lg);
+}
+
+.rc__dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.35);
+  transition: width var(--transition-base), background-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.rc__dots button.is-active {
+  width: 22px;
+  background-color: var(--color-red-bright);
+  box-shadow: var(--shadow-glow-sm);
+}
+
+/* Below tablet: rely on swipe, hide arrows for a cleaner mobile view */
+@media (max-width: 767px) {
+  .rc__arrow {
+    display: none;
+  }
+}
+
+/* --- Reviews page: search + masonry grid --- */
+.reviews-toolbar {
+  max-width: 520px;
+  margin: 0 auto var(--space-2xl);
+}
+
+.reviews-grid {
+  columns: 1;
+  column-gap: var(--space-lg);
+}
+
+.reviews-grid > .rc-card {
+  break-inside: avoid;
+  margin-bottom: var(--space-lg);
+}
+
+@media (min-width: 600px) {
+  .reviews-grid {
+    columns: 2;
+  }
+}
+
+@media (min-width: 992px) {
+  .reviews-grid {
+    columns: 3;
+  }
 }
