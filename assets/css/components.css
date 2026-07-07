@@ -2641,3 +2641,81 @@
   .lightbox__nav--prev { left: clamp(1rem, 8vw, 3rem); }
   .lightbox__nav--next { right: clamp(1rem, 8vw, 3rem); }
 }
+
+/* =====================================================================
+   Floating quick-nav island — fixed bottom-centre glass dock.
+   Fades in after ~280px of scroll (see navigation.js). Built on every
+   page; the current page's item is highlighted red.
+   ===================================================================== */
+.fnav {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%) translateY(18px);
+  z-index: 90;
+  display: flex;
+  gap: 0.15rem;
+  padding: 0.4rem;
+  max-width: calc(100vw - 1.5rem);
+  border-radius: var(--radius-full);
+  background: rgba(10, 10, 11, 0.72);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid rgba(224, 30, 46, 0.30);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.55), 0 0 26px rgba(224, 30, 46, 0.16);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--transition-base), transform var(--transition-base), visibility var(--transition-base);
+}
+.fnav.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+/* Hide while the mobile menu is open to avoid clutter */
+body.nav-open .fnav {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.fnav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 0.5rem 0.7rem;
+  min-width: 44px;
+  border-radius: 16px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--transition-base), background var(--transition-base), box-shadow var(--transition-base);
+}
+.fnav__item svg { width: 20px; height: 20px; }
+.fnav__label {
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.fnav__item:hover { color: var(--color-white); background: rgba(255, 255, 255, 0.06); }
+.fnav__item.is-current {
+  color: var(--color-white);
+  background: linear-gradient(150deg, var(--color-red), var(--color-red-dark));
+  box-shadow: var(--shadow-glow-sm);
+}
+
+/* Mobile: icon-only dock, comfortable touch targets, no overflow */
+@media (max-width: 640px) {
+  .fnav { gap: 0; padding: 0.3rem; }
+  .fnav__item { padding: 0.6rem; min-width: 40px; }
+  .fnav__label { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fnav { transition: opacity var(--transition-base), visibility var(--transition-base); transform: translateX(-50%); }
+  .fnav.is-visible { transform: translateX(-50%); }
+}

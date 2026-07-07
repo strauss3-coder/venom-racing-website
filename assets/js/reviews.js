@@ -99,7 +99,7 @@
         const d = document.createElement('button');
         d.type = 'button';
         d.setAttribute('aria-label', 'Go to review ' + (i + 1));
-        d.addEventListener('click', () => { scrollToCard(i); restart(); });
+        d.addEventListener('click', () => { scrollToCard(i, true); restart(); });
         dotsWrap.appendChild(d);
         dots.push(d);
       });
@@ -110,9 +110,13 @@
       return cards[0].getBoundingClientRect().width + gap;
     };
 
-    function scrollToCard(i) {
+    // Horizontal-only centring — never uses scrollIntoView, which would
+    // scroll the whole PAGE vertically down to Reviews on initial load.
+    function scrollToCard(i, smooth) {
       const c = cards[Math.max(0, Math.min(i, cards.length - 1))];
-      if (c) c.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      if (!c) return;
+      const left = c.offsetLeft - (viewport.clientWidth - c.offsetWidth) / 2;
+      viewport.scrollTo({ left: Math.max(0, left), behavior: smooth ? 'smooth' : 'auto' });
     }
 
     // Active-card detection (nearest to viewport centre)
