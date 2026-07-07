@@ -315,6 +315,24 @@
           <p>Every performance package is carefully designed to build on the previous stage, ensuring reliability, safety and maximum performance.</p>
         </div>
 
+        <!-- Mobile-only custom stage selector (desktop keeps the timeline) -->
+        <div class="stage-select" data-stage-select>
+          <button class="stage-select__toggle is-placeholder" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Select a performance stage" data-ss-toggle>
+            <span class="stage-select__current">
+              <span class="stage-select__num" data-ss-num aria-hidden="true"></span>
+              <span class="stage-select__label" data-ss-label>Select a Performance Stage</span>
+            </span>
+            <svg class="stage-select__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <ul class="stage-select__menu" role="listbox" aria-label="Performance stages" data-ss-menu>
+            <li class="stage-select__option" role="option" data-ss-option="0" aria-selected="false" tabindex="0"><span class="stage-select__num" aria-hidden="true">1</span><span class="stage-select__opt-label">Stage 1 · Software Only</span></li>
+            <li class="stage-select__option" role="option" data-ss-option="1" aria-selected="false" tabindex="0"><span class="stage-select__num" aria-hidden="true">1+</span><span class="stage-select__opt-label">Stage 1+ · Light Performance Upgrades</span></li>
+            <li class="stage-select__option" role="option" data-ss-option="2" aria-selected="false" tabindex="0"><span class="stage-select__num" aria-hidden="true">2</span><span class="stage-select__opt-label">Stage 2 · Intermediate Performance Build</span></li>
+            <li class="stage-select__option" role="option" data-ss-option="3" aria-selected="false" tabindex="0"><span class="stage-select__num" aria-hidden="true">2+</span><span class="stage-select__opt-label">Stage 2+ · Advanced Performance Setup</span></li>
+            <li class="stage-select__option" role="option" data-ss-option="4" aria-selected="false" tabindex="0"><span class="stage-select__num" aria-hidden="true">3</span><span class="stage-select__opt-label">Stage 3 · High Performance / Maximum Power Build</span></li>
+          </ul>
+        </div>
+
         <div class="stages__layout" data-stages>
           <div class="stages__timeline slide-in-left" role="tablist" aria-label="Performance stages" data-stages-timeline>
           <button class="stage-tab is-active" type="button" role="tab" data-stage-tab="0" id="stage-tab-0" aria-selected="true" aria-controls="stage-panel-0">
