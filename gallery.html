@@ -102,165 +102,123 @@
           <button class="gallery-filter" type="button" data-filter="videos" aria-pressed="false">Videos</button>
         </div>
 
-        <div class="masonry" data-gallery>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="builds" data-label="Performance Build" data-full="assets/images/gallery/feature-1.jpg" data-alt="Completed Venom Racing performance build">
-            <img class="gallery-item__media" src="assets/images/gallery/feature-1.jpg" alt="Completed Venom Racing performance build" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Performance Build</span></span>
+        <div class="gallery-grid" data-gallery>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="builds" data-label="Performance Build" data-full="assets/images/gallery/feature-1.jpg" data-alt="Performance Build — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/gallery/feature-1.jpg" alt="Performance Build — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Build</span><span class="gallery-card__title">Performance Build</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="ecu videos" data-label="ECU Calibration" data-full="assets/videos/gallery/tuning.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 478/850;" aria-label="ECU Calibration — Venom Racing">
-              <source data-src="assets/videos/gallery/tuning.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">ECU Calibration</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="ecu videos" data-label="ECU Calibration" data-full="assets/videos/gallery/tuning.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="ECU Calibration — Venom Racing"><source data-src="assets/videos/gallery/tuning.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Tuning</span><span class="gallery-card__title">ECU Calibration</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/exhaust/exhaust-dual-quad-system.jpg" data-alt="Custom TIG-welded dual-quad exhaust system by Venom Racing">
-            <img class="gallery-item__media" src="assets/images/exhaust/exhaust-dual-quad-system.jpg" alt="Custom TIG-welded dual-quad exhaust system by Venom Racing" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/exhaust/exhaust-dual-quad-system.jpg" data-alt="Custom Exhaust — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/exhaust/exhaust-dual-quad-system.jpg" alt="Custom Exhaust — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Fabrication</span><span class="gallery-card__title">Custom Exhaust</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="dyno videos" data-label="Dyno Validation" data-full="assets/videos/gallery/dyno-run.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 1280/720;" aria-label="Dyno Validation — Venom Racing">
-              <source data-src="assets/videos/gallery/dyno-run.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Dyno Validation</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="dyno videos" data-label="Vehicle on the Dyno" data-full="assets/videos/gallery/dyno-run.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Vehicle on the Dyno — Venom Racing"><source data-src="assets/videos/gallery/dyno-run.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Dyno</span><span class="gallery-card__title">Vehicle on the Dyno</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="ecu" data-label="ECU Calibration" data-full="assets/images/performance/dastek-unichip.jpg" data-alt="Dastek Unichip piggyback microcontroller installed by Venom Racing">
-            <img class="gallery-item__media" src="assets/images/performance/dastek-unichip.jpg" alt="Dastek Unichip piggyback microcontroller installed by Venom Racing" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">ECU Calibration</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="ecu" data-label="Dastek Unichip" data-full="assets/images/performance/dastek-unichip.jpg" data-alt="Dastek Unichip — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/performance/dastek-unichip.jpg" alt="Dastek Unichip — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Tuning</span><span class="gallery-card__title">Dastek Unichip</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="exhaust videos" data-label="Custom Exhaust" data-full="assets/videos/gallery/exhaust-welding.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 478/850;" aria-label="Custom Exhaust — Venom Racing">
-              <source data-src="assets/videos/gallery/exhaust-welding.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="exhaust videos" data-label="Exhaust Fabrication" data-full="assets/videos/gallery/exhaust-welding.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Exhaust Fabrication — Venom Racing"><source data-src="assets/videos/gallery/exhaust-welding.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Fabrication</span><span class="gallery-card__title">Exhaust Fabrication</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="turbo" data-label="Turbo Upgrade" data-full="assets/images/performance/intercooler-upgrades.jpg" data-alt="Uprated intercooler fitted during a turbo conversion">
-            <img class="gallery-item__media" src="assets/images/performance/intercooler-upgrades.jpg" alt="Uprated intercooler fitted during a turbo conversion" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Turbo Upgrade</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="turbo" data-label="Intercooler Upgrade" data-full="assets/images/performance/intercooler-upgrades.jpg" data-alt="Intercooler Upgrade — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/performance/intercooler-upgrades.jpg" alt="Intercooler Upgrade — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Performance</span><span class="gallery-card__title">Intercooler Upgrade</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="builds videos" data-label="Performance Build" data-full="assets/videos/gallery/air-intake.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 720/1280;" aria-label="Performance Build — Venom Racing">
-              <source data-src="assets/videos/gallery/air-intake.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Performance Build</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="builds videos" data-label="Intake Upgrade" data-full="assets/videos/gallery/air-intake.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Intake Upgrade — Venom Racing"><source data-src="assets/videos/gallery/air-intake.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Performance</span><span class="gallery-card__title">Intake Upgrade</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/exhaust/exhaust-downpipe-branded.jpg" data-alt="Venom Racing branded exhaust downpipe fabrication">
-            <img class="gallery-item__media" src="assets/images/exhaust/exhaust-downpipe-branded.jpg" alt="Venom Racing branded exhaust downpipe fabrication" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Exhaust Downpipe" data-full="assets/images/exhaust/exhaust-downpipe-branded.jpg" data-alt="Exhaust Downpipe — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/exhaust/exhaust-downpipe-branded.jpg" alt="Exhaust Downpipe — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Fabrication</span><span class="gallery-card__title">Exhaust Downpipe</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="dyno videos" data-label="Dyno Validation" data-full="assets/videos/performance/dyno-validation.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 1280/720;" aria-label="Dyno Validation — Venom Racing">
-              <source data-src="assets/videos/performance/dyno-validation.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Dyno Validation</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="dyno videos" data-label="Dyno Validation" data-full="assets/videos/performance/dyno-validation.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Dyno Validation — Venom Racing"><source data-src="assets/videos/performance/dyno-validation.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Dyno</span><span class="gallery-card__title">Dyno Validation</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="dyno" data-label="Dyno Validation" data-full="assets/images/about/dyno.jpg" data-alt="Vehicle on the Venom Racing in-house dyno">
-            <img class="gallery-item__media" src="assets/images/about/dyno.jpg" alt="Vehicle on the Venom Racing in-house dyno" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Dyno Validation</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="dyno" data-label="On the Dyno" data-full="assets/images/about/dyno.jpg" data-alt="On the Dyno — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/about/dyno.jpg" alt="On the Dyno — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Dyno</span><span class="gallery-card__title">On the Dyno</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="services videos workshop" data-label="Services & Repairs" data-full="assets/videos/gallery/engine-rebuild.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 478/850;" aria-label="Services & Repairs — Venom Racing">
-              <source data-src="assets/videos/gallery/engine-rebuild.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Services & Repairs</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="services videos workshop" data-label="Engine Rebuild" data-full="assets/videos/gallery/engine-rebuild.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Engine Rebuild — Venom Racing"><source data-src="assets/videos/gallery/engine-rebuild.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Workshop</span><span class="gallery-card__title">Engine Rebuild</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="turbo" data-label="Turbo Upgrade" data-full="assets/images/performance/water-methanol-injection.jpg" data-alt="Water-methanol injection setup installed by Venom Racing">
-            <img class="gallery-item__media" src="assets/images/performance/water-methanol-injection.jpg" alt="Water-methanol injection setup installed by Venom Racing" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Turbo Upgrade</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="turbo" data-label="Water-Methanol" data-full="assets/images/performance/water-methanol-injection.jpg" data-alt="Water-Methanol — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/performance/water-methanol-injection.jpg" alt="Water-Methanol — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Performance</span><span class="gallery-card__title">Water-Methanol</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="services videos workshop" data-label="Services & Repairs" data-full="assets/videos/gallery/diagnostics-1.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 478/850;" aria-label="Services & Repairs — Venom Racing">
-              <source data-src="assets/videos/gallery/diagnostics-1.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Services & Repairs</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="services videos workshop" data-label="Fault Finding" data-full="assets/videos/gallery/diagnostics-1.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Fault Finding — Venom Racing"><source data-src="assets/videos/gallery/diagnostics-1.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Diagnostics</span><span class="gallery-card__title">Fault Finding</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/exhaust/exhaust-catback-tips.jpg" data-alt="Custom cat-back exhaust system with chrome dual tips">
-            <img class="gallery-item__media" src="assets/images/exhaust/exhaust-catback-tips.jpg" alt="Custom cat-back exhaust system with chrome dual tips" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Cat-Back System" data-full="assets/images/exhaust/exhaust-catback-tips.jpg" data-alt="Cat-Back System — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/exhaust/exhaust-catback-tips.jpg" alt="Cat-Back System — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Fabrication</span><span class="gallery-card__title">Cat-Back System</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="workshop videos" data-label="Workshop" data-full="assets/videos/gallery/workshop.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 478/744;" aria-label="Workshop — Venom Racing">
-              <source data-src="assets/videos/gallery/workshop.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Workshop</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="workshop videos" data-label="Workshop" data-full="assets/videos/gallery/workshop.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Workshop — Venom Racing"><source data-src="assets/videos/gallery/workshop.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Venom Racing</span><span class="gallery-card__title">Workshop</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/performance/exhaust-1.jpg" data-alt="Custom-built stainless performance exhaust system">
-            <img class="gallery-item__media" src="assets/images/performance/exhaust-1.jpg" alt="Custom-built stainless performance exhaust system" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Exhaust System" data-full="assets/images/performance/exhaust-1.jpg" data-alt="Exhaust System — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/performance/exhaust-1.jpg" alt="Exhaust System — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Fabrication</span><span class="gallery-card__title">Exhaust System</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="ecu videos" data-label="ECU Calibration" data-full="assets/videos/performance/ecu-remapping.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 478/850;" aria-label="ECU Calibration — Venom Racing">
-              <source data-src="assets/videos/performance/ecu-remapping.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">ECU Calibration</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="ecu videos" data-label="ECU Remapping" data-full="assets/videos/performance/ecu-remapping.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="ECU Remapping — Venom Racing"><source data-src="assets/videos/performance/ecu-remapping.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Tuning</span><span class="gallery-card__title">ECU Remapping</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="turbo" data-label="Turbo Upgrade" data-full="assets/images/about/intercooler.jpg" data-alt="Front-mount intercooler upgrade by Venom Racing">
-            <img class="gallery-item__media" src="assets/images/about/intercooler.jpg" alt="Front-mount intercooler upgrade by Venom Racing" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Turbo Upgrade</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="turbo" data-label="Intercooler" data-full="assets/images/about/intercooler.jpg" data-alt="Intercooler — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/about/intercooler.jpg" alt="Intercooler — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Performance</span><span class="gallery-card__title">Intercooler</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="builds videos workshop" data-label="Performance Build" data-full="assets/videos/gallery/build-detail.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 478/850;" aria-label="Performance Build — Venom Racing">
-              <source data-src="assets/videos/gallery/build-detail.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Performance Build</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="builds videos workshop" data-label="Performance Build" data-full="assets/videos/gallery/build-detail.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Performance Build — Venom Racing"><source data-src="assets/videos/gallery/build-detail.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Build</span><span class="gallery-card__title">Performance Build</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/exhaust/exhaust-install-underside.jpg" data-alt="Exhaust system installed on a vehicle underside">
-            <img class="gallery-item__media" src="assets/images/exhaust/exhaust-install-underside.jpg" alt="Exhaust system installed on a vehicle underside" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Exhaust Install" data-full="assets/images/exhaust/exhaust-install-underside.jpg" data-alt="Exhaust Install — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/exhaust/exhaust-install-underside.jpg" alt="Exhaust Install — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Fabrication</span><span class="gallery-card__title">Exhaust Install</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="services videos workshop" data-label="Services & Repairs" data-full="assets/videos/gallery/diagnostics-2.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 720/1280;" aria-label="Services & Repairs — Venom Racing">
-              <source data-src="assets/videos/gallery/diagnostics-2.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Services & Repairs</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="services videos workshop" data-label="Fault Finding" data-full="assets/videos/gallery/diagnostics-2.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Fault Finding — Venom Racing"><source data-src="assets/videos/gallery/diagnostics-2.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Diagnostics</span><span class="gallery-card__title">Fault Finding</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/performance/exhaust-2.jpg" data-alt="Precision-welded exhaust piping detail">
-            <img class="gallery-item__media" src="assets/images/performance/exhaust-2.jpg" alt="Precision-welded exhaust piping detail" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Exhaust System" data-full="assets/images/performance/exhaust-2.jpg" data-alt="Exhaust System — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/performance/exhaust-2.jpg" alt="Exhaust System — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Fabrication</span><span class="gallery-card__title">Exhaust System</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="services videos workshop" data-label="Services & Repairs" data-full="assets/videos/gallery/services.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 720/1280;" aria-label="Services & Repairs — Venom Racing">
-              <source data-src="assets/videos/gallery/services.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Services & Repairs</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="services videos workshop" data-label="Servicing" data-full="assets/videos/gallery/services.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Servicing — Venom Racing"><source data-src="assets/videos/gallery/services.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Workshop</span><span class="gallery-card__title">Servicing</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/exhaust/04e24b24-61ad-4852-81ce-7eae75b053b6.JPG" data-alt="Venom Racing exhaust fabrication work">
-            <img class="gallery-item__media" src="assets/images/exhaust/04e24b24-61ad-4852-81ce-7eae75b053b6.JPG" alt="Venom Racing exhaust fabrication work" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Exhaust System" data-full="assets/images/performance/exhaust-3.jpg" data-alt="Exhaust System — Venom Racing">
+            <img class="gallery-card__media" src="assets/images/performance/exhaust-3.jpg" alt="Exhaust System — Venom Racing" loading="lazy">
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Fabrication</span><span class="gallery-card__title">Exhaust System</span></span>
           </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="video" data-cats="builds videos workshop" data-label="Performance Build" data-full="assets/videos/gallery/build-detail-2.mp4">
-            <video class="gallery-item__media" data-lazy-video autoplay muted loop playsinline preload="none" style="aspect-ratio: 478/850;" aria-label="Performance Build — Venom Racing">
-              <source data-src="assets/videos/gallery/build-detail-2.mp4" type="video/mp4">
-            </video>
-            <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Performance Build</span></span>
-          </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/performance/exhaust-3.jpg" data-alt="Finished performance exhaust system fabricated by Venom Racing">
-            <img class="gallery-item__media" src="assets/images/performance/exhaust-3.jpg" alt="Finished performance exhaust system fabricated by Venom Racing" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
-          </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/about/exhaust.jpg" data-alt="Performance exhaust manufactured by Venom Racing">
-            <img class="gallery-item__media" src="assets/images/about/exhaust.jpg" alt="Performance exhaust manufactured by Venom Racing" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
-          </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/exhaust/252b7e72-9404-46a2-832b-f3b329b018ce.JPG" data-alt="Venom Racing custom exhaust build">
-            <img class="gallery-item__media" src="assets/images/exhaust/252b7e72-9404-46a2-832b-f3b329b018ce.JPG" alt="Venom Racing custom exhaust build" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
-          </button>
-          <button class="gallery-item" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/exhaust/e1338595-28af-438c-a270-5c593084eb79.JPG" data-alt="Venom Racing stainless exhaust fabrication">
-            <img class="gallery-item__media" src="assets/images/exhaust/e1338595-28af-438c-a270-5c593084eb79.JPG" alt="Venom Racing stainless exhaust fabrication" loading="lazy">
-            <span class="gallery-item__overlay"><span class="gallery-item__tag">Custom Exhaust</span></span>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-cats="builds videos workshop" data-label="Performance Build" data-full="assets/videos/gallery/build-detail-2.mp4">
+            <video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline preload="none" aria-label="Performance Build — Venom Racing"><source data-src="assets/videos/gallery/build-detail-2.mp4" type="video/mp4"></video>
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Build</span><span class="gallery-card__title">Performance Build</span></span>
           </button>
         </div>
       </div>

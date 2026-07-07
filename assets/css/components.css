@@ -2413,7 +2413,8 @@
 }
 
 /* =====================================================================
-   Gallery — masonry showcase, animated filters, media cards + lightbox
+   Gallery — uniform 16:9 media cards, animated filters + lightbox
+   One reusable card. Every item: same size, radius, shadow, hover, overlay.
    ===================================================================== */
 
 /* --- Animated filter buttons --- */
@@ -2448,94 +2449,90 @@
   box-shadow: var(--shadow-glow-sm);
 }
 
-/* --- Masonry (CSS columns → natural ratios, no crop, no gaps) --- */
-.masonry { column-gap: var(--space-md); column-count: 3; }
-@media (max-width: 991px) { .masonry { column-count: 2; } }
-@media (max-width: 520px) { .masonry { column-count: 1; } }
+/* --- Fixed grid: 3 / 2 / 1 columns, perfectly aligned --- */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+@media (max-width: 991px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px)  { .gallery-grid { grid-template-columns: 1fr; } }
 
-/* --- Gallery item (button for a11y; premium media frame) --- */
-.gallery-item {
+/* --- The one reusable media card --- */
+.gallery-card {
+  position: relative;
   display: block;
   width: 100%;
-  margin: 0 0 var(--space-md);
-  padding: 5px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(224, 30, 46, 0.30);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--color-carbon-alt);
+  box-shadow: var(--shadow-md), var(--glass-glow);
+  -webkit-appearance: none;
+  appearance: none;
   font: inherit;
   color: inherit;
   text-align: left;
-  border: 1px solid rgba(224, 30, 46, 0.32);
-  background-color: var(--color-carbon-alt);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md), var(--glass-glow);
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
-  break-inside: avoid;
-  -webkit-appearance: none;
-  appearance: none;
-  transition: box-shadow var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
   opacity: 0;
-  transform: translateY(24px);
+  transition: transform var(--transition-base), box-shadow var(--transition-base),
+              border-color var(--transition-base), opacity var(--transition-slow) ease;
 }
-.gallery-item.is-in {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity var(--transition-slow) ease, transform var(--transition-slow) ease,
-              box-shadow var(--transition-base), border-color var(--transition-base);
-}
-.gallery-item[hidden] { display: none; }
+.gallery-card.is-in { opacity: 1; }               /* clean fade-in reveal */
+.gallery-card[hidden] { display: none; }
 
-.gallery-item__media {
+/* Every image AND video is locked to the same frame */
+.gallery-card__media {
   display: block;
   width: 100%;
-  height: auto;
-  border-radius: calc(var(--radius-lg) - 5px);
-  transition: transform var(--transition-slow) ease;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+  background: #000;
 }
-.gallery-item video.gallery-item__media { pointer-events: none; background: #000; }
+.gallery-card video.gallery-card__media { pointer-events: none; }
 
+/* Hover: scale 1.02 + soft red glow only */
 @media (hover: hover) and (pointer: fine) {
-  .gallery-item:hover {
+  .gallery-card:hover {
+    transform: scale(1.02);
     border-color: var(--color-red-bright);
     box-shadow: var(--shadow-lg), var(--glass-glow-hover);
   }
-  .gallery-item:hover .gallery-item__media { transform: scale(1.05); }
 }
 
-/* Subtle category overlay */
-.gallery-item__overlay {
+/* Minimal bottom-left overlay: small category + large title */
+.gallery-card__overlay {
   position: absolute;
-  inset: 5px;
-  border-radius: calc(var(--radius-lg) - 5px);
+  inset: 0;
   pointer-events: none;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
   padding: var(--space-md);
-  background: linear-gradient(to top, rgba(10, 10, 11, 0.74) 0%, transparent 46%);
-  opacity: 0.85;
-  transition: opacity var(--transition-base);
+  background: linear-gradient(to top, rgba(10, 10, 11, 0.80) 0%, rgba(10, 10, 11, 0.15) 46%, transparent 72%);
 }
-.gallery-item:hover .gallery-item__overlay { opacity: 1; }
-.gallery-item__tag {
+.gallery-card__cat {
   font-family: var(--font-heading);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: var(--fs-sm);
-  color: var(--color-white);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: var(--color-red-bright);
+  margin-bottom: 0.15rem;
 }
-.gallery-item__tag::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--color-red-bright);
-  box-shadow: 0 0 8px var(--color-red-glow);
+.gallery-card__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-lg);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--color-white);
 }
 
 /* Video play badge */
-.gallery-item__play {
+.gallery-card__play {
   position: absolute;
   top: var(--space-md);
   right: var(--space-md);
@@ -2552,7 +2549,7 @@
   z-index: 2;
   pointer-events: none;
 }
-.gallery-item__play svg { width: 15px; height: 15px; }
+.gallery-card__play svg { width: 15px; height: 15px; }
 
 /* --- Lightbox --- */
 .lightbox {
