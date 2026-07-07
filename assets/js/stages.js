@@ -1,14 +1,16 @@
 /**
  * stages.js
- * Homepage "Performance Stages" interaction, shared by two controls:
+ * Homepage "Performance Stages" interaction, shared by two controls that
+ * stay in perfect sync:
  *   - Desktop (>= 992px): the vertical timeline tabs + scroll-progressive
  *     activation (Stage 1 -> 3 as the section scrolls through view).
- *   - Mobile (<= 991px): a custom glassmorphism dropdown. It starts on a
- *     "Select a Performance Stage" placeholder with the detail card hidden;
- *     choosing a stage fades/slides the card in and scrolls it into view.
- *     Scroll-progressive activation is disabled on mobile.
- * The same content panels are driven by whichever control is active, so
- * they never fall out of sync. Pure class toggling; the crossfade is CSS.
+ *   - Mobile (<= 991px): a custom glassmorphism dropdown + a compact
+ *     preview strip. Stage 1 is shown by default (never an empty state);
+ *     the dropdown simply switches stages.
+ *
+ * NOTE: the dropdown and preview live in the section but OUTSIDE the
+ * [data-stages] layout, so they are queried from `section`, not `root`.
+ * Pure class toggling; the crossfade / entrance stagger is CSS.
  */
 
 (function (window, document) {
@@ -16,30 +18,40 @@
 
   const { qs, qsa } = window.VenomUtils || {};
 
+  const PREVIEW = [
+    { type: 'Software Only', tag: 'Safe entry-level upgrade' },
+    { type: 'Light Performance Upgrades', tag: 'First bolt-on gains' },
+    { type: 'Intermediate Build', tag: 'Balanced performance step' },
+    { type: 'Advanced Setup', tag: 'Hybrid turbo territory' },
+    { type: 'Maximum Power Build', tag: 'Full performance build' },
+  ];
+
   function initStages(root) {
     const section = root.closest('.stages') || root;
     const tabs = qsa('[data-stage-tab]', root);
     const panels = qsa('[data-stage-content]', root);
     if (tabs.length < 2 || panels.length !== tabs.length) return;
 
-    // Labels/numbers pulled from the timeline tabs (single source of truth)
-    const nums = tabs.map((t) => (qs('.stage-tab__num', t) || {}).textContent || '');
+    const nums = tabs.map((t) => ((qs('.stage-tab__num', t) || {}).textContent || '').trim());
     const labels = tabs.map((t) => {
-      const name = (qs('.stage-tab__name', t) || {}).textContent || '';
-      const sub = (qs('.stage-tab__sub', t) || {}).textContent || '';
+      const name = ((qs('.stage-tab__name', t) || {}).textContent || '').trim();
+      const sub = ((qs('.stage-tab__sub', t) || {}).textContent || '').trim();
       return sub ? `${name} · ${sub}` : name;
     });
 
-    // Mobile dropdown bits (optional)
-    const select = qs('[data-stage-select]', root);
-    const ssToggle = qs('[data-ss-toggle]', root);
-    const ssMenu = qs('[data-ss-menu]', root);
-    const ssNum = qs('[data-ss-num]', root);
-    const ssLabel = qs('[data-ss-label]', root);
-    const options = qsa('[data-ss-option]', root);
+    // Dropdown + preview live in the section (siblings of the layout).
+    const select = qs('[data-stage-select]', section);
+    const ssToggle = qs('[data-ss-toggle]', section);
+    const ssNum = qs('[data-ss-num]', section);
+    const ssLabel = qs('[data-ss-label]', section);
+    const options = qsa('[data-ss-option]', section);
+    const spNum = qs('[data-sp-num]', section);
+    const spName = qs('[data-sp-name]', section);
+    const spType = qs('[data-sp-type]', section);
+    const spTag = qs('[data-sp-tag]', section);
 
     const mobileMq = window.matchMedia('(max-width: 991px)');
-    let active = 0;
+    let active = -1;
     let lockUntil = 0;
 
     function setTabs(i) {
@@ -63,44 +75,32 @@
         o.classList.toggle('is-active', on);
         o.setAttribute('aria-selected', on ? 'true' : 'false');
       });
-      if (ssToggle && ssLabel) {
-        if (i < 0) {
-          ssLabel.textContent = 'Select a Performance Stage';
-          if (ssNum) ssNum.textContent = '';
-          ssToggle.classList.add('is-placeholder');
-        } else {
-          ssLabel.textContent = labels[i];
-          if (ssNum) ssNum.textContent = nums[i];
-          ssToggle.classList.remove('is-placeholder');
-        }
-      }
+      if (ssNum) ssNum.textContent = nums[i] || '';
+      if (ssLabel) ssLabel.textContent = labels[i] || '';
+      if (ssToggle) ssToggle.classList.remove('is-placeholder');
+    }
+    function setPreview(i) {
+      if (spNum) spNum.textContent = nums[i] || '';
+      if (spName) spName.textContent = (labels[i] || '').split(' · ')[0];
+      if (spType) spType.textContent = PREVIEW[i] ? PREVIEW[i].type : '';
+      if (spTag) spTag.textContent = PREVIEW[i] ? PREVIEW[i].tag : '';
     }
 
     function select_(i, opts) {
       i = Math.max(0, Math.min(i, tabs.length - 1));
       opts = opts || {};
-      const wasPick = section.classList.contains('stages--pick');
-      section.classList.remove('stages--pick');
-      setTabs(i);
-      setSelector(i);
-
-      if (wasPick) {
-        // Fade the first chosen card in from the hidden state
-        setPanels(-1);
-        active = i;
-        window.requestAnimationFrame(() =>
-          window.requestAnimationFrame(() => setPanels(i))
-        );
-      } else if (i !== active) {
-        setPanels(i);
-        active = i;
+      if (i === active) {
+        if (opts.reveal && opts.scrollTarget) opts.scrollTarget.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        return;
       }
-
+      active = i;
+      setTabs(i);
+      setPanels(i);
+      setSelector(i);
+      setPreview(i);
       if (opts.reveal) {
         const target = opts.scrollTarget || tabs[i];
-        if (target && target.scrollIntoView) {
-          target.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
-        }
+        if (target && target.scrollIntoView) target.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
       }
     }
 
@@ -120,7 +120,8 @@
       });
     });
 
-    /* --- Mobile custom dropdown --- */
+    /* --- Mobile dropdown --- */
+    function isOpen() { return select && select.classList.contains('is-open'); }
     function openMenu() {
       if (!select) return;
       select.classList.add('is-open');
@@ -132,20 +133,27 @@
       ssToggle.setAttribute('aria-expanded', 'false');
     }
     if (ssToggle) {
-      ssToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        select.classList.contains('is-open') ? closeMenu() : openMenu();
+      ssToggle.addEventListener('click', (e) => { e.stopPropagation(); isOpen() ? closeMenu() : openMenu(); });
+      ssToggle.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openMenu();
+          if (options[active >= 0 ? active : 0]) options[active >= 0 ? active : 0].focus();
+        }
       });
     }
     function chooseOption(i) {
       closeMenu();
-      const panel = panels[i];
-      select_(i, { reveal: true, scrollTarget: panel });
+      select_(i, { reveal: true, scrollTarget: panels[i] });
+      if (ssToggle) ssToggle.focus();
     }
     options.forEach((opt, i) => {
       opt.addEventListener('click', () => chooseOption(i));
       opt.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chooseOption(i); }
+        else if (e.key === 'ArrowDown') { e.preventDefault(); (options[i + 1] || options[0]).focus(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); (options[i - 1] || options[options.length - 1]).focus(); }
+        else if (e.key === 'Escape') { e.preventDefault(); closeMenu(); ssToggle && ssToggle.focus(); }
       });
     });
     if (select) {
@@ -169,29 +177,8 @@
     }
     window.addEventListener('scroll', () => { if (!raf) raf = window.requestAnimationFrame(update); }, { passive: true });
 
-    /* --- Mode switching (desktop timeline vs mobile placeholder) --- */
-    function applyMode() {
-      if (mobileMq.matches) {
-        // Mobile: placeholder-first, detail card hidden until a pick
-        section.classList.add('stages--pick');
-        active = -1;
-        setTabs(-1);
-        setPanels(-1);
-        setSelector(-1);
-        closeMenu();
-      } else {
-        // Desktop: default to Stage 1, timeline visible
-        section.classList.remove('stages--pick');
-        if (active < 0) active = 0;
-        setTabs(active);
-        setPanels(active);
-        setSelector(active);
-      }
-    }
-    if (mobileMq.addEventListener) mobileMq.addEventListener('change', applyMode);
-    else if (mobileMq.addListener) mobileMq.addListener(applyMode);
-
-    applyMode();
+    // Default: Stage 1 shown immediately (never empty), both controls synced.
+    select_(0);
     update();
   }
 

@@ -315,12 +315,22 @@
           <p>Every performance package is carefully designed to build on the previous stage, ensuring reliability, safety and maximum performance.</p>
         </div>
 
+        <!-- Mobile-only preview strip (immediate feedback; updates with the stage) -->
+        <div class="stage-preview" data-stage-preview aria-hidden="true">
+          <span class="stage-preview__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+          <span class="stage-preview__text">
+            <strong><span class="stage-preview__num" data-sp-num>1</span> <span data-sp-name>Stage 1</span></strong>
+            <span class="stage-preview__type" data-sp-type>Software Only</span>
+          </span>
+          <span class="stage-preview__tag" data-sp-tag>Safe entry-level upgrade</span>
+        </div>
+
         <!-- Mobile-only custom stage selector (desktop keeps the timeline) -->
         <div class="stage-select" data-stage-select>
-          <button class="stage-select__toggle is-placeholder" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Select a performance stage" data-ss-toggle>
+          <button class="stage-select__toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Select a performance stage" data-ss-toggle data-ripple>
             <span class="stage-select__current">
-              <span class="stage-select__num" data-ss-num aria-hidden="true"></span>
-              <span class="stage-select__label" data-ss-label>Select a Performance Stage</span>
+              <span class="stage-select__num" data-ss-num aria-hidden="true">1</span>
+              <span class="stage-select__label" data-ss-label>Stage 1 · Software Only</span>
             </span>
             <svg class="stage-select__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </button>

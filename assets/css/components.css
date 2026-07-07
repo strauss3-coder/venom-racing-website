@@ -1768,6 +1768,7 @@
 
 .stage-content {
   grid-area: 1 / 1;
+  position: relative;
   padding: var(--space-2xl);
   border-radius: var(--radius-lg);
   background-color: var(--glass-bg);
@@ -1971,13 +1972,123 @@
     margin-bottom: var(--space-lg);
   }
 
-  /* Hide the detail card until a stage is selected */
-  .stages--pick .stages__panel {
-    display: none;
+  .stage-preview {
+    display: flex;
+  }
+
+  /* On mobile the card slides UP into view (desktop keeps slide-in-right) */
+  .stages__panel.slide-in-right {
+    transform: translateY(24px);
+  }
+  .stages__panel.slide-in-right.is-visible {
+    transform: none;
+  }
+
+  /* Staggered entrance for the active card's content — plays when the
+     section scrolls into view and replays on every stage switch. Scoped
+     to mobile so desktop is untouched. */
+  .stages__panel.is-visible .stage-content.is-active .stage-content__badge { animation: stageChildIn 0.7s var(--transition-base) both; }
+  .stages__panel.is-visible .stage-content.is-active .stage-content__title { animation: stageChildIn 0.7s var(--transition-base) both 0.08s; }
+  .stages__panel.is-visible .stage-content.is-active .stage-content__tag { animation: stageChildIn 0.7s var(--transition-base) both 0.14s; }
+  .stages__panel.is-visible .stage-content.is-active .stage-content__desc { animation: stageChildIn 0.7s var(--transition-base) both 0.2s; }
+  .stages__panel.is-visible .stage-content.is-active .stage-list { animation: stageChildIn 0.75s var(--transition-base) both 0.28s; }
+  .stages__panel.is-visible .stage-content.is-active .stage-benefits { animation: stageChildIn 0.8s var(--transition-base) both 0.4s; }
+
+  /* Subtle light sweep across the active card every few seconds */
+  .stages__panel.is-visible .stage-content.is-active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.05) 50%, transparent 62%);
+    transform: translateX(-120%);
+    animation: stageSweep 7s ease-in-out 1.5s infinite;
   }
 }
 
+@keyframes stageChildIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes stageSweep {
+  0% { transform: translateX(-120%); }
+  22%, 100% { transform: translateX(120%); }
+}
+
+/* --- Mobile preview strip --- */
+.stage-preview {
+  display: none;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-lg);
+  background-color: var(--glass-bg);
+  background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 7px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-glow);
+}
+
+.stage-preview__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background-color: rgba(224, 30, 46, 0.14);
+  color: var(--color-red-bright);
+}
+
+.stage-preview__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.stage-preview__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.stage-preview__text strong {
+  font-family: var(--font-heading);
+  font-size: var(--fs-base);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-white);
+}
+
+.stage-preview__type {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stage-preview__tag {
+  flex-shrink: 0;
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  background-color: rgba(224, 30, 46, 0.14);
+  color: var(--color-red-bright);
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.2;
+}
+
 .stage-select__toggle {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   width: 100%;
   min-height: 56px;
   display: flex;
