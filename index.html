@@ -304,31 +304,204 @@
     </section>
 
     <!-- ============================================================
-         5. Featured Builds
+         5. Performance Stages
          ============================================================ -->
-    <section class="section section--alt" aria-labelledby="builds-heading">
+    <section class="section section--alt stages" id="stages" aria-labelledby="stages-heading">
+      <div class="particle-field" data-particles data-particle-count="14" aria-hidden="true"></div>
       <div class="container">
         <div class="section-heading section-heading--center fade-in">
-          <span class="eyebrow">Case Study</span>
-          <h2 id="builds-heading">Featured Build — Toyota Hilux 2.8 GD-6</h2>
-          <p>Dastek Unichip 5-map install, tested and validated on our dyno.</p>
+          <span class="eyebrow">Performance Packages</span>
+          <h2 id="stages-heading">Choose Your Performance Stage</h2>
+          <p>Every performance package is carefully designed to build on the previous stage, ensuring reliability, safety and maximum performance.</p>
         </div>
 
-        <div class="grid split-grid" style="align-items: center;">
-          <div class="photo-placeholder texture-carbon slide-in-left" style="aspect-ratio: 4/3;" role="img" aria-label="Toyota Hilux 2.8 GD-6 with Dastek Unichip installation — coming soon">
-              <svg class="photo-placeholder__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-              <strong class="photo-placeholder__title">Professional Workshop Photography</strong>
-              <p class="photo-placeholder__subtitle">This section will showcase our completed builds and workshop after the photo shoot.</p>
-            </div>
+        <div class="stages__layout" data-stages>
+          <div class="stages__timeline slide-in-left" role="tablist" aria-label="Performance stages" data-stages-timeline>
+          <button class="stage-tab is-active" type="button" role="tab" data-stage-tab="0" id="stage-tab-0" aria-selected="true" aria-controls="stage-panel-0">
+            <span class="stage-tab__num">1</span>
+            <span class="stage-tab__body">
+              <strong class="stage-tab__name">Stage 1</strong>
+              <span class="stage-tab__sub">Software Only</span>
+            </span>
+            <span class="stage-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8M12 18v2"/></svg></span>
+          </button>
+          <button class="stage-tab" type="button" role="tab" data-stage-tab="1" id="stage-tab-1" aria-selected="false" aria-controls="stage-panel-1">
+            <span class="stage-tab__num">1+</span>
+            <span class="stage-tab__body">
+              <strong class="stage-tab__name">Stage 1+</strong>
+              <span class="stage-tab__sub">Light Performance Upgrades</span>
+            </span>
+            <span class="stage-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12c3-4 5-4 6 0s3 4 6 0 5-4 6 0"/></svg></span>
+          </button>
+          <button class="stage-tab" type="button" role="tab" data-stage-tab="2" id="stage-tab-2" aria-selected="false" aria-controls="stage-panel-2">
+            <span class="stage-tab__num">2</span>
+            <span class="stage-tab__body">
+              <strong class="stage-tab__name">Stage 2</strong>
+              <span class="stage-tab__sub">Intermediate Performance Build</span>
+            </span>
+            <span class="stage-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 12l4.5-3"/></svg></span>
+          </button>
+          <button class="stage-tab" type="button" role="tab" data-stage-tab="3" id="stage-tab-3" aria-selected="false" aria-controls="stage-panel-3">
+            <span class="stage-tab__num">2+</span>
+            <span class="stage-tab__body">
+              <strong class="stage-tab__name">Stage 2+</strong>
+              <span class="stage-tab__sub">Advanced Performance Setup</span>
+            </span>
+            <span class="stage-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></span>
+          </button>
+          <button class="stage-tab" type="button" role="tab" data-stage-tab="4" id="stage-tab-4" aria-selected="false" aria-controls="stage-panel-4">
+            <span class="stage-tab__num">3</span>
+            <span class="stage-tab__body">
+              <strong class="stage-tab__name">Stage 3</strong>
+              <span class="stage-tab__sub">High Performance / Maximum Power Build</span>
+            </span>
+            <span class="stage-tab__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2s5 4 5 9a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5C9 8 12 6 12 2z"/></svg></span>
+          </button>
+          </div>
 
-          <div class="slide-in-right">
-            <h3>25.6% Fuel Efficiency Gain</h3>
-            <p>Highway testing on a Venom Racing Unichip calibration reduced fuel consumption from a stock 8.2 L/100km to 6.1 L/100km — a saving that compounds fast for fleet and commercial operators.</p>
-            <div class="grid split-grid--stats" style="gap: var(--space-md); margin-bottom: var(--space-lg);">
-              <div class="glass-card"><strong style="color: var(--color-white);">8.2 → 6.1</strong><p style="margin:0; font-size: var(--fs-sm);">L/100km highway</p></div>
-              <div class="glass-card"><strong style="color: var(--color-white);">~1,050L</strong><p style="margin:0; font-size: var(--fs-sm);">saved per 50,000km/yr</p></div>
+          <div class="stages__panel slide-in-right">
+          <article class="stage-content is-active" role="tabpanel" data-stage-content="0" id="stage-panel-0" aria-labelledby="stage-tab-0" aria-hidden="false">
+            <div class="stage-content__art" aria-hidden="true">
+              <span class="stage-content__watermark">1</span>
+              <span class="stage-content__art-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8M12 18v2"/></svg></span>
             </div>
-            <a class="btn btn-primary" href="builds.html" data-ripple>See All Builds</a>
+            <div class="stage-content__body">
+              <span class="stage-content__badge">Stage 1</span>
+              <h3 class="stage-content__title">Software Only</h3>
+              <p class="stage-content__tag">Entry-level software tune</p>
+              <p class="stage-content__desc">A pure ECU software remap — safe, reliable gains with no hardware changes required.</p>
+              <h4 class="stage-content__label">Included Upgrades</h4>
+              <ul class="stage-list">
+                <li>Basic ECU software / remap</li>
+                <li>No hardware upgrades required</li>
+              </ul>
+              <h4 class="stage-content__label">Every Stage Delivers</h4>
+              <div class="stage-benefits">
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>More Power</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 14l3.5-3.5"/><path d="M20.6 15.5A9 9 0 1 0 3.4 15.5"/></svg>Better Response</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>Improved Driveability</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5l8-3z"/></svg>Reliable Performance</span>
+              </div>
+            </div>
+          </article>
+          <article class="stage-content" role="tabpanel" data-stage-content="1" id="stage-panel-1" aria-labelledby="stage-tab-1" aria-hidden="true">
+            <div class="stage-content__art" aria-hidden="true">
+              <span class="stage-content__watermark">1+</span>
+              <span class="stage-content__art-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M3 12c3-4 5-4 6 0s3 4 6 0 5-4 6 0"/></svg></span>
+            </div>
+            <div class="stage-content__body">
+              <span class="stage-content__badge">Stage 1+</span>
+              <h3 class="stage-content__title">Light Performance Upgrades</h3>
+              <p class="stage-content__tag">Light bolt-on upgrades</p>
+              <p class="stage-content__desc">Light bolt-on hardware paired with your Stage 1 tune for a noticeable step up.</p>
+              <h4 class="stage-content__label">Included Upgrades</h4>
+              <ul class="stage-list">
+                <li>Decat or downpipe</li>
+                <li>Optional upgraded exhaust system</li>
+                <li>Optional intake / induction</li>
+                <li>Optional Stage 1 TCU (gearbox) tune</li>
+              </ul>
+              <h4 class="stage-content__label">Every Stage Delivers</h4>
+              <div class="stage-benefits">
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>More Power</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 14l3.5-3.5"/><path d="M20.6 15.5A9 9 0 1 0 3.4 15.5"/></svg>Better Response</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>Improved Driveability</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5l8-3z"/></svg>Reliable Performance</span>
+              </div>
+            </div>
+          </article>
+          <article class="stage-content" role="tabpanel" data-stage-content="2" id="stage-panel-2" aria-labelledby="stage-tab-2" aria-hidden="true">
+            <div class="stage-content__art" aria-hidden="true">
+              <span class="stage-content__watermark">2</span>
+              <span class="stage-content__art-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 12l4.5-3"/></svg></span>
+            </div>
+            <div class="stage-content__body">
+              <span class="stage-content__badge">Stage 2</span>
+              <h3 class="stage-content__title">Intermediate Performance Build</h3>
+              <p class="stage-content__tag">Intermediate build</p>
+              <p class="stage-content__desc">A balanced intermediate build — supporting hardware plus a Stage 2 software tune.</p>
+              <h4 class="stage-content__label">Included Upgrades</h4>
+              <ul class="stage-list">
+                <li>Downpipe</li>
+                <li>Intake / induction upgrade</li>
+                <li>Exhaust mid-box delete or full upgraded exhaust</li>
+                <li>Intercooler upgrade or Water-Methanol Injection (WMI)</li>
+                <li>Stage 2 ECU software tune</li>
+                <li>Optional Stage 1 or 2 TCU tune</li>
+              </ul>
+              <h4 class="stage-content__label">Every Stage Delivers</h4>
+              <div class="stage-benefits">
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>More Power</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 14l3.5-3.5"/><path d="M20.6 15.5A9 9 0 1 0 3.4 15.5"/></svg>Better Response</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>Improved Driveability</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5l8-3z"/></svg>Reliable Performance</span>
+              </div>
+            </div>
+          </article>
+          <article class="stage-content" role="tabpanel" data-stage-content="3" id="stage-panel-3" aria-labelledby="stage-tab-3" aria-hidden="true">
+            <div class="stage-content__art" aria-hidden="true">
+              <span class="stage-content__watermark">2+</span>
+              <span class="stage-content__art-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></span>
+            </div>
+            <div class="stage-content__body">
+              <span class="stage-content__badge">Stage 2+</span>
+              <h3 class="stage-content__title">Advanced Performance Setup</h3>
+              <p class="stage-content__tag">Hybrid turbo setup</p>
+              <p class="stage-content__desc">Advanced setup introducing a hybrid turbo with matched Stage 2+ software.</p>
+              <h4 class="stage-content__label">Included Upgrades</h4>
+              <ul class="stage-list">
+                <li>Hybrid turbo upgrade</li>
+                <li>Stage 2+ ECU software</li>
+                <li>Stage 2 TCU software</li>
+              </ul>
+              <h4 class="stage-content__label">Every Stage Delivers</h4>
+              <div class="stage-benefits">
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>More Power</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 14l3.5-3.5"/><path d="M20.6 15.5A9 9 0 1 0 3.4 15.5"/></svg>Better Response</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>Improved Driveability</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5l8-3z"/></svg>Reliable Performance</span>
+              </div>
+            </div>
+          </article>
+          <article class="stage-content" role="tabpanel" data-stage-content="4" id="stage-panel-4" aria-labelledby="stage-tab-4" aria-hidden="true">
+            <div class="stage-content__art" aria-hidden="true">
+              <span class="stage-content__watermark">3</span>
+              <span class="stage-content__art-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M12 2s5 4 5 9a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5C9 8 12 6 12 2z"/></svg></span>
+            </div>
+            <div class="stage-content__body">
+              <span class="stage-content__badge">Stage 3</span>
+              <h3 class="stage-content__title">High Performance / Maximum Power Build</h3>
+              <p class="stage-content__tag">Maximum power build</p>
+              <p class="stage-content__desc">Our maximum-power build — full supporting hardware, a bigger turbo and optional forged internals.</p>
+              <h4 class="stage-content__label">Included Upgrades</h4>
+              <ul class="stage-list">
+                <li>Downpipe and full exhaust system</li>
+                <li>Intercooler upgrade</li>
+                <li>Water-Methanol Injection (WMI)</li>
+                <li>Upgraded larger / bigger turbo</li>
+                <li>Optional forged engine internals</li>
+                <li>Stage 3 ECU software tune</li>
+                <li>Stage 2+ / 3 TCU software</li>
+                <li>Optional performance modifications</li>
+              </ul>
+              <p class="stage-content__note">The above are the basic requirements for a Stage 3 package — additional upgrades and modifications can be added.</p>
+              <h4 class="stage-content__label">Every Stage Delivers</h4>
+              <div class="stage-benefits">
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>More Power</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 14l3.5-3.5"/><path d="M20.6 15.5A9 9 0 1 0 3.4 15.5"/></svg>Better Response</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>Improved Driveability</span>
+                <span class="stage-benefit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M12 2l8 3v6c0 5.5-3.5 9-8 11-4.5-2-8-5.5-8-11V5l8-3z"/></svg>Reliable Performance</span>
+              </div>
+            </div>
+          </article>
+          </div>
+        </div>
+
+        <div class="stages__cta fade-in">
+          <p class="stages__cta-text">Not sure which stage is right for your vehicle?</p>
+          <div class="stages__cta-actions">
+            <a class="btn btn-primary" href="contact.html" data-ripple>Book a Consultation</a>
+            <a class="btn btn-outline" href="contact.html" data-ripple>Contact Venom Racing</a>
           </div>
         </div>
       </div>
@@ -571,6 +744,7 @@
   <script src="assets/js/forms.js" defer></script>
   <script src="assets/js/hero.js" defer></script>
   <script src="assets/js/reviews.js" defer></script>
+  <script src="assets/js/stages.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
