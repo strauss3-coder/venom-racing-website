@@ -2664,3 +2664,117 @@ body.nav-open .fnav {
 }
 .brand-card__name { margin: 0; font-size: var(--fs-lg); color: var(--color-white); }
 .brand-card__desc { margin: 0; font-size: var(--fs-sm); line-height: 1.5; color: var(--color-gray-300); }
+
+/* =====================================================================
+   Premium Workshop Products — auto-rotating showcase (Services & Repairs).
+   Decorative only: no arrows/dots/drag. Three cards orbit forever; the
+   centre card is sharp, larger and red-glowing, the sides sit behind,
+   smaller and softly blurred. Respects prefers-reduced-motion.
+   ===================================================================== */
+.product-showcase {
+  position: relative;
+  height: clamp(360px, 58vw, 460px);
+  margin-top: var(--space-2xl);
+  overflow: hidden;                 /* clip the side cards — never overflow the page */
+}
+.product-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(210px, 40vw, 300px);
+  aspect-ratio: 940 / 1280;
+  transform: translate(-50%, -50%);
+  will-change: transform, filter, opacity;
+  animation: productOrbit 7.5s ease-in-out infinite;
+}
+.product-card[data-pos="1"] { animation-delay: -2.5s; }
+.product-card[data-pos="2"] { animation-delay: -5s; }
+
+.product-card__inner {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-carbon-alt);
+  background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 7px);
+  border: 1px solid rgba(224, 30, 46, 0.35);
+  box-shadow: var(--glass-glow);
+  animation: productFloat 3.6s ease-in-out infinite alternate;
+}
+.product-card__inner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;              /* keep aspect ratio, never crop */
+}
+
+@keyframes productOrbit {
+  0%, 100% {          /* CENTRE — sharp, front, red glow */
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
+    opacity: 1;
+    z-index: 3;
+    box-shadow: 0 0 46px rgba(224, 30, 46, 0.45), 0 26px 60px rgba(0, 0, 0, 0.6);
+  }
+  16% {
+    transform: translate(calc(-50% - 42%), -50%) scale(0.9);
+    filter: blur(1px);
+    opacity: 0.85;
+    z-index: 2;
+    box-shadow: 0 0 26px rgba(224, 30, 46, 0.22), 0 18px 44px rgba(0, 0, 0, 0.5);
+  }
+  33% {               /* LEFT — behind, smaller, blurred */
+    transform: translate(calc(-50% - 62%), -50%) scale(0.8);
+    filter: blur(2.4px);
+    opacity: 0.62;
+    z-index: 2;
+    box-shadow: 0 0 16px rgba(224, 30, 46, 0.12), 0 14px 36px rgba(0, 0, 0, 0.5);
+  }
+  50% {               /* around the back (behind centre) */
+    transform: translate(-50%, -50%) scale(0.5);
+    filter: blur(4px);
+    opacity: 0.3;
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(224, 30, 46, 0.08);
+  }
+  66% {               /* RIGHT — behind, smaller, blurred */
+    transform: translate(calc(-50% + 62%), -50%) scale(0.8);
+    filter: blur(2.4px);
+    opacity: 0.62;
+    z-index: 2;
+    box-shadow: 0 0 16px rgba(224, 30, 46, 0.12), 0 14px 36px rgba(0, 0, 0, 0.5);
+  }
+  84% {
+    transform: translate(calc(-50% + 42%), -50%) scale(0.9);
+    filter: blur(1px);
+    opacity: 0.85;
+    z-index: 2;
+    box-shadow: 0 0 26px rgba(224, 30, 46, 0.22), 0 18px 44px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@keyframes productFloat {
+  from { transform: translateY(-6px); }
+  to   { transform: translateY(6px); }
+}
+
+/* Reduced motion / no animation: a clean static three-up, all sharp */
+@media (prefers-reduced-motion: reduce) {
+  .product-showcase {
+    height: auto;
+    overflow: visible;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-lg);
+  }
+  .product-card {
+    position: static;
+    transform: none;
+    animation: none;
+    opacity: 1;
+    filter: none;
+    width: clamp(200px, 46vw, 280px);
+  }
+  .product-card__inner { animation: none; }
+}
