@@ -1,8 +1,8 @@
 /**
  * main.js
  * Site-wide initialization entry point. Loaded last on every page.
- * Feature-specific modules (navigation.js, animations.js, builds.js,
- * forms.js) self-initialize on DOMContentLoaded; this file handles
+ * Feature-specific modules (navigation.js, animations.js, forms.js)
+ * self-initialize on DOMContentLoaded; this file handles
  * global, page-agnostic UI: FAQ accordions, stat counters, the reviews
  * carousel, and button ripple feedback.
  */
