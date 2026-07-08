@@ -2629,36 +2629,38 @@ body.nav-open .fnav {
     border-color: rgba(224, 30, 46, 0.5);
     box-shadow: var(--shadow-lg), var(--glass-glow-hover);
   }
-  .brand-card:hover .brand-card__logo { transform: scale(1.06); }
+  .brand-card:hover .brand-card__logo {
+    transform: scale(1.05);
+    border-color: rgba(224, 30, 46, 0.45);
+    box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.55), 0 0 26px rgba(224, 30, 46, 0.22);
+  }
 }
 
+/* Premium logo container — carbon glass, thin red outline, subtle red glow,
+   soft inner shadow. No white box; the transparent logo floats inside. */
 .brand-card__logo {
   display: grid;
   place-items: center;
-  width: 168px;
-  height: 92px;
+  width: 100%;
+  max-width: 190px;
+  height: 84px;
   border-radius: var(--radius-md);
-  background: #ffffff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  background: rgba(10, 10, 11, 0.5);
+  border: 1px solid rgba(224, 30, 46, 0.18);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.5), 0 0 16px rgba(224, 30, 46, 0.10);
   overflow: hidden;
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
 }
 .brand-card__logo img {
   width: 100%;
   height: 100%;
   object-fit: contain;          /* never stretch, squash or crop */
   object-position: center;
-  padding: 12px 16px;
-}
-/* Per-logo optical balance (different native aspect ratios) */
-.brand-card:nth-child(1) .brand-card__logo img { padding: 15px 18px; } /* Unichip — square */
-.brand-card:nth-child(4) .brand-card__logo img { padding: 10px 16px; } /* Sirius — wide/short */
-.brand-card__monogram {
-  font-family: var(--font-display);
-  font-size: 2.4rem;
-  letter-spacing: 0.04em;
-  color: var(--color-red-bright);
-  text-shadow: 0 0 20px var(--color-red-glow);
+  padding: 15px 22px;           /* uniform: caps every logo to the same height */
+  /* subtle light halo so dark logo elements stay legible on carbon */
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.32));
 }
 .brand-card__name { margin: 0; font-size: var(--fs-lg); color: var(--color-white); }
 .brand-card__desc { margin: 0; font-size: var(--fs-sm); line-height: 1.5; color: var(--color-gray-300); }
