@@ -2690,6 +2690,73 @@ body.nav-open .fnav {
 }
 
 /* =====================================================================
+   NF Additives — continuous product marquee (Performance page).
+   Reuses the Preferred Brands motion (brandScroll, duplicate-set -50% loop):
+   premium light chips glide forever, decorative only, product image only.
+   ===================================================================== */
+.product-marquee {
+  position: relative;
+  margin-top: var(--space-2xl);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+.product-marquee__track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+  animation: brandScroll 55s linear infinite;   /* same keyframes as the brand marquee */
+}
+.product-slide {
+  flex: 0 0 auto;
+  margin-right: clamp(var(--space-md), 2.4vw, var(--space-xl));
+}
+.product-slide__plate {
+  display: grid;
+  place-items: center;
+  width: clamp(150px, 19vw, 188px);
+  height: clamp(206px, 26vw, 256px);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  background: linear-gradient(158deg, #ffffff 0%, #f2f3f6 78%, #eaecef 100%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+.product-slide__plate img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;              /* never stretch, squash or crop */
+  -webkit-user-drag: none;
+  user-select: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .product-slide__plate:hover {
+    transform: translateY(-4px);
+    border-color: rgba(224, 30, 46, 0.5);
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.5), 0 0 24px rgba(224, 30, 46, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .product-marquee {
+    -webkit-mask-image: none;
+            mask-image: none;
+  }
+  .product-marquee__track {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-lg);
+  }
+  .product-slide { margin-right: 0; }
+  .product-slide[data-dup] { display: none; }
+}
+
+/* =====================================================================
    Premium Workshop Products — auto-rotating showcase (Services & Repairs).
    Decorative only: no arrows/dots/drag. Three cards orbit forever; the
    centre card is sharp, larger and red-glowing, the sides sit behind,
