@@ -150,7 +150,7 @@
       </div>
     </section>
 
-    <!-- Workshop in Action — service video showcase (manual, click-through carousel) -->
+    <!-- Workshop in Action — service video showcase (gallery cards + lightbox) -->
     <section class="section section--alt" aria-labelledby="workshop-heading">
       <div class="container">
         <div class="section-heading section-heading--center fade-in">
@@ -159,36 +159,47 @@
           <p>See our workshop in action with real servicing, repairs and mechanical work carried out by the Venom Racing team.</p>
         </div>
 
-        <div class="carousel carousel--portrait media-frame texture-carbon fade-in" data-carousel aria-roledescription="carousel" aria-label="Venom Racing workshop service videos">
-          <div class="carousel__viewport" data-carousel-viewport tabindex="0" aria-label="Workshop videos — use arrow keys, swipe or drag to change video">
-            <ul class="carousel__track" data-carousel-track>
-              <li class="carousel__slide" role="group" aria-roledescription="slide" aria-label="1 of 4">
-                <video class="carousel__video" muted loop playsinline preload="none" aria-label="BMW service — Venom Racing"><source data-src="assets/videos/services/bmw-service.mp4" type="video/mp4"></video>
-              </li>
-              <li class="carousel__slide" role="group" aria-roledescription="slide" aria-label="2 of 4">
-                <video class="carousel__video" muted loop playsinline preload="none" aria-label="Toyota Hilux service — Venom Racing"><source data-src="assets/videos/services/hilux-service.mp4" type="video/mp4"></video>
-              </li>
-              <li class="carousel__slide" role="group" aria-roledescription="slide" aria-label="3 of 4">
-                <video class="carousel__video" muted loop playsinline preload="none" aria-label="Mercedes-Benz service — Venom Racing"><source data-src="assets/videos/services/mercedes-service.mp4" type="video/mp4"></video>
-              </li>
-              <li class="carousel__slide" role="group" aria-roledescription="slide" aria-label="4 of 4">
-                <video class="carousel__video" muted loop playsinline preload="none" aria-label="Porsche service — Venom Racing"><source data-src="assets/videos/services/porsche-service.mp4" type="video/mp4"></video>
-              </li>
-            </ul>
-          </div>
-          <button class="carousel__arrow carousel__arrow--prev" type="button" data-carousel-prev aria-label="Previous video">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        <div class="gallery-grid" data-gallery>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-muted data-cats="services" data-label="BMW Service" data-full="assets/videos/services/bmw-service.mp4">
+            <img class="gallery-card__media" src="assets/images/services-posters/bmw-service.jpg" alt="BMW service carried out by Venom Racing" loading="lazy">
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Service</span><span class="gallery-card__title">BMW Service</span></span>
           </button>
-          <button class="carousel__arrow carousel__arrow--next" type="button" data-carousel-next aria-label="Next video">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-muted data-cats="services" data-label="Toyota Hilux Service" data-full="assets/videos/services/hilux-service.mp4">
+            <img class="gallery-card__media" src="assets/images/services-posters/hilux-service.jpg" alt="Toyota Hilux service carried out by Venom Racing" loading="lazy">
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Service</span><span class="gallery-card__title">Toyota Hilux Service</span></span>
           </button>
-          <div class="carousel__ui">
-            <div class="carousel__dots" data-carousel-dots role="tablist" aria-label="Choose workshop video"></div>
-            <span class="carousel__counter" data-carousel-counter aria-live="polite">1 / 4</span>
-          </div>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-muted data-cats="services" data-label="Mercedes-Benz Service" data-full="assets/videos/services/mercedes-service.mp4">
+            <img class="gallery-card__media" src="assets/images/services-posters/mercedes-service.jpg" alt="Mercedes-Benz service carried out by Venom Racing" loading="lazy">
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Service</span><span class="gallery-card__title">Mercedes-Benz Service</span></span>
+          </button>
+          <button class="gallery-card is-in" type="button" data-gallery-item data-type="video" data-muted data-cats="services" data-label="Porsche Service" data-full="assets/videos/services/porsche-service.mp4">
+            <img class="gallery-card__media" src="assets/images/services-posters/porsche-service.jpg" alt="Porsche service carried out by Venom Racing" loading="lazy">
+            <span class="gallery-card__play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-card__overlay"><span class="gallery-card__cat">Service</span><span class="gallery-card__title">Porsche Service</span></span>
+          </button>
         </div>
       </div>
     </section>
+
+    <!-- Lightbox — reused Gallery viewer (images + videos, prev/next, swipe, ESC) -->
+    <div class="lightbox" data-lightbox aria-hidden="true" role="dialog" aria-modal="true" aria-label="Workshop video viewer">
+      <div class="lightbox__backdrop" data-lightbox-close></div>
+      <button class="lightbox__close" type="button" data-lightbox-close aria-label="Close viewer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <button class="lightbox__nav lightbox__nav--prev" type="button" data-lightbox-prev aria-label="Previous">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="lightbox__nav lightbox__nav--next" type="button" data-lightbox-next aria-label="Next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <figure class="lightbox__stage" data-lightbox-stage>
+        <figcaption class="lightbox__caption" data-lightbox-caption aria-live="polite"></figcaption>
+      </figure>
+    </div>
 
     <!-- Why choose -->
     <section class="section" aria-labelledby="why-heading">
@@ -310,6 +321,7 @@
   <script src="assets/js/utils.js" defer></script>
   <script src="assets/js/navigation.js" defer></script>
   <script src="assets/js/animations.js" defer></script>
+  <script src="assets/js/gallery.js" defer></script>
   <script src="assets/js/forms.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </body>

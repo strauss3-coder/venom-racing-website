@@ -115,6 +115,10 @@
         media.loop = true;
         media.playsInline = true;
         media.setAttribute('playsinline', '');
+        if (item.hasAttribute('data-muted')) {
+          media.muted = true;
+          media.setAttribute('muted', '');
+        }
       } else {
         media = document.createElement('img');
         media.src = item.dataset.full;
