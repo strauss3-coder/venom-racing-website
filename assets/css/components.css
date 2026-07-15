@@ -2713,11 +2713,14 @@ body.nav-open .fnav {
   margin-right: clamp(var(--space-md), 2.4vw, var(--space-xl));
 }
 .product-slide__plate {
-  display: grid;
-  place-items: center;
+  --nf-card-h: clamp(206px, 26vw, 256px);
+  display: flex;                     /* flex centring is reliable for replaced elements */
+  align-items: center;
+  justify-content: center;
   width: clamp(150px, 19vw, 188px);
-  height: clamp(206px, 26vw, 256px);
+  height: var(--nf-card-h);
   padding: var(--space-md);
+  overflow: hidden;                  /* belt-and-braces: never spill past the card */
   border-radius: var(--radius-md);
   background: linear-gradient(158deg, #ffffff 0%, #f2f3f6 78%, #eaecef 100%);
   border: 1px solid rgba(255, 255, 255, 0.65);
@@ -2725,12 +2728,12 @@ body.nav-open .fnav {
   transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
 }
 .product-slide__plate img {
-  /* Definite caps (not %) so tall bottles always scale DOWN to fit the card
-     — percentage heights don't resolve in this flex/grid chain, which let the
-     image overflow and get clipped. max-height mirrors the card height minus
-     its 1rem padding on each side. */
-  max-width: 100%;
-  max-height: calc(clamp(206px, 26vw, 256px) - 2rem);
+  /* Definite caps (not %) so tall bottles always scale DOWN to fit the card in
+     full. max-height = card height minus generous padding, so every bottle has
+     clear breathing room top and bottom and is never cropped. */
+  display: block;
+  max-width: 90%;
+  max-height: calc(var(--nf-card-h) - 2.75rem);
   width: auto;
   height: auto;
   object-fit: contain;              /* whole bottle — never crop or stretch */
