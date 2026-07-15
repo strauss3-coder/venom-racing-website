@@ -150,30 +150,41 @@
       </div>
     </section>
 
-    <!-- Premium Workshop Products — auto-rotating showcase (decorative, non-interactive) -->
-    <section class="section section--alt" aria-labelledby="products-heading">
+    <!-- Workshop in Action — service video showcase (manual, click-through carousel) -->
+    <section class="section section--alt" aria-labelledby="workshop-heading">
       <div class="container">
         <div class="section-heading section-heading--center fade-in">
-          <span class="eyebrow">Trusted Products</span>
-          <h2 id="products-heading">Premium Workshop Products</h2>
-          <p>We use trusted premium workshop products to improve engine protection, fuel system performance and long-term reliability. Every product we recommend has been selected to complement our servicing, diagnostics and performance solutions.</p>
+          <span class="eyebrow">Behind the Scenes</span>
+          <h2 id="workshop-heading">Workshop in Action</h2>
+          <p>See our workshop in action with real servicing, repairs and mechanical work carried out by the Venom Racing team.</p>
         </div>
 
-        <div class="product-showcase fade-in" role="img" aria-label="NF octane boosters, petrol and diesel fuel-system treatments supplied by Venom Racing">
-          <div class="product-card" data-pos="0">
-            <div class="product-card__inner">
-              <img src="assets/images/products/nf-octane-boosters.png" alt="NF octane booster range supplied by Venom Racing" loading="lazy" width="940" height="1280">
-            </div>
+        <div class="carousel carousel--portrait media-frame texture-carbon fade-in" data-carousel aria-roledescription="carousel" aria-label="Venom Racing workshop service videos">
+          <div class="carousel__viewport" data-carousel-viewport tabindex="0" aria-label="Workshop videos — use arrow keys, swipe or drag to change video">
+            <ul class="carousel__track" data-carousel-track>
+              <li class="carousel__slide" role="group" aria-roledescription="slide" aria-label="1 of 4">
+                <video class="carousel__video" muted loop playsinline preload="none" aria-label="BMW service — Venom Racing"><source data-src="assets/videos/services/bmw-service.mp4" type="video/mp4"></video>
+              </li>
+              <li class="carousel__slide" role="group" aria-roledescription="slide" aria-label="2 of 4">
+                <video class="carousel__video" muted loop playsinline preload="none" aria-label="Toyota Hilux service — Venom Racing"><source data-src="assets/videos/services/hilux-service.mp4" type="video/mp4"></video>
+              </li>
+              <li class="carousel__slide" role="group" aria-roledescription="slide" aria-label="3 of 4">
+                <video class="carousel__video" muted loop playsinline preload="none" aria-label="Mercedes-Benz service — Venom Racing"><source data-src="assets/videos/services/mercedes-service.mp4" type="video/mp4"></video>
+              </li>
+              <li class="carousel__slide" role="group" aria-roledescription="slide" aria-label="4 of 4">
+                <video class="carousel__video" muted loop playsinline preload="none" aria-label="Porsche service — Venom Racing"><source data-src="assets/videos/services/porsche-service.mp4" type="video/mp4"></video>
+              </li>
+            </ul>
           </div>
-          <div class="product-card" data-pos="1">
-            <div class="product-card__inner">
-              <img src="assets/images/products/nf-petrol.png" alt="NF petrol fuel-system treatments supplied by Venom Racing" loading="lazy" width="946" height="1280">
-            </div>
-          </div>
-          <div class="product-card" data-pos="2">
-            <div class="product-card__inner">
-              <img src="assets/images/products/nf-diesel.png" alt="NF diesel fuel-system treatments supplied by Venom Racing" loading="lazy" width="955" height="1280">
-            </div>
+          <button class="carousel__arrow carousel__arrow--prev" type="button" data-carousel-prev aria-label="Previous video">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="carousel__arrow carousel__arrow--next" type="button" data-carousel-next aria-label="Next video">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <div class="carousel__ui">
+            <div class="carousel__dots" data-carousel-dots role="tablist" aria-label="Choose workshop video"></div>
+            <span class="carousel__counter" data-carousel-counter aria-live="polite">1 / 4</span>
           </div>
         </div>
       </div>

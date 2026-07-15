@@ -45,6 +45,26 @@
     const total = slides.length;
     if (total === 0) return;
 
+    // Videos (if any): only the active slide plays, and only while the
+    // carousel is in view. All others stay paused. No-op for image carousels.
+    const slideVideos = slides.map((s) => qs('video', s));
+    const hasVideo = slideVideos.some(Boolean);
+    let inView = true;
+
+    function syncVideos() {
+      if (!hasVideo) return;
+      slideVideos.forEach((v, i) => {
+        if (!v) return;
+        if (i === index && inView) {
+          loadVideo(v);
+          const p = v.play();
+          if (p && p.catch) p.catch(() => {}); // ignore autoplay rejections
+        } else if (!v.paused) {
+          v.pause();
+        }
+      });
+    }
+
     const prevBtn = qs('[data-carousel-prev]', root);
     const nextBtn = qs('[data-carousel-next]', root);
     const dotsWrap = qs('[data-carousel-dots]', root);
@@ -77,6 +97,7 @@
       });
       slides.forEach((s, i) => s.setAttribute('aria-hidden', i === index ? 'false' : 'true'));
       if (counter) counter.textContent = `${index + 1} / ${total}`;
+      syncVideos();
       if (!animate) {
         // Force reflow so the next move animates from the snapped position.
         void track.offsetWidth;
@@ -90,6 +111,22 @@
     }
     const next = () => goTo(index + 1);
     const prev = () => goTo(index - 1);
+
+    // Pause videos when the carousel scrolls out of view; resume the active
+    // one when it returns. Keeps only the visible, active video playing.
+    if (hasVideo) {
+      if ('IntersectionObserver' in window) {
+        inView = false;
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => { inView = e.isIntersecting; });
+            syncVideos();
+          },
+          { threshold: 0.35 }
+        );
+        io.observe(root);
+      }
+    }
 
     // Single slide → no controls needed
     if (total < 2) {
