@@ -2725,10 +2725,16 @@ body.nav-open .fnav {
   transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
 }
 .product-slide__plate img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;              /* whole bottle, letterboxed — never crop or stretch */
-  object-position: center;          /* centred vertically and horizontally */
+  /* Definite caps (not %) so tall bottles always scale DOWN to fit the card
+     — percentage heights don't resolve in this flex/grid chain, which let the
+     image overflow and get clipped. max-height mirrors the card height minus
+     its 1rem padding on each side. */
+  max-width: 100%;
+  max-height: calc(clamp(206px, 26vw, 256px) - 2rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;              /* whole bottle — never crop or stretch */
+  object-position: center center;   /* centred vertically and horizontally */
   -webkit-user-drag: none;
   user-select: none;
 }
