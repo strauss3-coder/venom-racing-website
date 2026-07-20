@@ -9,7 +9,7 @@
 (function (window, document) {
   'use strict';
 
-  const WHATSAPP_NUMBER = '27825126166'; // 082 512 6166
+  const WHATSAPP_NUMBER = '27828520680'; // 082 852 0680 (primary)
 
   function val(id) {
     const el = document.getElementById(id);
