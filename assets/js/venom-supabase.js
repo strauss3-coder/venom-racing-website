@@ -74,5 +74,27 @@
     }
   }
 
-  window.VenomSupabase = { sendEnquiry, isConfigured };
+  /**
+   * Read a public table or view. Returns null on any failure so callers can
+   * fall back to the HTML already on the page rather than blanking it.
+   * @param {string} query e.g. 'website_faqs?select=*'
+   * @param {AbortSignal} [signal]
+   * @returns {Promise<Array|null>}
+   */
+  async function fetchTable(query, signal) {
+    if (!isConfigured()) return null;
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/' + query, {
+        headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY },
+        signal: signal,
+      });
+      if (!res.ok) return null;
+      const rows = await res.json();
+      return Array.isArray(rows) && rows.length ? rows : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  window.VenomSupabase = { sendEnquiry, fetchTable, isConfigured };
 })(window);
