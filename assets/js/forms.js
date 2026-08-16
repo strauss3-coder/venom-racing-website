@@ -2,8 +2,9 @@
  * forms.js
  * Client-side validation and submission handling for the quote-request
  * and contact forms.
- * Replace the `submitForm` implementation with a real endpoint call
- * (e.g. fetch to a backend, Formspree, Netlify Forms) when available.
+ * Submissions are recorded in Supabase and appear in the Venom Racing
+ * Portal inbox. The connection is configured in venom-supabase.js, which
+ * must be loaded before this file.
  */
 
 (function (window, document) {
@@ -59,17 +60,35 @@
   }
 
   /**
-   * Placeholder submission handler.
+   * Record the enquiry in Supabase so it reaches the Venom Racing Portal.
+   * Configure the connection once in assets/js/venom-supabase.js.
    * @param {HTMLFormElement} form
-   * @returns {Promise<void>}
+   * @returns {Promise<void>} rejects if the enquiry could not be stored
    */
   async function submitForm(form) {
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
-    // TODO: replace with real endpoint integration.
-    console.info(`[forms.js] Submitting "${form.dataset.formName || form.id}"`, payload);
-    return Promise.resolve();
+    const api = window.VenomSupabase;
+    if (!api || !api.isConfigured()) {
+      // Not connected yet — behave as before rather than showing an error.
+      console.info(`[forms.js] Submitting "${form.dataset.formName || form.id}"`, payload);
+      return;
+    }
+
+    const stored = await api.sendEnquiry({
+      name: payload.name,
+      phone: payload.phone,
+      email: payload.email,
+      make: payload.make,
+      model: payload.model,
+      registration: payload.registration,
+      service: payload.service,
+      message: payload.message,
+      source: 'Website form',
+    });
+
+    if (!stored) throw new Error('Enquiry could not be sent.');
   }
 
   function initForm(form) {
