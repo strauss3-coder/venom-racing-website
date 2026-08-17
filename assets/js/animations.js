@@ -13,16 +13,20 @@
 
   const ANIMATION_SELECTORS = '.fade-in, .slide-up, .slide-in-left, .slide-in-right';
 
+  /* Kept so content rendered after load can be observed too. These classes
+     start at opacity 0 and are only revealed by `.is-visible`, so anything
+     created later without being observed would stay invisible forever. */
+  let observer = null;
+
   function initScrollAnimations() {
     const targets = qsa(ANIMATION_SELECTORS);
-    if (!targets.length) return;
 
     if (!('IntersectionObserver' in window)) {
       targets.forEach((el) => el.classList.add('is-visible'));
       return;
     }
 
-    const observer = new IntersectionObserver(
+    observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -35,6 +39,32 @@
     );
 
     targets.forEach((el) => observer.observe(el));
+  }
+
+  /**
+   * Observe animation targets inside a subtree rendered after page load.
+   * Call this after replacing any markup that uses the animation classes.
+   * @param {ParentNode} [scope=document]
+   */
+  function observe(scope) {
+    const root = scope || document;
+    const targets = Array.from(root.querySelectorAll(ANIMATION_SELECTORS));
+    if (root.matches && root.matches(ANIMATION_SELECTORS)) targets.push(root);
+    if (!observer) {
+      targets.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+    targets.forEach((el) => {
+      if (!el.classList.contains('is-visible')) observer.observe(el);
+    });
+  }
+
+  /** Re-apply the stagger delays inside a freshly rendered container. */
+  function stagger(container) {
+    if (!container) return;
+    Array.from(container.children).forEach((child, index) => {
+      child.style.transitionDelay = `${index * 80}ms`;
+    });
   }
 
   function initStaggeredChildren() {
@@ -51,4 +81,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', initAnimations);
+
+  window.VenomAnimations = { observe, stagger };
 })(window, document);

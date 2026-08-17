@@ -4,8 +4,10 @@
  *   - the homepage centre-peek carousel  ([data-reviews-carousel])
  *   - the Reviews page masonry grid       ([data-reviews-grid])
  *
- * All reviews below are transcribed from the business's real Google
- * reviews. No dependencies. The carousel uses native CSS scroll-snap
+ * Reviews come from the Venom Racing Portal when it is reachable. The
+ * array below is the transcribed fallback and stays in the file on
+ * purpose, so the section still renders with the database switched off.
+ * No dependencies. The carousel uses native CSS scroll-snap
  * (buttery on touch) enhanced with autoplay (ping-pong), pause-on-hover,
  * pointer-drag on desktop, arrows, dots and an "active card" glow.
  */
@@ -18,7 +20,7 @@
   const GOOGLE_REVIEWS_URL = 'https://maps.app.goo.gl/HpCtPxiZec25Rqi1A?g_st=ic';
 
   /** Genuine Google reviews (deduplicated). */
-  const REVIEWS = [
+  let REVIEWS = [
     { name: 'William Nalane', date: '5 days ago',
       text: 'Perfect service and quality work. No return job. Friendly and good customer care. Most important is the honesty.' },
     { name: 'Newqishke du Preez', date: '3 weeks ago',
@@ -232,13 +234,31 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  /**
+   * Replace the fallback list with the portal's reviews, when available.
+   * Returns quietly on any failure so the transcribed array is used.
+   */
+  async function loadFromPortal() {
+    const api = window.VenomSupabase;
+    if (!api || !api.isConfigured()) return;
+    const rows = await api.fetchTable('testimonials?select=*&order=sort_order.asc');
+    if (!rows) return;
+    const mapped = rows
+      .filter((r) => r.review)
+      .map((r) => ({ name: r.name || '', date: r.date_text || '', text: r.review }));
+    if (mapped.length) REVIEWS = mapped;
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
     // Point any Google-review CTA at the live link
     qsa('[data-google-reviews]').forEach((a) => {
       a.href = GOOGLE_REVIEWS_URL;
       a.target = '_blank';
       a.rel = 'noopener';
     });
+    // Fetched before rendering so the carousel measures the final cards;
+    // rendering twice would leave its scroll maths pointing at stale nodes.
+    await loadFromPortal();
     qsa('[data-reviews-carousel]').forEach(initCarousel);
     qsa('[data-reviews-grid]').forEach(initGrid);
   });

@@ -19,11 +19,17 @@
  *    of elements that already exist. It creates and removes nothing, so it
  *    cannot shift the page or fight the other scripts for the DOM.
  *
- * Currently synced: phone numbers, email addresses, WhatsApp links, social
- * links, physical address, trading hours.
- * Not yet synced: services, stages, products, brands, gallery, homepage copy.
- * Those are bound to page-specific scripts and need a proper rebuild rather
- * than in-place hydration.
+ * 4. Re-arm anything the page scripts bound at load. Reveal animations use
+ *    an IntersectionObserver that collects its targets once, and the FAQ
+ *    accordion binds click handlers directly. Markup rendered afterwards is
+ *    invisible and inert unless it is re-observed and re-bound, so every
+ *    render path here does both.
+ *
+ * Synced: contact details, trading hours, social links, services, brands,
+ * products, FAQs and reviews.
+ * Not synced: performance stages, gallery and homepage hero copy. Those are
+ * driven by page-specific scripts holding their own state and need a proper
+ * rebuild rather than in-place hydration.
  */
 
 (function (window, document) {
@@ -134,13 +140,166 @@
     }).join(' · ');
   }
 
+  /** Re-observe reveal targets and re-apply stagger after a render. */
+  function rearm(container) {
+    const anim = window.VenomAnimations;
+    if (!anim) return;
+    if (container.hasAttribute('data-stagger') || container.hasAttribute('data-reveal-stagger')) {
+      anim.stagger(container);
+    }
+    anim.observe(container);
+  }
+
+  const esc = (v) => String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  /**
+   * Service cards. The portal owns the copy; the icons stay in the page,
+   * reused from the card that already sits in that position so a redesign
+   * of the artwork is never overwritten by the database.
+   */
+  async function applyServices() {
+    const grids = Array.from(document.querySelectorAll('.grid--services'));
+    if (!grids.length) return;
+    const rows = await api.fetchTable('website_services?select=*');
+    if (!rows) return;
+
+    grids.forEach((grid) => {
+      // Which division this grid shows is inferred from the page it is on.
+      const isRepairs = /services\.html$/.test(location.pathname);
+      const onHome = /(^|\/)(index\.html)?$/.test(location.pathname);
+      let list = rows;
+      if (isRepairs) list = rows.filter((r) => r.division === 'Services & Repairs');
+      else if (!onHome) list = rows.filter((r) => r.division === 'Performance');
+      else list = rows.filter((r) => r.featured);
+      if (!list.length) return;
+
+      const icons = Array.from(grid.querySelectorAll('.service-card__icon'))
+        .map((el) => el.innerHTML);
+      if (!icons.length) return;
+
+      grid.innerHTML = list.map((r, i) => `
+        <article class="service-card slide-up">
+          <div class="service-card__icon" aria-hidden="true">${icons[i % icons.length]}</div>
+          <h3 class="service-card__title">${esc(r.title)}</h3>
+          <p>${esc(r.description)}</p>
+        </article>`).join('');
+      rearm(grid);
+    });
+  }
+
+  /** Marquees need their slides duplicated once for a seamless loop. */
+  function renderMarquee(track, list, build) {
+    track.innerHTML = list.map((r) => build(r, false)).join('')
+                    + list.map((r) => build(r, true)).join('');
+  }
+
+  async function applyBrands() {
+    const track = document.querySelector('.brand-marquee__track');
+    if (!track) return;
+    const rows = await api.fetchTable('website_brands?select=*');
+    if (!rows) return;
+    renderMarquee(track, rows, (r, dup) => `
+      <div class="brand-slide"${dup ? ' data-dup aria-hidden="true"' : ''}>
+        <span class="brand-slide__plate">${r.logo
+          ? `<img src="${esc(r.logo)}" alt="${esc(r.name)} logo" loading="lazy" draggable="false">`
+          : ''}</span>
+        <span class="brand-slide__name">${esc(r.name)}</span>
+      </div>`);
+  }
+
+  async function applyProducts() {
+    const track = document.querySelector('.product-marquee__track');
+    if (!track) return;
+    const rows = await api.fetchTable('website_products?select=*');
+    if (!rows) return;
+    renderMarquee(track, rows, (r, dup) => `
+      <div class="product-slide"${dup ? ' data-dup aria-hidden="true"' : ''}>
+        <span class="product-slide__plate">${r.image
+          ? `<img src="${esc(r.image)}" alt="${esc(r.name)}" loading="lazy" draggable="false">`
+          : ''}</span>
+      </div>`);
+  }
+
+  /**
+   * FAQs. main.js binds each trigger directly at load, so rebuilt markup
+   * would be inert. A delegated handler on the container is attached here
+   * instead, which survives any number of re-renders.
+   */
+  async function applyFaqs() {
+    const blocks = Array.from(document.querySelectorAll('.accordion'));
+    if (!blocks.length) return;
+    const rows = await api.fetchTable('website_faqs?select=*');
+    if (!rows) return;
+
+    const onHome = document.querySelectorAll('.accordion').length === 1;
+    if (onHome) {
+      const featured = rows.filter((r) => r.featured);
+      renderAccordion(blocks[0], featured.length ? featured : rows.slice(0, 4));
+      return;
+    }
+    // FAQs page: one accordion per category, in the page's existing order.
+    const cats = [];
+    rows.forEach((r) => { if (cats.indexOf(r.category) < 0) cats.push(r.category); });
+    blocks.forEach((block, i) => {
+      const cat = cats[i];
+      if (!cat) return;
+      renderAccordion(block, rows.filter((r) => r.category === cat));
+      const heading = block.previousElementSibling;
+      if (heading && /^H[23]$/.test(heading.tagName)) setText(heading, cat);
+    });
+  }
+
+  function renderAccordion(block, list) {
+    if (!block || !list.length) return;
+    block.innerHTML = list.map((r) => `
+      <div class="accordion__item">
+        <button class="accordion__trigger" type="button" aria-expanded="false">
+          ${esc(r.question)}
+          <span class="accordion__icon" aria-hidden="true"></span>
+        </button>
+        <div class="accordion__panel">
+          <div class="accordion__panel-inner">
+            <div class="accordion__panel-content">${esc(r.answer)}</div>
+          </div>
+        </div>
+      </div>`).join('');
+
+    if (block.dataset.vrBound !== '1') {
+      block.dataset.vrBound = '1';
+      block.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.accordion__trigger');
+        if (!trigger || !block.contains(trigger)) return;
+        const item = trigger.closest('.accordion__item');
+        const isOpen = item.classList.contains('is-open');
+        block.querySelectorAll('.accordion__item.is-open').forEach((el) => {
+          el.classList.remove('is-open');
+          const t = el.querySelector('.accordion__trigger');
+          if (t) t.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    }
+    rearm(block);
+  }
+
   async function init() {
     const settings = await loadSettings();
     if (settings && settings.contact) applyContact(settings.contact);
+    // Independent, so one empty table never stops the others.
+    await Promise.all([
+      applyServices().catch(() => {}),
+      applyBrands().catch(() => {}),
+      applyProducts().catch(() => {}),
+      applyFaqs().catch(() => {}),
+    ]);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  window.VenomContent = { summariseHours, applyContact };
+  window.VenomContent = { summariseHours, applyContact, applyServices, applyBrands, applyProducts, applyFaqs };
 })(window, document);
