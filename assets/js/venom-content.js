@@ -26,7 +26,7 @@
  *    render path here does both.
  *
  * Synced: contact details, trading hours, social links, services, brands,
- * products, FAQs, reviews, performance stages and proven results.
+ * products, FAQs, reviews and performance stages.
  * Not synced: the homepage stage timeline and the gallery. Both are driven
  * by page scripts holding their own tab and filter state, and need a proper
  * rebuild rather than in-place hydration.
@@ -309,41 +309,6 @@
     rearm(grid);
   }
 
-  /**
-   * Proven results. The section stays hidden unless the portal has a
-   * published build carrying both a before and an after figure, so the
-   * page never shows an empty shell or an unverified number.
-   */
-  async function applyResults() {
-    const section = document.querySelector('[data-vr-results]');
-    const grid = document.querySelector('[data-vr-results-grid]');
-    if (!section || !grid) return;
-    const rows = await api.fetchTable('website_builds?select=*');
-    if (!rows) return;
-
-    const proven = rows.filter((r) => Number(r.power_after) > 0 && Number(r.power_before) > 0);
-    if (!proven.length) return;                 // stays hidden
-
-    grid.innerHTML = proven.slice(0, 6).map((r) => {
-      const kw = Math.round(Number(r.power_after) - Number(r.power_before));
-      const nm = Math.round(Number(r.torque_after) - Number(r.torque_before));
-      const vehicle = [r.year, r.make, r.model].filter(Boolean).join(' ');
-      return `
-      <article class="service-card slide-up">
-        ${r.stage ? `<span class="stage-content__badge">${esc(r.stage)}</span>` : ''}
-        <h3 class="service-card__title">${esc(r.title)}</h3>
-        <p class="card__meta">${esc(vehicle)}${r.engine ? ' · ' + esc(r.engine) : ''}</p>
-        <ul class="stage-list">
-          <li>Power ${esc(r.power_before)} kW to ${esc(r.power_after)} kW${kw > 0 ? ' (+' + kw + ' kW)' : ''}</li>
-          ${nm > 0 ? `<li>Torque ${esc(r.torque_before)} Nm to ${esc(r.torque_after)} Nm (+${nm} Nm)</li>` : ''}
-          ${r.validation ? `<li>Validated on ${esc(r.validation)}</li>` : ''}
-        </ul>
-      </article>`;
-    }).join('');
-    section.removeAttribute('hidden');
-    rearm(grid);
-  }
-
   async function init() {
     const settings = await loadSettings();
     if (settings && settings.contact) applyContact(settings.contact);
@@ -354,12 +319,11 @@
       applyProducts().catch(() => {}),
       applyFaqs().catch(() => {}),
       applyStages().catch(() => {}),
-      applyResults().catch(() => {}),
     ]);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  window.VenomContent = { summariseHours, applyContact, applyServices, applyBrands, applyProducts, applyFaqs, applyStages, applyResults };
+  window.VenomContent = { summariseHours, applyContact, applyServices, applyBrands, applyProducts, applyFaqs, applyStages };
 })(window, document);
