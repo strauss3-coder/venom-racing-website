@@ -17,7 +17,7 @@
   --color-graphite-border: #313136;
 
   --color-red: #b3121f;
-  --color-red-bright: #e01e2e;
+  --color-red-bright: #e33140; /* 4.50:1 on carbon - AA for .eyebrow and .text-accent */
   --color-red-dark: #7a0c15;
   --color-red-glow: rgba(224, 30, 46, 0.45);
 
@@ -26,7 +26,7 @@
 
   --color-gray-300: #d4d4d8;
   --color-gray-400: #a3a3aa;
-  --color-gray-500: #767680;
+  --color-gray-500: #787882;   /* 4.53:1 on carbon - AA for small muted text */
   --color-gray-600: #55555c;
 
   --color-success: #2a9d6f;
