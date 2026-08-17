@@ -161,6 +161,8 @@
           <a class="btn btn-secondary" href="#dyno">Dyno Validation</a>
           <a class="btn btn-secondary" href="#exhaust">Performance Exhaust</a>
           <a class="btn btn-secondary" href="#conversions">Turbo &amp; Hybrid Conversions</a>
+          <a class="btn btn-secondary" href="#stages">Performance Stages</a>
+          <a class="btn btn-secondary" href="#process">Our Process</a>
         </nav>
 
         <article id="ecu-remapping" class="section" style="padding-top:0;">
@@ -581,6 +583,137 @@
                 <div class="carousel__dots" data-carousel-dots role="tablist" aria-label="Choose conversions image"></div>
                 <span class="carousel__counter" data-carousel-counter aria-live="polite">1 / 4</span>
               </div>
+            </div>
+          </div>
+        </article>
+
+
+        <!-- ============================================================
+             Performance Stages — the packages ladder.
+             Rendered from the portal (website_stages) with this markup
+             as the fallback when the database is unreachable.
+             ============================================================ -->
+        <article id="stages" class="section" aria-labelledby="perf-stages-heading">
+          <div class="section-heading section-heading--center fade-in">
+            <span class="eyebrow">Performance Packages</span>
+            <h2 id="perf-stages-heading">Choose Your Performance Stage</h2>
+            <p style="max-width:680px; margin-inline:auto;">Every performance package is carefully designed to build on the previous stage, ensuring reliability, safety and maximum performance.</p>
+          </div>
+
+          <div class="grid grid--services" data-vr-stages data-reveal-stagger>
+            <article class="service-card slide-up">
+              <span class="stage-content__badge">Stage 1</span>
+              <h3 class="service-card__title">Software Only</h3>
+              <p>A pure ECU or TCU software remap — safe, reliable gains with no hardware changes required.</p>
+              <ul class="stage-list">
+                <li>Basic ECU software / remap</li>
+                <li>No hardware upgrades required</li>
+              </ul>
+            </article>
+            <article class="service-card slide-up">
+              <span class="stage-content__badge">Stage 1+</span>
+              <h3 class="service-card__title">Light Performance Upgrades</h3>
+              <p>Light bolt-on hardware paired with customised tune adjustments, creating a Stage 1+ tune for a noticeable step up.</p>
+              <ul class="stage-list">
+                <li>Decat or downpipe</li>
+                <li>Optional upgraded exhaust system</li>
+                <li>Optional intake / induction</li>
+                <li>Optional Stage 1 TCU (gearbox) tune</li>
+              </ul>
+            </article>
+            <article class="service-card slide-up">
+              <span class="stage-content__badge">Stage 2</span>
+              <h3 class="service-card__title">Intermediate Performance Build</h3>
+              <p>A balanced intermediate build — supporting hardware plus a Stage 2 software tune.</p>
+              <ul class="stage-list">
+                <li>Downpipe</li>
+                <li>Intake / induction upgrade</li>
+                <li>Exhaust mid-box delete or full upgraded exhaust</li>
+                <li>Intercooler upgrade or Water-Methanol Injection (WMI)</li>
+                <li>Stage 2 ECU software tune</li>
+                <li>Optional Stage 1 or 2 TCU tune</li>
+              </ul>
+            </article>
+            <article class="service-card slide-up">
+              <span class="stage-content__badge">Stage 2+</span>
+              <h3 class="service-card__title">Advanced Performance Setup</h3>
+              <p>Advanced setup consisting of Stage 2 hardware but introducing a hybrid turbo with matched Stage 2+ software.</p>
+              <ul class="stage-list">
+                <li>Downpipe</li>
+                <li>Intake / induction upgrade</li>
+                <li>Full upgraded exhaust</li>
+                <li>Boost Pipes</li>
+                <li>Intercooler upgrade</li>
+                <li>Water-Methanol Injection (WMI)</li>
+                <li>Hybrid turbos</li>
+                <li>Stage 2+ ECU software tune</li>
+                <li>Supportive ECU tune</li>
+              </ul>
+            </article>
+            <article class="service-card slide-up">
+              <span class="stage-content__badge">Stage 3</span>
+              <h3 class="service-card__title">High Performance / Maximum Power Build</h3>
+              <p>Our maximum-power build — full supporting hardware, a bigger turbo and optional forged internals.</p>
+              <ul class="stage-list">
+                <li>Downpipe and full exhaust system</li>
+                <li>Intercooler upgrade</li>
+                <li>Water-Methanol Injection (WMI)</li>
+                <li>Upgraded larger / bigger turbo</li>
+                <li>Optional forged engine internals</li>
+                <li>Stage 3 ECU software tune</li>
+                <li>Stage 2+ / 3 TCU software</li>
+                <li>Optional performance modifications</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="fade-in" style="text-align:center; margin-top: var(--space-xl);">
+            <a class="btn btn-primary" href="contact.html" data-ripple>Book a Consultation</a>
+          </div>
+        </article>
+
+        <!-- ============================================================
+             Proven Results — completed builds with validated figures.
+             Hidden entirely until the portal has published a build, so
+             no placeholder or invented numbers are ever shown.
+             ============================================================ -->
+        <article id="results" class="section" aria-labelledby="perf-results-heading" data-vr-results hidden>
+          <div class="section-heading section-heading--center fade-in">
+            <span class="eyebrow">Measured, Not Guessed</span>
+            <h2 id="perf-results-heading">Proven Results</h2>
+            <p style="max-width:680px; margin-inline:auto;">Before-and-after figures from completed builds, validated on our in-house dyno or by V-Box.</p>
+          </div>
+          <div class="grid grid--services" data-vr-results-grid data-reveal-stagger></div>
+        </article>
+
+        <!-- ============================================================
+             Performance Process
+             ============================================================ -->
+        <article id="process" class="section" aria-labelledby="perf-process-heading">
+          <div class="section-heading section-heading--center fade-in">
+            <span class="eyebrow">How It Works</span>
+            <h2 id="perf-process-heading">Our Performance Process</h2>
+          </div>
+          <div class="process" data-stagger>
+            <div class="process__step fade-in">
+              <h4>Book Consultation</h4>
+              <p>Tell us about your vehicle and goals.</p>
+            </div>
+            <div class="process__step fade-in">
+              <h4>Vehicle Inspection</h4>
+              <p>We assess the platform and current setup.</p>
+            </div>
+            <div class="process__step fade-in">
+              <h4>Custom Recommendation</h4>
+              <p>A tailored plan — software, hardware or fabrication to suit your needs.</p>
+            </div>
+            <div class="process__step fade-in">
+              <h4>Installation / Tuning</h4>
+              <p>Work carried out in-house by our skilled technicians.</p>
+            </div>
+            <div class="process__step fade-in">
+              <h4>Testing &amp; Delivery</h4>
+              <p>Dyno-validated and/or V-Box results with data logging before handover.</p>
             </div>
           </div>
         </article>
