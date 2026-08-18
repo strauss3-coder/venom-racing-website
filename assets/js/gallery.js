@@ -25,7 +25,11 @@
   function initGallery() {
     const grid = qs('[data-gallery]');
     if (!grid) return;
-    const items = qsa('[data-gallery-item]', grid);
+    /* Queried live rather than captured once. The grid can be re-rendered
+       from the portal, and a captured array would leave the filters and
+       the lightbox operating on detached nodes. */
+    const currentItems = () => qsa('[data-gallery-item]', grid);
+    const items = currentItems();
     if (!items.length) return;
 
     /* ---- Scroll reveal (fade up) ---- */
@@ -49,7 +53,7 @@
     /* ---- Animated filters ---- */
     const filterBtns = qsa('[data-filter]');
     function applyFilter(key) {
-      items.forEach((it) => {
+      currentItems().forEach((it) => {
         const cats = (it.dataset.cats || '').split(/\s+/);
         const show = key === 'all' || cats.indexOf(key) !== -1;
         if (show) {
@@ -63,6 +67,8 @@
       });
     }
     filterBtns.forEach((btn) => {
+      if (btn.dataset.vrBound === '1') return;   /* survives a re-render */
+      btn.dataset.vrBound = '1';
       btn.addEventListener('click', () => {
         filterBtns.forEach((b) => {
           const on = b === btn;
@@ -88,7 +94,7 @@
     let lastFocus = null;
 
     function buildVisible() {
-      visible = items.filter((it) => !it.hidden);
+      visible = currentItems().filter((it) => !it.hidden);
     }
 
     function clearStage() {
@@ -153,10 +159,15 @@
     }
 
     items.forEach((it) => it.addEventListener('click', () => open(it)));
-    closeEls.forEach((el) => el.addEventListener('click', close));
-    if (nextBtn) nextBtn.addEventListener('click', next);
-    if (prevBtn) prevBtn.addEventListener('click', prev);
+    if (lb.dataset.vrBound !== '1') {
+      lb.dataset.vrBound = '1';
+      closeEls.forEach((el) => el.addEventListener('click', close));
+      if (nextBtn) nextBtn.addEventListener('click', next);
+      if (prevBtn) prevBtn.addEventListener('click', prev);
+      bindLightboxKeys();
+    }
 
+    function bindLightboxKeys() {
     document.addEventListener('keydown', (e) => {
       if (!lb.classList.contains('is-open')) return;
       if (e.key === 'Escape') close();
@@ -164,7 +175,11 @@
       else if (e.key === 'ArrowLeft') prev();
     });
 
+    }
+
     /* Swipe — image slides only, so native video controls stay usable */
+    if (stage.dataset.vrBound === '1') return;
+    stage.dataset.vrBound = '1';
     let startX = 0;
     let dx = 0;
     let dragging = false;
@@ -183,4 +198,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', initGallery);
+
+  /* Re-runnable so the grid can be re-rendered from the portal. Elements
+     that survive a re-render carry data-vr-bound and are skipped. */
+  window.VenomGallery = { init: initGallery };
 })(window, document);

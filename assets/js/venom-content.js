@@ -25,11 +25,12 @@
  *    invisible and inert unless it is re-observed and re-bound, so every
  *    render path here does both.
  *
- * Synced: contact details, trading hours, social links, services, brands,
- * products, FAQs, reviews and performance stages.
- * Not synced: the homepage stage timeline and the gallery. Both are driven
- * by page scripts holding their own tab and filter state, and need a proper
- * rebuild rather than in-place hydration.
+ * Synced: homepage hero and about copy, contact details, trading hours,
+ * social links, services, brands, products, FAQs, reviews, stages and
+ * the gallery grid.
+ * Not synced: the homepage's tabbed stage timeline, which stages.js owns
+ * along with its own tab state. The Performance page carries the
+ * portal-driven stage cards instead.
  */
 
 (function (window, document) {
@@ -309,9 +310,81 @@
     rearm(grid);
   }
 
+  /**
+   * Homepage copy. The hero headline keeps its three animated lines: the
+   * portal supplies one sentence and it is split on whitespace so the
+   * stagger animation still has something to stagger.
+   */
+  function applyHomepage(h) {
+    if (!h) return;
+
+    const title = document.querySelector('[data-vr-hero-title]');
+    if (title && h.heroTitle) {
+      const words = String(h.heroTitle).trim().split(/\s+/);
+      // Last word keeps the accent treatment, as the page ships it.
+      const parts = words.length > 2
+        ? [words.slice(0, -2).join(' '), words[words.length - 2], words[words.length - 1]]
+        : words;
+      title.innerHTML = parts.filter(Boolean).map((line, i) =>
+        '<span class="hero__line' + (i === parts.length - 1 ? ' hero__line--accent' : '') +
+        '" style="--i:' + i + '">' + esc(line) + '</span>').join('\n');
+    }
+
+    setText(document.querySelector('[data-vr-hero-text]'), h.heroSubtitle);
+    setText(document.querySelector('[data-vr-about-title]'), h.aboutTitle);
+    setText(document.querySelector('[data-vr-about-text]'), h.aboutText);
+    setText(document.querySelector('[data-vr-cta-title]'), h.ctaTitle);
+
+    // Hero buttons, in the order the page lays them out.
+    const actions = document.querySelectorAll('.hero__actions a');
+    if (actions[0] && h.btn1Text) { setText(actions[0], h.btn1Text); if (h.btn1Link) actions[0].href = h.btn1Link; }
+    if (actions[1] && h.btn2Text) { setText(actions[1], h.btn2Text); if (h.btn2Link) actions[1].href = h.btn2Link; }
+  }
+
+  /* Map the portal's category names onto the filter keys already in the
+     page, so the existing filter buttons keep working untouched. */
+  const GALLERY_KEYS = {
+    'Performance Builds':'builds', 'ECU Calibration':'ecu', 'Dyno Testing':'dyno',
+    'Exhaust Systems':'exhaust', 'Turbo Upgrades':'turbo', 'Workshop':'workshop',
+    'Services & Repairs':'services', 'Videos':'videos'
+  };
+
+  /**
+   * Gallery grid. Replaced only when the portal actually has images; an
+   * empty gallery leaves the 42 built into the page. gallery.js binds its
+   * filters, lightbox and swipe at load, so it is re-initialised after a
+   * render - its own guards stop the persistent elements binding twice.
+   */
+  function applyGallery(list) {
+    const grid = document.querySelector('[data-gallery]');
+    if (!grid || !Array.isArray(list) || !list.length) return;
+
+    grid.innerHTML = list.map((g) => {
+      const url = g.url || g;
+      const label = g.label || '';
+      const key = GALLERY_KEYS[g.category] || 'workshop';
+      return `
+        <button class="gallery-card is-in" type="button" data-gallery-item data-type="image"
+                data-cats="${esc(key)}" data-label="${esc(label)}"
+                data-full="${esc(url)}" data-alt="${esc(label)}">
+          <img class="gallery-card__media" src="${esc(url)}" alt="${esc(label)}" loading="lazy">
+          <span class="gallery-card__overlay">
+            <span class="gallery-card__cat">${esc(g.category || '')}</span>
+            <span class="gallery-card__title">${esc(label)}</span>
+          </span>
+        </button>`;
+    }).join('');
+
+    if (window.VenomGallery && window.VenomGallery.init) window.VenomGallery.init();
+    rearm(grid);
+  }
+
   async function init() {
     const settings = await loadSettings();
     if (settings && settings.contact) applyContact(settings.contact);
+    if (settings && settings.homepage) applyHomepage(settings.homepage);
+    /* The portal stores the gallery as { list: [...] } under this key. */
+    if (settings && settings.gallery) applyGallery(settings.gallery.list);
     // Independent, so one empty table never stops the others.
     await Promise.all([
       applyServices().catch(() => {}),
@@ -325,5 +398,5 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  window.VenomContent = { summariseHours, applyContact, applyServices, applyBrands, applyProducts, applyFaqs, applyStages };
+  window.VenomContent = { summariseHours, applyContact, applyServices, applyBrands, applyProducts, applyFaqs, applyStages, applyHomepage, applyGallery };
 })(window, document);
