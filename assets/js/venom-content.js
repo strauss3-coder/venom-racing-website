@@ -26,8 +26,8 @@
  *    render path here does both.
  *
  * Synced: homepage hero and about copy, contact details, trading hours,
- * social links, services, brands, products, FAQs, reviews, stages and
- * the gallery grid.
+ * social links, services, brands, products, FAQs, reviews, stages, the
+ * gallery grid, the repeated card lists on every page, and per-page SEO.
  * Not synced: the homepage's tabbed stage timeline, which stages.js owns
  * along with its own tab state. The Performance page carries the
  * portal-driven stage cards instead.
@@ -379,6 +379,97 @@
     rearm(grid);
   }
 
+  /** Which page we are on, matching the portal's page keys. */
+  function pageKey() {
+    const f = (location.pathname.split('/').pop() || 'index.html').replace('.html', '');
+    return f || 'index';
+  }
+
+  /**
+   * Repeated card lists: why-choose cards, process steps, trust-bar items,
+   * technology chips and the specialise grid. Each container's existing
+   * first child is used as the template so the page keeps its own markup,
+   * icons and classes - only the words come from the portal.
+   */
+  async function applySections() {
+    const rows = await api.fetchTable('website_sections?select=*&page=eq.' + encodeURIComponent(pageKey()));
+    if (!rows) return;
+
+    const groups = {};
+    rows.forEach((r) => { (groups[r.section] = groups[r.section] || []).push(r); });
+
+    const targets = {
+      feature:    '.feature-card',
+      process:    '.process__step',
+      trust:      '.trust-item',
+      chip:       '.tech-chip',
+      specialise: '.card',
+    };
+
+    Object.keys(groups).forEach((section) => {
+      const sel = targets[section];
+      if (!sel) return;
+      const first = document.querySelector(sel);
+      if (!first) return;
+      const container = first.parentElement;
+      const template = first.cloneNode(true);
+      const items = groups[section];
+
+      // Reuse the page's own node for each item, replacing only the text.
+      const built = items.map((r) => {
+        const node = template.cloneNode(true);
+        const h = node.querySelector('h4, .card__title');
+        const p = node.querySelector('p:not(.card__meta)') || node.querySelector('.card__meta');
+        if (h) h.textContent = r.title;
+        else if (!node.querySelector('svg')) node.textContent = r.title;
+        else {
+          // trust items and chips are an icon plus a bare text node
+          const t = Array.from(node.childNodes).find((n) => n.nodeType === 3 && n.textContent.trim());
+          if (t) t.textContent = ' ' + r.title;
+        }
+        if (p && r.body) p.textContent = r.body;
+        return node;
+      });
+
+      Array.from(container.querySelectorAll(sel)).forEach((n) => n.remove());
+      built.forEach((n) => container.appendChild(n));
+      rearm(container);
+    });
+  }
+
+  /**
+   * Page title, meta description and social preview. Written into the
+   * existing tags; a tag the page does not have is created, because a
+   * missing og:image is the difference between a link preview and a
+   * blank card.
+   */
+  async function applySeo() {
+    const rows = await api.fetchTable('website_seo?select=*&page=eq.' + encodeURIComponent(pageKey()));
+    if (!rows || !rows.length) return;
+    const r = rows[0];
+
+    if (r.title) document.title = r.title;
+
+    const meta = (attr, name, value) => {
+      if (!value) return;
+      let el = document.head.querySelector('meta[' + attr + '="' + name + '"]');
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(attr, name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', value);
+    };
+
+    meta('name', 'description', r.description);
+    meta('property', 'og:title', r.og_title || r.title);
+    meta('property', 'og:description', r.og_description || r.description);
+    meta('property', 'og:image', r.og_image);
+    meta('name', 'twitter:title', r.og_title || r.title);
+    meta('name', 'twitter:description', r.og_description || r.description);
+    meta('name', 'twitter:image', r.og_image);
+  }
+
   async function init() {
     const settings = await loadSettings();
     if (settings && settings.contact) applyContact(settings.contact);
@@ -392,11 +483,13 @@
       applyProducts().catch(() => {}),
       applyFaqs().catch(() => {}),
       applyStages().catch(() => {}),
+      applySections().catch(() => {}),
+      applySeo().catch(() => {}),
     ]);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  window.VenomContent = { summariseHours, applyContact, applyServices, applyBrands, applyProducts, applyFaqs, applyStages, applyHomepage, applyGallery };
+  window.VenomContent = { summariseHours, applyContact, applyServices, applyBrands, applyProducts, applyFaqs, applyStages, applyHomepage, applyGallery, applySections, applySeo };
 })(window, document);
