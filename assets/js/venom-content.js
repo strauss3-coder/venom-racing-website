@@ -113,6 +113,12 @@
       });
     });
 
+    // Google rating. Only the number is ours - the wording around it stays
+    // in the markup, so the page still reads correctly on its own.
+    if (c.googleRating) {
+      document.querySelectorAll('[data-vr-rating]').forEach((el) => setText(el, c.googleRating));
+    }
+
     // Address and hours, where the page has marked them.
     document.querySelectorAll('[data-vr-address]').forEach((el) => setText(el, c.address));
     if (Array.isArray(c.hours)) {
@@ -362,12 +368,24 @@
     grid.innerHTML = list.map((g) => {
       const url = g.url || g;
       const label = g.label || '';
+      const alt = g.alt || label;
       const key = GALLERY_KEYS[g.category] || 'workshop';
+      const isVideo = g.type === 'video';
+      // Videos also carry the page's own "videos" filter key, as they do
+      // in the markup this replaces.
+      const cats = isVideo ? key + ' videos' : key;
+      const media = isVideo
+        ? `<video class="gallery-card__media" data-lazy-video autoplay muted loop playsinline
+                  preload="none" aria-label="${esc(label)}">
+             <source data-src="${esc(url)}" type="video/mp4">
+           </video>`
+        : `<img class="gallery-card__media" src="${esc(url)}" alt="${esc(alt)}" loading="lazy">`;
       return `
-        <button class="gallery-card is-in" type="button" data-gallery-item data-type="image"
-                data-cats="${esc(key)}" data-label="${esc(label)}"
-                data-full="${esc(url)}" data-alt="${esc(label)}">
-          <img class="gallery-card__media" src="${esc(url)}" alt="${esc(label)}" loading="lazy">
+        <button class="gallery-card is-in" type="button" data-gallery-item
+                data-type="${isVideo ? 'video' : 'image'}"${isVideo ? ' data-muted' : ''}
+                data-cats="${esc(cats)}" data-label="${esc(label)}"
+                data-full="${esc(url)}" data-alt="${esc(alt)}">
+          ${media}
           <span class="gallery-card__overlay">
             <span class="gallery-card__cat">${esc(g.category || '')}</span>
             <span class="gallery-card__title">${esc(label)}</span>
@@ -375,6 +393,8 @@
         </button>`;
     }).join('');
 
+    // Videos here use data-src, so the page's lazy loader must run again.
+    if (window.VenomCarousel && window.VenomCarousel.initLazyVideos) window.VenomCarousel.initLazyVideos();
     if (window.VenomGallery && window.VenomGallery.init) window.VenomGallery.init();
     rearm(grid);
   }

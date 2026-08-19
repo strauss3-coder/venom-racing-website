@@ -1210,6 +1210,35 @@
   color: var(--color-red-bright);
 }
 
+/* Google rating. Deliberately not a .trust-item: the trust bar is rebuilt
+   from the portal's page sections, and this line is not the portal's to
+   remove. Only the number is hydrated (data-vr-rating) - the wording round
+   it stays in the markup so the line still reads if the database is down. */
+.google-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin: 0 0 var(--space-lg);
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-gray-300);
+}
+
+.google-rating svg {
+  width: 18px;
+  height: 18px;
+  color: var(--color-red-bright);
+}
+
+.google-rating b {
+  color: var(--color-white);
+  font-size: var(--fs-md);
+}
+
 /* Review card (shared by carousel + grid) */
 .rc-card {
   display: flex;

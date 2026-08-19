@@ -238,4 +238,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', init);
+  /* Re-runnable: the gallery grid can be re-rendered from the portal, and
+     its videos arrive with data-src still unloaded. */
+  window.VenomCarousel = { initLazyVideos };
 })(window, document);
