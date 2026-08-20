@@ -405,8 +405,17 @@
     setText(document.querySelector('[data-vr-badge-title]'), c.badgeTitle);
     setText(document.querySelector('[data-vr-badge-text]'), c.badgeText);
 
-    const btn = document.querySelector('[data-vr-page-btn]');
-    if (btn) { if (c.btnText) setText(btn, c.btnText); if (c.btnLink) btn.href = c.btnLink; }
+    // Buttons are matched by name, not by position: services.html carries
+    // three in two different blocks, and an index would quietly relabel the
+    // wrong one the moment the markup moved.
+    const buttons = c.buttons || {};
+    Object.keys(buttons).forEach((name) => {
+      const el = document.querySelector('[data-vr-page-btn="' + name + '"]');
+      if (!el) return;
+      const v = buttons[name] || {};
+      if (v.text) setText(el, v.text);
+      if (v.link) el.href = v.link;
+    });
 
     applyShowcase(c.showcase);
     applyHeadings(c.sections);
