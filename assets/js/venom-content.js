@@ -162,7 +162,10 @@
         if (f.getAttribute('src') !== next) f.setAttribute('src', next);
       });
       document.querySelectorAll('[data-vr-directions]').forEach((a) => {
-        a.href = 'https://www.google.com/maps/dir/?api=1&destination=' + q;
+        /* A share link from Google Maps points at the listing itself, which
+           is more precise than a geocoded address, so it wins where set.
+           The embedded map above always needs a query, so it cannot. */
+        a.href = c.mapsUrl || ('https://www.google.com/maps/dir/?api=1&destination=' + q);
       });
     }
 
@@ -445,6 +448,34 @@
     const actions = document.querySelectorAll('.hero__actions a');
     if (actions[0] && h.btn1Text) { setText(actions[0], h.btn1Text); if (h.btn1Link) actions[0].href = h.btn1Link; }
     if (actions[1] && h.btn2Text) { setText(actions[1], h.btn2Text); if (h.btn2Link) actions[1].href = h.btn2Link; }
+
+    /* The two badges over the hero. Each holds an icon beside its text, so
+       only the text node is replaced. */
+    setLabel(document.querySelector('[data-vr-hero-badge="1"]'), h.heroBadge1);
+    setLabel(document.querySelector('[data-vr-hero-badge="2"]'), h.heroBadge2);
+
+    /* The hero background is a video, not an image. Swapping the source
+       needs an explicit load() - the element will otherwise keep playing
+       the clip it already has. */
+    const heroVid = document.querySelector('[data-vr-hero-video]');
+    if (heroVid && h.heroVideo) {
+      const src = heroVid.querySelector('source');
+      if (src && src.getAttribute('src') !== h.heroVideo) {
+        src.setAttribute('src', h.heroVideo);
+        heroVid.load();
+      }
+    }
+
+    /* The two buttons in the closing band. The page has carried both since
+       it was built; the portal only ever offered words for one. */
+    [1, 2].forEach((n) => {
+      const el = document.querySelector('[data-vr-cta-btn="' + n + '"]');
+      if (!el) return;
+      const text = h['ctaBtn' + n + 'Text'];
+      const link = h['ctaBtn' + n + 'Link'];
+      if (text) setLabel(el, text);
+      if (link) el.href = link;
+    });
 
     // The About section's own button.
     const ab = document.querySelector('[data-vr-about-btn]');
