@@ -50,6 +50,14 @@
     el.textContent = value;
   }
 
+  /* Headings the page breaks across lines. Newlines from the portal become
+     the <br> the markup already uses; everything else is escaped, because
+     this is the one place page copy is written as HTML. */
+  function setLines(el, value) {
+    if (!el || !value) return;
+    el.innerHTML = String(value).split(/\r?\n/).map(esc).join('<br>');
+  }
+
   async function loadSettings() {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -382,6 +390,29 @@
   }
 
   /**
+   * Copy for a page that is not the homepage: its lead block, the badge and
+   * carousel beside it, its section headings and its closing button. The
+   * hooks are deliberately generic - every page carries at most one of each,
+   * so the same code serves about, services and the rest.
+   */
+  function applyPageCopy(c) {
+    if (!c) return;
+    setText(document.querySelector('[data-vr-page-eyebrow]'), c.eyebrow);
+    setLines(document.querySelector('[data-vr-page-title]'), c.title);
+    setText(document.querySelector('[data-vr-page-text]'), c.text);
+    setText(document.querySelector('[data-vr-page-text2]'), c.text2);
+    setText(document.querySelector('[data-vr-tech-label]'), c.techLabel);
+    setText(document.querySelector('[data-vr-badge-title]'), c.badgeTitle);
+    setText(document.querySelector('[data-vr-badge-text]'), c.badgeText);
+
+    const btn = document.querySelector('[data-vr-page-btn]');
+    if (btn) { if (c.btnText) setText(btn, c.btnText); if (c.btnLink) btn.href = c.btnLink; }
+
+    applyShowcase(c.showcase);
+    applyHeadings(c.sections);
+  }
+
+  /**
    * Section headings: the eyebrow, heading and intro above each block of a
    * page. Each is keyed by the data-vr-heading on its wrapper, so the page
    * decides which sections exist and the portal only supplies words.
@@ -393,10 +424,22 @@
       const box = document.querySelector('[data-vr-heading="' + key + '"]');
       if (!box) return;
       const v = map[key] || {};
-      setText(box.querySelector('.eyebrow'), v.eyebrow);
-      setText(box.querySelector('h1, h2'), v.title);
+      const head = box.querySelector('h1, h2');
+
+      // Some headings ship without an eyebrow or an intro. Create them
+      // rather than drop the words, so no field in the portal is offered
+      // for a section and then quietly ignored.
+      if (v.eyebrow) {
+        let e = box.querySelector('.eyebrow');
+        if (!e) {
+          e = document.createElement('span');
+          e.className = 'eyebrow';
+          box.insertBefore(e, head || box.firstChild);
+        }
+        setText(e, v.eyebrow);
+      }
+      setText(head, v.title);
       if (v.intro) {
-        // Some headings ship without an intro; add one rather than drop it.
         let p = box.querySelector('p');
         if (!p) { p = document.createElement('p'); box.appendChild(p); }
         setText(p, v.intro);
@@ -551,6 +594,7 @@
     const settings = await loadSettings();
     if (settings && settings.contact) applyContact(settings.contact);
     if (settings && settings.homepage) applyHomepage(settings.homepage);
+    if (settings && settings.pages) applyPageCopy(settings.pages[pageKey()]);
     /* The portal stores the gallery as { list: [...] } under this key. */
     if (settings && settings.gallery) applyGallery(settings.gallery.list);
     // Independent, so one empty table never stops the others.
