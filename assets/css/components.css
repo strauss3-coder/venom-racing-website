@@ -3049,6 +3049,9 @@ body.nav-open .fnav {
 .info-card__item span { font-size: var(--fs-sm); color: var(--color-text-muted); }
 .info-card__item a, .info-card__value a { color: var(--color-white); font-size: var(--fs-md); }
 .info-card__item a:hover, .info-card__value a:hover { color: var(--color-red-bright); }
+/* A value that is not a link - trading hours - still reads as the value
+   rather than as a second label. */
+.info-card__item .info-card__text { color: var(--color-white); font-size: var(--fs-md); }
 
 /* Social row */
 .info-social { display: flex; gap: var(--space-sm); }

@@ -684,7 +684,11 @@
       process:    '.process__step',
       trust:      '.trust-item',
       chip:       '.tech-chip',
-      specialise: '.card',
+      /* A dedicated class, not a bare .card. The specialities grid was
+         the only .card on the site, so matching the generic class worked -
+         until anything else on that page used one, which would have made
+         the first of them the template and wiped its neighbours. */
+      specialise: '.specialise-card',
     };
 
     Object.keys(groups).forEach((section) => {
