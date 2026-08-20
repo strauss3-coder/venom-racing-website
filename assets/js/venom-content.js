@@ -306,9 +306,39 @@
     // FAQs page: one accordion per category, in the page's existing order.
     const cats = [];
     rows.forEach((r) => { if (cats.indexOf(r.category) < 0) cats.push(r.category); });
+
+    /* The page ships with a fixed number of blocks. A category beyond that
+       had nowhere to go, so adding one in the portal published questions
+       that never appeared - the block, its heading and every question in it
+       were simply dropped. Extra categories now get a block of their own,
+       cloned from the last one so they keep the page's own markup. */
+    const last = blocks[blocks.length - 1];
+    if (last) {
+      const lastHeading = last.previousElementSibling;
+      for (let i = blocks.length; i < cats.length; i++) {
+        /* Keyed by index and reused. This runs more than once per page load,
+           and creating blindly appended a second copy of every extra
+           category on the second pass. */
+        let block = document.querySelector('[data-vr-faq-extra="' + i + '"]');
+        if (!block) {
+          const heading = (lastHeading && /^H[23]$/.test(lastHeading.tagName))
+            ? lastHeading.cloneNode(true) : document.createElement('h3');
+          block = last.cloneNode(false);            // an empty .accordion
+          block.setAttribute('data-vr-faq-extra', i);
+          heading.setAttribute('data-vr-faq-extra-h', i);
+          last.parentNode.appendChild(heading);
+          last.parentNode.appendChild(block);
+        }
+        blocks.push(block);
+      }
+    }
+
     blocks.forEach((block, i) => {
       const cat = cats[i];
-      if (!cat) return;
+      /* More blocks than categories: leave the surplus empty rather than
+         showing a stale heading over someone else's questions. */
+      if (!cat) { block.innerHTML = ''; const h = block.previousElementSibling;
+        if (h && /^H[23]$/.test(h.tagName)) h.textContent = ''; return; }
       renderAccordion(block, rows.filter((r) => r.category === cat));
       const heading = block.previousElementSibling;
       if (heading && /^H[23]$/.test(heading.tagName)) setText(heading, cat);
