@@ -50,6 +50,15 @@
     el.textContent = value;
   }
 
+  /* A button's label, where the element also holds an icon. Only the text
+     node is replaced, so the svg beside it survives - textContent would
+     take the icon with it. Same approach applySections uses for chips. */
+  function setLabel(el, value) {
+    if (!el || !value) return;
+    const t = Array.from(el.childNodes).find((n) => n.nodeType === 3 && n.textContent.trim());
+    if (t) t.textContent = value; else el.textContent = value;
+  }
+
   /* Headings the page breaks across lines. Newlines from the portal become
      the <br> the markup already uses; everything else is escaped, because
      this is the one place page copy is written as HTML. */
@@ -127,6 +136,26 @@
       document.querySelectorAll('[data-vr-rating]').forEach((el) => setText(el, c.googleRating));
     }
 
+    /* The tuning portal address. It was already stored in the portal and
+       read by nothing, while the contact page carried its own copy. */
+    if (c.tuningPortal) {
+      document.querySelectorAll('[data-vr-tuning-portal]').forEach((a) => { a.href = c.tuningPortal; });
+    }
+
+    /* The embedded map and the directions link were each carrying their own
+       copy of the address. Change it in the portal and they pointed at the
+       old workshop until someone edited the markup. */
+    if (c.address) {
+      const q = encodeURIComponent(c.address);
+      document.querySelectorAll('[data-vr-map]').forEach((f) => {
+        const next = 'https://www.google.com/maps?q=' + q + '&output=embed';
+        if (f.getAttribute('src') !== next) f.setAttribute('src', next);
+      });
+      document.querySelectorAll('[data-vr-directions]').forEach((a) => {
+        a.href = 'https://www.google.com/maps/dir/?api=1&destination=' + q;
+      });
+    }
+
     // Address and hours, where the page has marked them.
     document.querySelectorAll('[data-vr-address]').forEach((el) => setText(el, c.address));
     if (Array.isArray(c.hours)) {
@@ -173,11 +202,32 @@
    * reused from the card that already sits in that position so a redesign
    * of the artwork is never overwritten by the database.
    */
+  /**
+   * The enquiry form's service list. The page ships with eight options
+   * while the portal carries twenty services, so a visitor could not ask
+   * for most of what the workshop actually does. The selected option is
+   * kept if it still exists, and an empty list leaves the page's own.
+   */
+  function applyServiceOptions(rows) {
+    const sel = document.querySelector('[data-vr-services]');
+    if (!sel || !Array.isArray(rows) || !rows.length) return;
+    const chosen = sel.value;
+    const placeholder = sel.querySelector('option[value=""]');
+    const names = [];
+    rows.forEach((r) => { if (r.title && names.indexOf(r.title) < 0) names.push(r.title); });
+    sel.innerHTML = (placeholder ? placeholder.outerHTML : '') +
+      names.map((n) => '<option>' + esc(n) + '</option>').join('');
+    if (chosen && names.indexOf(chosen) >= 0) sel.value = chosen;
+  }
+
   async function applyServices() {
     const grids = Array.from(document.querySelectorAll('.grid--services'));
-    if (!grids.length) return;
+    const optionList = document.querySelector('[data-vr-services]');
+    if (!grids.length && !optionList) return;
     const rows = await api.fetchTable('website_services?select=*');
     if (!rows) return;
+    applyServiceOptions(rows);
+    if (!grids.length) return;
 
     grids.forEach((grid) => {
       // Which division this grid shows is inferred from the page it is on.
@@ -413,8 +463,16 @@
       const el = document.querySelector('[data-vr-page-btn="' + name + '"]');
       if (!el) return;
       const v = buttons[name] || {};
-      if (v.text) setText(el, v.text);
-      if (v.link) el.href = v.link;
+      if (v.text) setLabel(el, v.text);
+      if (v.link && el.tagName === 'A') el.href = v.link;
+    });
+
+    setText(document.querySelector('[data-vr-portal-text]'), c.portalText);
+
+    // Small labels the page uses to title its own blocks.
+    const labels = c.labels || {};
+    Object.keys(labels).forEach((name) => {
+      setText(document.querySelector('[data-vr-label="' + name + '"]'), labels[name]);
     });
 
     applyShowcase(c.showcase);
