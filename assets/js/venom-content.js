@@ -424,7 +424,10 @@
       const box = document.querySelector('[data-vr-heading="' + key + '"]');
       if (!box) return;
       const v = map[key] || {};
-      const head = box.querySelector('h1, h2');
+      /* h3 because one block on the performance page leads with one.
+         A selector list returns the first match in document order, so a
+         block whose h2 is followed by an h3 still resolves to its h2. */
+      const head = box.querySelector('h1, h2, h3');
 
       // Some headings ship without an eyebrow or an intro. Create them
       // rather than drop the words, so no field in the portal is offered
