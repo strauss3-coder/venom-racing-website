@@ -113,4 +113,8 @@
   document.addEventListener('DOMContentLoaded', () => {
     qsa('[data-showcase]').forEach(initShowcase);
   });
+
+  /* Re-runnable: the portal can replace the slides after this has already
+     run, and the new figures need their arrows, dots and autoplay bound. */
+  window.VenomShowcase = { init(){ qsa('[data-showcase]').forEach(initShowcase); } };
 })(window, document);

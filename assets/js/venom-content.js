@@ -337,14 +337,71 @@
     }
 
     setText(document.querySelector('[data-vr-hero-text]'), h.heroSubtitle);
+    setText(document.querySelector('[data-vr-about-eyebrow]'), h.aboutEyebrow);
     setText(document.querySelector('[data-vr-about-title]'), h.aboutTitle);
     setText(document.querySelector('[data-vr-about-text]'), h.aboutText);
+    setText(document.querySelector('[data-vr-about-text2]'), h.aboutText2);
     setText(document.querySelector('[data-vr-cta-title]'), h.ctaTitle);
 
     // Hero buttons, in the order the page lays them out.
     const actions = document.querySelectorAll('.hero__actions a');
     if (actions[0] && h.btn1Text) { setText(actions[0], h.btn1Text); if (h.btn1Link) actions[0].href = h.btn1Link; }
     if (actions[1] && h.btn2Text) { setText(actions[1], h.btn2Text); if (h.btn2Link) actions[1].href = h.btn2Link; }
+
+    // The About section's own button.
+    const ab = document.querySelector('[data-vr-about-btn]');
+    if (ab) { if (h.aboutBtnText) setText(ab, h.aboutBtnText); if (h.aboutBtnLink) ab.href = h.aboutBtnLink; }
+
+    // RMI accreditation badge.
+    setText(document.querySelector('[data-vr-badge-title]'), h.badgeTitle);
+    setText(document.querySelector('[data-vr-badge-text]'), h.badgeText);
+
+    applyShowcase(h.showcase);
+    applyHeadings(h.sections);
+  }
+
+  /**
+   * The About carousel. Rebuilt only when the portal has slides, so an
+   * empty list leaves the three the page ships with. showcase.js reads the
+   * track on DOMContentLoaded, so it is re-initialised afterwards.
+   */
+  function applyShowcase(list) {
+    const track = document.querySelector('[data-vr-showcase]');
+    if (!track || !Array.isArray(list) || !list.length) return;
+
+    track.innerHTML = list.map((s) => {
+      const cap = s.label || '';
+      return '<figure class="showcase__slide texture-carbon" data-label="' + esc(cap) + '">' +
+             '<img src="' + esc(s.url) + '" alt="' + esc(s.alt || cap) + '" loading="lazy"' +
+             ' onerror="this.style.display=\'none\'">' +
+             '<figcaption class="showcase__caption">' + esc(cap) + '</figcaption>' +
+             '</figure>';
+    }).join('');
+
+    if (window.VenomShowcase && window.VenomShowcase.init) window.VenomShowcase.init();
+  }
+
+  /**
+   * Section headings: the eyebrow, heading and intro above each block of a
+   * page. Each is keyed by the data-vr-heading on its wrapper, so the page
+   * decides which sections exist and the portal only supplies words.
+   * A blank value leaves what the page already has.
+   */
+  function applyHeadings(map) {
+    if (!map) return;
+    Object.keys(map).forEach((key) => {
+      const box = document.querySelector('[data-vr-heading="' + key + '"]');
+      if (!box) return;
+      const v = map[key] || {};
+      setText(box.querySelector('.eyebrow'), v.eyebrow);
+      setText(box.querySelector('h1, h2'), v.title);
+      if (v.intro) {
+        // Some headings ship without an intro; add one rather than drop it.
+        let p = box.querySelector('p');
+        if (!p) { p = document.createElement('p'); box.appendChild(p); }
+        setText(p, v.intro);
+      }
+    });
   }
 
   /* Map the portal's category names onto the filter keys already in the
