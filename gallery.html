@@ -83,7 +83,7 @@
 
     <section class="section" style="padding-top: var(--space-2xl);">
       <div class="container">
-        <div class="section-heading section-heading--center fade-in">
+        <div class="section-heading section-heading--center fade-in" data-vr-heading="hero">
           <span class="eyebrow">Workshop &amp; Builds</span>
           <h1>Gallery</h1>
           <p>The complete showcase of Venom Racing — performance builds, dyno runs, custom exhaust fabrication, tuning and workshop life. Tap any item to view it full-screen.</p>
@@ -101,6 +101,7 @@
           <button class="gallery-filter" type="button" data-filter="videos" aria-pressed="false">Videos</button>
         </div>
 
+        <p data-gallery-empty data-vr-label="empty" hidden style="text-align:center; color: var(--color-text-muted); margin: var(--space-xl) 0;">Nothing in this filter yet.</p>
         <div class="gallery-grid" data-gallery>
           <button class="gallery-card is-in" type="button" data-gallery-item data-type="image" data-cats="exhaust" data-label="Custom Exhaust" data-full="assets/images/gallery/gp-exhaust-1.jpg" data-alt="Custom Exhaust — Venom Racing">
             <img class="gallery-card__media" src="assets/images/gallery/gp-exhaust-1.jpg" alt="Custom Exhaust — Venom Racing" loading="lazy">

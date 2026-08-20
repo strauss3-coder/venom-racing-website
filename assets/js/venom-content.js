@@ -608,6 +608,21 @@
         </button>`;
     }).join('');
 
+    /* The filter bar is fixed markup listing every category the site knows.
+       Once the portal owns the grid, a category with nothing in it left a
+       filter that opened onto an empty page, so the bar follows the items
+       actually present. "All" always stays. */
+    const present = {};
+    list.forEach((g) => {
+      const k = GALLERY_KEYS[g.category] || 'workshop';
+      present[k] = true;
+      if (g.type === 'video') present.videos = true;
+    });
+    document.querySelectorAll('[data-filter]').forEach((btn) => {
+      const key = btn.dataset.filter;
+      btn.hidden = !(key === 'all' || present[key]);
+    });
+
     // Videos here use data-src, so the page's lazy loader must run again.
     if (window.VenomCarousel && window.VenomCarousel.initLazyVideos) window.VenomCarousel.initLazyVideos();
     if (window.VenomGallery && window.VenomGallery.init) window.VenomGallery.init();

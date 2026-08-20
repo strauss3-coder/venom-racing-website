@@ -65,6 +65,10 @@
           it.hidden = true;
         }
       });
+      /* A filter that matches nothing left a blank stretch of page with no
+         explanation. Say so instead. */
+      const empty = document.querySelector('[data-gallery-empty]');
+      if (empty) empty.hidden = currentItems().some((it) => !it.hidden);
     }
     filterBtns.forEach((btn) => {
       if (btn.dataset.vrBound === '1') return;   /* survives a re-render */
