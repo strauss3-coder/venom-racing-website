@@ -83,7 +83,7 @@
 
     <section class="section" style="padding-top: var(--space-2xl);">
       <div class="container">
-        <div class="section-heading section-heading--center fade-in">
+        <div class="section-heading section-heading--center fade-in" data-vr-heading="hero">
           <span class="eyebrow">Customer Testimonials</span>
           <h1>Trusted by Performance Enthusiasts Across South Africa</h1>
           <p>Read genuine feedback from customers who have trusted Venom Racing with performance tuning, diagnostics, servicing and custom fabrication.</p>
@@ -102,20 +102,20 @@
         </div>
 
         <div style="display:flex; flex-wrap:wrap; gap: var(--space-md); justify-content:center; margin-bottom: var(--space-2xl);">
-          <a class="btn btn-primary" href="#" data-google-reviews data-ripple>Read All Google Reviews</a>
-          <a class="btn btn-outline" href="#" data-google-reviews data-ripple>Leave a Review</a>
+          <a class="btn btn-primary" href="#" data-google-reviews data-vr-page-btn="google" data-ripple>Read All Google Reviews</a>
+          <a class="btn btn-outline" href="#" data-google-reviews data-vr-page-btn="leave" data-ripple>Leave a Review</a>
         </div>
 
         <div class="reviews-toolbar fade-in">
-          <input class="form-input" type="search" data-reviews-search placeholder="Search reviews&hellip;" aria-label="Search reviews">
+          <input class="form-input" type="search" data-reviews-search data-vr-search placeholder="Search reviews&hellip;" aria-label="Search reviews">
         </div>
 
         <div class="reviews-grid fade-in" data-reviews-grid></div>
-        <p data-reviews-empty hidden style="text-align:center; color: var(--color-text-muted); margin-top: var(--space-lg);">No reviews match your search.</p>
+        <p data-reviews-empty data-vr-label="empty" hidden style="text-align:center; color: var(--color-text-muted); margin-top: var(--space-lg);">No reviews match your search.</p>
 
         <div style="display:flex; flex-wrap:wrap; gap: var(--space-md); justify-content:center; margin-top: var(--space-3xl);">
-          <a class="btn btn-primary" href="#" data-google-reviews data-ripple>Read All Google Reviews</a>
-          <a class="btn btn-outline" href="#" data-google-reviews data-ripple>Leave a Review</a>
+          <a class="btn btn-primary" href="#" data-google-reviews data-vr-page-btn="google" data-ripple>Read All Google Reviews</a>
+          <a class="btn btn-outline" href="#" data-google-reviews data-vr-page-btn="leave" data-ripple>Leave a Review</a>
         </div>
       </div>
     </section>

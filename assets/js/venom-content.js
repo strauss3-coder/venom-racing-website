@@ -136,6 +136,16 @@
       document.querySelectorAll('[data-vr-rating]').forEach((el) => setText(el, c.googleRating));
     }
 
+    /* The Google reviews link. reviews.js pointed these at a constant baked
+       into the script, while the portal has carried the address in Contact
+       Details the whole time - a third field stored and read by nothing. */
+    const gr = (c.social || {}).google;
+    if (gr) {
+      document.querySelectorAll('[data-google-reviews]').forEach((a) => {
+        a.href = gr; a.target = '_blank'; a.rel = 'noopener';
+      });
+    }
+
     /* The tuning portal address. It was already stored in the portal and
        read by nothing, while the contact page carried its own copy. */
     if (c.tuningPortal) {
@@ -490,14 +500,19 @@
     // wrong one the moment the markup moved.
     const buttons = c.buttons || {};
     Object.keys(buttons).forEach((name) => {
-      const el = document.querySelector('[data-vr-page-btn="' + name + '"]');
-      if (!el) return;
       const v = buttons[name] || {};
-      if (v.text) setLabel(el, v.text);
-      if (v.link && el.tagName === 'A') el.href = v.link;
+      document.querySelectorAll('[data-vr-page-btn="' + name + '"]').forEach((el) => {
+        if (v.text) setLabel(el, v.text);
+        if (v.link && el.tagName === 'A') el.href = v.link;
+      });
     });
 
     setText(document.querySelector('[data-vr-portal-text]'), c.portalText);
+
+    // A search box is named by its placeholder, so that is what is set.
+    if (c.searchText) {
+      document.querySelectorAll('[data-vr-search]').forEach((el) => { el.placeholder = c.searchText; });
+    }
 
     // Small labels the page uses to title its own blocks.
     const labels = c.labels || {};
