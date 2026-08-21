@@ -18,13 +18,15 @@
 
   const { qs, qsa } = window.VenomUtils || {};
 
-  const PREVIEW = [
-    { type: 'Software Only', tag: 'Safe entry-level upgrade' },
-    { type: 'Light Performance Upgrades', tag: 'First bolt-on gains' },
-    { type: 'Intermediate Build', tag: 'Balanced performance step' },
-    { type: 'Advanced Setup', tag: 'Hybrid turbo territory' },
-    { type: 'Maximum Power Build', tag: 'Full performance build' },
-  ];
+  /* Read off the panels rather than listed here. This was a fixed array of
+     five, indexed by position, so a sixth stage added in the portal showed a
+     blank strip on mobile - and any wording change had to be made twice. */
+  function previewFrom(panels) {
+    return panels.map((p) => ({
+      type: ((qs('.stage-content__title', p) || {}).textContent || '').trim(),
+      tag:  ((qs('.stage-content__tag', p) || {}).textContent || '').trim(),
+    }));
+  }
 
   function initStages(root) {
     const section = root.closest('.stages') || root;
@@ -32,6 +34,7 @@
     const panels = qsa('[data-stage-content]', root);
     if (tabs.length < 2 || panels.length !== tabs.length) return;
 
+    const PREVIEW = previewFrom(panels);
     const nums = tabs.map((t) => ((qs('.stage-tab__num', t) || {}).textContent || '').trim());
     const labels = tabs.map((t) => {
       const name = ((qs('.stage-tab__name', t) || {}).textContent || '').trim();
@@ -181,6 +184,10 @@
     select_(0);
     update();
   }
+
+  /* Re-runnable: the portal can rebuild the timeline after this has already
+     run, and the new tabs need their handlers. */
+  window.VenomStages = { init(){ qsa('[data-stages]').forEach(initStages); } };
 
   document.addEventListener('DOMContentLoaded', () => {
     qsa('[data-stages]').forEach(initStages);

@@ -399,11 +399,136 @@
    * tabbed timeline, which stages.js owns; only the card grid here is
    * driven from the portal.
    */
+  /**
+   * The homepage stage timeline. Three controls have to agree: the desktop
+   * tabs, their panels, and the mobile dropdown - all addressed by index, so
+   * they are rebuilt together or not at all.
+   *
+   * Each one is cloned from the tab or panel already at that position, which
+   * keeps the artwork the page ships with; a stage beyond what the page had
+   * reuses the last one rather than arriving with no icon.
+   */
+  function applyHomeStages(rows) {
+    const timeline = document.querySelector('[data-stages-timeline]');
+    if (!timeline || !Array.isArray(rows) || !rows.length) return;
+    const tabs = Array.from(timeline.querySelectorAll('[data-stage-tab]'));
+    if (!tabs.length) return;
+    const panels = Array.from(document.querySelectorAll('[data-stage-content]'));
+    const panelHost = panels.length ? panels[0].parentNode : null;
+    if (!panelHost) return;
+    const list = document.querySelector('[data-ss-menu]');
+
+    const pick = (arr, i) => arr[i] || arr[arr.length - 1];
+    const set = (node, sel, value) => { const el = node.querySelector(sel); if (el) el.textContent = value; };
+
+    const newTabs = [], newPanels = [], newOpts = [];
+    rows.forEach((r, i) => {
+      const label = r.label || String(i + 1);
+      const name = r.name || '';
+      const tagline = r.tagline || '';
+
+      const tab = pick(tabs, i).cloneNode(true);
+      tab.setAttribute('data-stage-tab', i);
+      tab.id = 'stage-tab-' + i;
+      tab.setAttribute('aria-controls', 'stage-panel-' + i);
+      tab.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+      tab.classList.toggle('is-active', i === 0);
+      set(tab, '.stage-tab__num', label);
+      set(tab, '.stage-tab__name', name);
+      set(tab, '.stage-tab__sub', tagline);
+      newTabs.push(tab);
+
+      const panel = pick(panels, i).cloneNode(true);
+      panel.setAttribute('data-stage-content', i);
+      panel.id = 'stage-panel-' + i;
+      panel.setAttribute('aria-labelledby', 'stage-tab-' + i);
+      panel.setAttribute('aria-hidden', i === 0 ? 'false' : 'true');
+      panel.classList.toggle('is-active', i === 0);
+      set(panel, '.stage-content__watermark', label);
+      set(panel, '.stage-content__badge', name);
+      set(panel, '.stage-content__title', tagline);
+      set(panel, '.stage-content__desc', r.description || '');
+      /* No portal field matches this line, so a stage that had one keeps it
+         and a new one does without, rather than inheriting someone else's. */
+      const tagEl = panel.querySelector('.stage-content__tag');
+      if (tagEl && i >= panels.length) tagEl.remove();
+
+      /* A list and the heading above it stand or fall together, or a stage
+         with nothing in it shows "Required Upgrades" over blank space. */
+      const dropWithHeading = (el) => {
+        const prev = el.previousElementSibling;
+        if (prev && prev.classList.contains('stage-content__label')) prev.remove();
+        el.remove();
+      };
+
+      const reqs = panel.querySelector('.stage-list');
+      if (reqs) {
+        const items = r.requirements || [];
+        if (items.length) reqs.innerHTML = items.map((x) => '<li>' + esc(x) + '</li>').join('');
+        else dropWithHeading(reqs);
+      }
+      const benefits = panel.querySelector('.stage-benefits');
+      if (benefits) {
+        const items = r.benefits || [];
+        if (items.length) {
+          const chip = benefits.querySelector('.stage-benefit');
+          benefits.innerHTML = items.map((x) => {
+            const c = chip ? chip.cloneNode(true) : document.createElement('span');
+            const t = Array.from(c.childNodes).find((n) => n.nodeType === 3 && n.textContent.trim());
+            if (t) t.textContent = x; else c.textContent = x;
+            return c.outerHTML;
+          }).join('');
+        } else dropWithHeading(benefits);
+      }
+
+      /* The note belongs to whichever stage was cloned. Left alone, every
+         stage templated from Stage 3 inherited its footnote. */
+      let note = panel.querySelector('.stage-content__note');
+      if (r.note) {
+        /* Only one stage ships with a footnote, so a stage cloned from any
+           other has no element to fill and would lose its note silently. */
+        if (!note) {
+          note = document.createElement('p');
+          note.className = 'stage-content__note';
+          (panel.querySelector('.stage-content__body') || panel).appendChild(note);
+        }
+        note.textContent = r.note;
+      } else if (note) note.remove();
+
+      newPanels.push(panel);
+
+      if (list) {
+        const opt = document.createElement('li');
+        opt.className = 'stage-select__option';
+        opt.setAttribute('role', 'option');
+        opt.setAttribute('data-ss-option', i);
+        opt.setAttribute('aria-selected', 'false');
+        opt.tabIndex = 0;
+        opt.innerHTML = '<span class="stage-select__num" aria-hidden="true">' + esc(label) + '</span>' +
+                        '<span class="stage-select__opt-label">' + esc(name + (tagline ? ' · ' + tagline : '')) + '</span>';
+        newOpts.push(opt);
+      }
+    });
+
+    tabs.forEach((t) => t.remove());
+    newTabs.forEach((t) => timeline.appendChild(t));
+    panels.forEach((p) => p.remove());
+    newPanels.forEach((p) => panelHost.appendChild(p));
+    if (list) { list.innerHTML = ''; newOpts.forEach((o) => list.appendChild(o)); }
+
+    // The tabs are new elements, so their handlers must be bound again.
+    if (window.VenomStages && window.VenomStages.init) window.VenomStages.init();
+    rearm(timeline);
+  }
+
   async function applyStages() {
     const grid = document.querySelector('[data-vr-stages]');
-    if (!grid) return;
+    const timeline = document.querySelector('[data-stages-timeline]');
+    if (!grid && !timeline) return;
     const rows = await api.fetchTable('website_stages?select=*');
     if (!rows) return;
+    applyHomeStages(rows);
+    if (!grid) return;
     grid.innerHTML = rows.map((r) => `
       <article class="service-card slide-up">
         <span class="stage-content__badge">${esc(r.name)}</span>
