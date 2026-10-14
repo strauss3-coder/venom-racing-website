@@ -36,22 +36,30 @@
   }
 
   /**
-   * Preloader — reveals the page once assets have loaded, with a hard
-   * safety timeout so a slow/failed asset can never trap the visitor
+   * Preloader — reveals the page once the document and its fonts are
+   * ready, with a hard safety timeout so nothing can trap the visitor
    * behind the loading screen.
+   *
+   * It deliberately does not wait for window `load`: that fires only after
+   * every image and the hero video's metadata, which held the whole page
+   * hidden on slow connections and pushed back Largest Contentful Paint.
+   * Fonts are the one thing worth waiting for, so text never reflows on
+   * reveal.
    */
   function initPreloader() {
     // Uses native DOM (not the qs helper) so a failure to load utils.js
     // can never leave the visitor trapped behind the loading screen.
     const preloader = document.getElementById('preloader');
     if (!preloader) return;
-    const hide = () => preloader.classList.add('is-hidden');
-    if (document.readyState === 'complete') {
-      setTimeout(hide, 300);
-    } else {
-      window.addEventListener('load', () => setTimeout(hide, 300));
-    }
-    setTimeout(hide, 2500);
+    let done = false;
+    const hide = () => {
+      if (done) return;
+      done = true;
+      preloader.classList.add('is-hidden');
+    };
+    const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    fontsReady.then(() => setTimeout(hide, 150), hide);
+    setTimeout(hide, 1800);
   }
 
   /**

@@ -1,0 +1,8 @@
+# Venom Racing - security contact (RFC 9116)
+# Found a vulnerability in venomracing.co.za? Please tell us privately
+# before disclosing it, and do not access or change anyone's data.
+Contact: mailto:venom@venomracing.co.za
+Expires: 2027-10-14T00:00:00.000Z
+Preferred-Languages: en, af
+Canonical: https://venomracing.co.za/.well-known/security.txt
+Policy: https://venomracing.co.za/terms.html

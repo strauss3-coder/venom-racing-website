@@ -1,24 +1,19 @@
 {
+  "id": "/",
   "name": "Venom Racing",
   "short_name": "Venom Racing",
   "description": "RMI Accredited performance tuning and fabrication workshop in eMalahleni, Mpumalanga — official Dastek Unichip dealer.",
-  "start_url": "/index.html",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait-primary",
   "background_color": "#0a0a0b",
   "theme_color": "#0a0a0b",
-  "lang": "en-US",
+  "lang": "en-ZA",
+  "dir": "ltr",
+  "categories": ["business", "lifestyle"],
   "icons": [
-    {
-      "src": "favicon/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "favicon/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "/favicon/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/favicon/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/favicon/maskable-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }

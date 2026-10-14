@@ -24,8 +24,21 @@ venom-racing-website/
 ├── reviews.html            Customer reviews
 ├── faqs.html               Full FAQ (grouped by topic)
 ├── contact.html            Quote request form, contact info, embedded map
-├── privacy.html            Privacy policy (placeholder — needs legal review)
-├── terms.html              Terms & conditions (placeholder — needs legal review)
+├── privacy.html            Privacy Policy (POPIA)
+├── cookies.html            Cookie Policy — everything stored, by name
+├── terms.html              Terms & Conditions
+├── disclaimer.html         Disclaimer
+├── popia.html              POPIA compliance and data-subject requests
+├── paia.html               PAIA access-to-information details
+├── 404.html / 500.html     Error pages (404 is served by GitHub Pages automatically)
+├── offline.html            Served by the service worker when offline
+├── maintenance.html        Maintenance mode — see docs/OPERATIONS.md
+├── sw.js                   Service worker (offline page, conservative caching)
+├── _config.yml             Controls what GitHub Pages publishes
+├── _headers                Security headers, ready for a CDN (not used by GitHub Pages)
+├── .well-known/security.txt  Vulnerability contact (RFC 9116)
+├── docs/                   SECURITY.md, OPERATIONS.md — not published
+├── ops/                    check-site.mjs (pre-deploy check), backup-db.sh — not published
 │
 ├── robots.txt             Search engine crawl rules
 ├── sitemap.xml            Search engine sitemap
@@ -48,7 +61,13 @@ venom-racing-website/
 │   │   ├── navigation.js     Navbar toggle, scroll state, active link
 │   │   ├── animations.js     IntersectionObserver scroll animations
 │   │   ├── builds.js         Featured build/gallery card rendering & category filtering
-│   │   ├── forms.js          Form validation & submission (quote request/contact)
+│   │   ├── forms.js          Homepage quote form: validation & submission
+│   │   ├── form-guard.js     Bot protection for every form (honeypot, timing, rate limit, spam)
+│   │   ├── contact.js        Contact page WhatsApp hand-off + enquiry capture
+│   │   ├── consent.js        Cookie consent banner, preferences, consent-gated embeds
+│   │   ├── resilience.js     Client log, offline notice, broken-image fallback, framing guard
+│   │   ├── venom-supabase.js Supabase connection (publishable key only)
+│   │   ├── venom-content.js  Hydrates content from the portal (escaped, link-checked)
 │   │   ├── hero.js           Cinematic scroll-scrubbed homepage hero (GSAP ScrollTrigger)
 │   │   │                      + the floating particle-field generator
 │   │   └── main.js           Site-wide init: FAQ accordion, stat counters, reviews
@@ -107,88 +126,41 @@ npx serve .
 
 Then open `http://localhost:8000` in a browser.
 
-## Adding a new page
+## Security, privacy and operations
 
-1. Copy an existing page (e.g. `about.html`) as your starting point — it
-   already includes the full `<head>` boilerplate, navbar, and footer.
-2. Update the `<title>`, meta description, canonical URL, Open Graph, and
-   Twitter Card content.
-3. Every page loads `utils.js`, `navigation.js`, `animations.js`,
-   `builds.js`, `forms.js`, and `main.js` — the feature-specific ones
-   (`builds.js`, `forms.js`) no-op harmlessly on pages that don't have
-   their target elements, so there's no need to remove them per page.
-4. Add the new URL to `sitemap.xml`.
-5. Add a link to the new page in the navbar and footer across all pages.
+- **Security** — `docs/SECURITY.md`: the Content-Security-Policy, the form
+  protection layers, what GitHub Pages cannot do (HSTS and other headers)
+  and how to add it, and recommended database hardening.
+- **Operations** — `docs/OPERATIONS.md`: deployment checklist, rollback,
+  maintenance mode, backups, recovery procedures.
+- **Before every push to `main`** (it deploys straight to production):
 
-## Content still required before launch
+  ```bash
+  node ops/check-site.mjs
+  ```
 
-- **Photography/video**: real exhaust fabrication photos are in place
-  (`assets/images/exhaust/`, wired into `services.html`, `gallery.html`
-  and `builds.js`). Everything else (workshop, other build categories)
-  is still a `.photo-placeholder` — drop real files into `assets/images/`
-  and swap them in as they're supplied.
-- **Real customer reviews**: `index.html` and `reviews.html` contain
-  clearly-marked placeholder review cards (`<!-- TODO: replace with real
-  verified reviews -->`) — do not publish these as-is, they are structural
-  placeholders only.
-- **Legal pages**: `privacy.html` and `terms.html` are placeholder text
-  and must be reviewed by a qualified attorney (POPIA-compliant) before
-  launch.
-- **Contact details**: phone/WhatsApp numbers were independently verified
-  against public listings during development. The street address and
-  email in the current copy came from client-supplied research and were
-  confirmed by the client — re-confirm before launch if anything about
-  the business (address, hours) has changed since.
+## Adding a page — the rules the check enforces
 
-## SEO checklist per page
-
-- [x] `<title>` and `<meta name="description">` — filled in with real
-  copy per page
-- [ ] `<link rel="canonical">` and `og:url` — intentionally left blank
-  until the production domain is confirmed
-- [x] Open Graph / Twitter Card title & description
-- [ ] `og:image` / `twitter:image` — points at
-  `assets/images/social/og-image.jpg`, which doesn't exist yet
-- [x] `LocalBusiness` (`AutoRepair`) structured data on `index.html` —
-  update if address/hours change
+1. Copy the `<head>` from an existing page: CSP, referrer policy, canonical
+   URL (`https://venomracing.co.za/<page>.html`), Open Graph/Twitter tags
+   with absolute image URLs.
+2. Load `resilience.js` and `consent.js` first, and `form-guard.js` before
+   any form script.
+3. No inline `<script>` or `on…=""` handlers — the CSP blocks them.
+4. Third-party embeds must be consent-gated:
+   `<iframe data-consent="functional" data-consent-src="…">`.
+5. Add the page to `sitemap.xml` and the navbar/footer.
 
 ## Deployment — GitHub Pages
 
-1. Push this repository to GitHub.
-2. In the repo settings, go to **Pages** and set the source to the
-   `main` branch, root folder.
-3. The site will be published at `https://<username>.github.io/<repo>/`.
+Deployed from `main`, root folder, custom domain `venomracing.co.za`
+(`www` redirects to the apex). **Enforce HTTPS must be ticked** in
+Settings → Pages.
 
-### Connecting a custom domain
+## Before launch — needs a person, not code
 
-1. Add the domain to the `CNAME` file at the project root (currently
-   blank), e.g.:
-   ```
-   www.venomracing.co.za
-   ```
-2. In your domain's DNS settings, add a `CNAME` record pointing
-   `www` to `<username>.github.io`, and `A` records for the apex
-   domain pointing to GitHub Pages' IP addresses (see
-   [GitHub's custom domain docs](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site)).
-3. In the repo's **Pages** settings, enter the custom domain and enable
-   **Enforce HTTPS** once DNS has propagated.
-4. Update `robots.txt`, `sitemap.xml`, and every page's `canonical`/`og:url`
-   placeholder to use the final production domain.
-
-## Favicon & PWA icons
-
-`favicon/` currently contains empty placeholder files referenced by every
-page, `manifest.json`, and `browserconfig.xml`. See `favicon/README.md`
-for the full list and generation instructions once the logo is final.
-
-## Notes
-
-- `assets/js/builds.js` has an empty `BUILDS` placeholder array; wire it
-  up to real completed-project data (JSON file, CMS, or API) once
-  photography and specs are available.
-- `assets/js/forms.js` submits by logging to the console; replace
-  `submitForm()` with a real backend/API integration before launch.
-- Icons throughout the site are hand-drawn inline SVGs approximating an
-  outline icon style (engine/turbo/ECU/wrench/etc.). Swap in a proper
-  icon library (e.g. [Lucide](https://lucide.dev)) for pixel-perfect
-  icons and the official Facebook/Instagram/WhatsApp glyphs.
+- **Legal review.** The legal pages describe what the site actually does,
+  but have not been reviewed by a South African attorney. Confirm the
+  retention periods in the Privacy Policy, and add the business's legal
+  entity name and registration number (if registered) to the Terms and
+  PAIA pages.

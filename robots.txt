@@ -1,5 +1,9 @@
+# venomracing.co.za
+# Status pages (404, 500, offline, maintenance, holding) carry their own
+# noindex tag. They are deliberately not disallowed here: a crawler must be
+# able to fetch a page to see that it should not be indexed.
+
 User-agent: *
 Allow: /
 
-# TODO: replace with the production domain once the custom domain is connected.
-Sitemap: https://www.your-domain-here.com/sitemap.xml
+Sitemap: https://venomracing.co.za/sitemap.xml

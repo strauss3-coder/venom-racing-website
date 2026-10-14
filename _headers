@@ -1,0 +1,30 @@
+# Response headers for venomracing.co.za
+#
+# GitHub Pages (the current host) cannot send custom headers and ignores
+# this file. It is the ready-made header set for the day the site sits
+# behind Cloudflare, or moves to Cloudflare Pages or Netlify, both of which
+# read this exact format. See docs/SECURITY.md.
+#
+# The Content-Security-Policy here must stay identical to the <meta> tag
+# in every page, plus frame-ancestors, which only works as a header.
+
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://znuozxezktzoeozffddk.supabase.co; media-src 'self' blob: https://znuozxezktzoeozffddk.supabase.co; connect-src 'self' https://znuozxezktzoeozffddk.supabase.co; frame-src https://www.google.com https://maps.google.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests; frame-ancestors 'none'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), autoplay=(self), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self), publickey-credentials-get=(), screen-wake-lock=(), usb=(), xr-spatial-tracking=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+
+/assets/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/favicon/*
+  Cache-Control: public, max-age=2592000
+
+/sw.js
+  Cache-Control: no-cache
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

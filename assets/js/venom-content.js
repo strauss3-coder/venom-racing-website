@@ -44,6 +44,23 @@
   /** Digits only, for tel: and wa.me hrefs. 0XX becomes 27XX. */
   const digits = (v) => String(v || '').replace(/[^0-9]/g, '').replace(/^0/, '27');
 
+  /* A link from the database is only followed if it is one of ours or an
+     ordinary web, mail, phone or WhatsApp link. Anything else - above all
+     a javascript: URL - would run code on the live site, so it is dropped
+     and the link the page shipped with stays. */
+  function safeUrl(value) {
+    const v = String(value || '').trim();
+    if (!v) return '';
+    if (/^(https?:|mailto:|tel:)/i.test(v)) return v;
+    if (/^(#|\/(?!\/)|\.\/|[a-z0-9_-]+\.html\b)/i.test(v)) return v;
+    return '';
+  }
+
+  function setHref(el, value) {
+    const url = safeUrl(value);
+    if (el && url) el.href = url;
+  }
+
   /** Set text only when there is something real to set. */
   function setText(el, value) {
     if (!el || !value) return;
@@ -126,7 +143,7 @@
     document.querySelectorAll('a[aria-label]').forEach((a) => {
       const label = a.getAttribute('aria-label').toLowerCase();
       map.forEach(([name, url]) => {
-        if (url && label.indexOf(name) >= 0) a.href = url;
+        if (url && label.indexOf(name) >= 0) setHref(a, url);
       });
     });
 
@@ -139,7 +156,7 @@
     /* The Google reviews link. reviews.js pointed these at a constant baked
        into the script, while the portal has carried the address in Contact
        Details the whole time - a third field stored and read by nothing. */
-    const gr = (c.social || {}).google;
+    const gr = safeUrl((c.social || {}).google);
     if (gr) {
       document.querySelectorAll('[data-google-reviews]').forEach((a) => {
         a.href = gr; a.target = '_blank'; a.rel = 'noopener';
@@ -149,7 +166,7 @@
     /* The tuning portal address. It was already stored in the portal and
        read by nothing, while the contact page carried its own copy. */
     if (c.tuningPortal) {
-      document.querySelectorAll('[data-vr-tuning-portal]').forEach((a) => { a.href = c.tuningPortal; });
+      document.querySelectorAll('[data-vr-tuning-portal]').forEach((a) => { setHref(a, c.tuningPortal); });
     }
 
     /* The embedded map and the directions link were each carrying their own
@@ -159,13 +176,20 @@
       const q = encodeURIComponent(c.address);
       document.querySelectorAll('[data-vr-map]').forEach((f) => {
         const next = 'https://www.google.com/maps?q=' + q + '&output=embed';
-        if (f.getAttribute('src') !== next) f.setAttribute('src', next);
+        /* A consent-gated map only learns its new address; consent.js
+           decides whether it loads. */
+        if (f.hasAttribute('data-consent-src')) {
+          f.setAttribute('data-consent-src', next);
+          if (window.VenomConsent) window.VenomConsent.apply();
+        } else if (f.getAttribute('src') !== next) {
+          f.setAttribute('src', next);
+        }
       });
       document.querySelectorAll('[data-vr-directions]').forEach((a) => {
         /* A share link from Google Maps points at the listing itself, which
            is more precise than a geocoded address, so it wins where set.
            The embedded map above always needs a query, so it cannot. */
-        a.href = c.mapsUrl || ('https://www.google.com/maps/dir/?api=1&destination=' + q);
+        a.href = safeUrl(c.mapsUrl) || ('https://www.google.com/maps/dir/?api=1&destination=' + q);
       });
     }
 
@@ -571,8 +595,8 @@
 
     // Hero buttons, in the order the page lays them out.
     const actions = document.querySelectorAll('.hero__actions a');
-    if (actions[0] && h.btn1Text) { setText(actions[0], h.btn1Text); if (h.btn1Link) actions[0].href = h.btn1Link; }
-    if (actions[1] && h.btn2Text) { setText(actions[1], h.btn2Text); if (h.btn2Link) actions[1].href = h.btn2Link; }
+    if (actions[0] && h.btn1Text) { setText(actions[0], h.btn1Text); setHref(actions[0], h.btn1Link); }
+    if (actions[1] && h.btn2Text) { setText(actions[1], h.btn2Text); setHref(actions[1], h.btn2Link); }
 
     /* The two badges over the hero. Each holds an icon beside its text, so
        only the text node is replaced. */
@@ -599,12 +623,12 @@
       const text = h['ctaBtn' + n + 'Text'];
       const link = h['ctaBtn' + n + 'Link'];
       if (text) setLabel(el, text);
-      if (link) el.href = link;
+      setHref(el, link);
     });
 
     // The About section's own button.
     const ab = document.querySelector('[data-vr-about-btn]');
-    if (ab) { if (h.aboutBtnText) setText(ab, h.aboutBtnText); if (h.aboutBtnLink) ab.href = h.aboutBtnLink; }
+    if (ab) { if (h.aboutBtnText) setText(ab, h.aboutBtnText); setHref(ab, h.aboutBtnLink); }
 
     // RMI accreditation badge.
     setText(document.querySelector('[data-vr-badge-title]'), h.badgeTitle);
@@ -627,7 +651,7 @@
       const cap = s.label || '';
       return '<figure class="showcase__slide texture-carbon" data-label="' + esc(cap) + '">' +
              '<img src="' + esc(s.url) + '" alt="' + esc(s.alt || cap) + '" loading="lazy"' +
-             ' onerror="this.style.display=\'none\'">' +
+             ' data-hide-on-error>' +
              '<figcaption class="showcase__caption">' + esc(cap) + '</figcaption>' +
              '</figure>';
     }).join('');
@@ -659,7 +683,7 @@
       const v = buttons[name] || {};
       document.querySelectorAll('[data-vr-page-btn="' + name + '"]').forEach((el) => {
         if (v.text) setLabel(el, v.text);
-        if (v.link && el.tagName === 'A') el.href = v.link;
+        if (el.tagName === 'A') setHref(el, v.link);
       });
     });
 

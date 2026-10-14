@@ -1,0 +1,21 @@
+# GitHub Pages build settings.
+#
+# This is a plain static site: no page uses Jekyll templating. The file
+# exists to control what is published.
+#
+#  - include: Jekyll skips dot-folders by default; .well-known holds
+#    security.txt, which must be public.
+#  - exclude: repository-only files. Without this, README.md and the docs
+#    were published at venomracing.co.za/README.md for anyone to read.
+
+include:
+  - .well-known
+
+exclude:
+  - README.md
+  - docs/
+  - ops/
+  - favicon/README.md
+  - _headers
+  - .vscode/
+  - .claude/

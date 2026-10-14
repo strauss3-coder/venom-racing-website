@@ -3,8 +3,9 @@
  * One place for the Supabase connection used by the website's enquiry forms.
  *
  * Enquiries submitted on the site are recorded in Supabase so they appear in
- * the Venom Racing Portal inbox. Nothing else on the website reads from
- * Supabase yet — every page still renders its own HTML as before.
+ * the Venom Racing Portal inbox, and venom-content.js reads the published
+ * content through fetchTable(). The origin below is also allowed in the
+ * Content-Security-Policy on every page; change one, change both.
  *
  * The publishable key is MEANT to be public and to sit in website source.
  * Row Level Security is what protects you: a visitor may insert one enquiry
@@ -24,6 +25,8 @@
 
   const isConfigured = () => Boolean(SUPABASE_URL && SUPABASE_KEY);
 
+  const SEND_TIMEOUT_MS = 12000;
+
   /**
    * Record an enquiry. Never throws and never blocks the caller — if the
    * request fails the visitor must still get their normal outcome.
@@ -32,15 +35,23 @@
    */
   async function sendEnquiry(data) {
     if (!isConfigured()) {
-      console.info('[venom-supabase] Not configured; enquiry not recorded.', data);
+      // Never log the enquiry itself: it is a customer's personal information.
+      console.info('[venom-supabase] Not configured; enquiry not recorded.');
       return false;
     }
 
     const vehicle = [data.make, data.model].filter(Boolean).join(' ');
 
+    // A request that never answers must not leave the form stuck.
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), SEND_TIMEOUT_MS);
+
     try {
       const res = await fetch(SUPABASE_URL + '/rest/v1/enquiries', {
         method: 'POST',
+        signal: controller.signal,
+        credentials: 'omit',
+        referrerPolicy: 'strict-origin-when-cross-origin',
         headers: {
           apikey: SUPABASE_KEY,
           Authorization: 'Bearer ' + SUPABASE_KEY,
@@ -64,13 +75,15 @@
       });
 
       if (!res.ok) {
-        console.error('[venom-supabase] Enquiry rejected:', res.status, await res.text());
+        console.error('[venom-supabase] Enquiry rejected:', res.status);
         return false;
       }
       return true;
     } catch (error) {
-      console.error('[venom-supabase] Enquiry failed to send:', error);
+      console.error('[venom-supabase] Enquiry failed to send:', error && error.name);
       return false;
+    } finally {
+      clearTimeout(timer);
     }
   }
 
@@ -85,6 +98,7 @@
     if (!isConfigured()) return null;
     try {
       const res = await fetch(SUPABASE_URL + '/rest/v1/' + query, {
+        credentials: 'omit',
         headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY },
         signal: signal,
       });
